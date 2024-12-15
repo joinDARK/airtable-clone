@@ -22,13 +22,24 @@ const AgentSchema = z.object({
 })
 
 const CountrySchema = z.object({
-  id: z.number().min(1),
+  id: z.number(),
   name: z.string().min(1),
   code: z.string().min(1),
   full_name: z.string().min(1),
   orders: z.array(z.object({}))
 })
 
+const ManagerSchema = z.object({
+  id: z.number(),
+  name: z.string().min(1),
+  tel: z.string(),
+  date: z.string().date(),
+  orders: z.array(z.object({})),
+  review_table: z.array(z.object({})),
+})
 
+const SubagentSchema = z.object({
+  
+})
 
 export { ClientSchema, ContragentSchema, AgentSchema, CountrySchema,  }
