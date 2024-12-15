@@ -1,16 +1,15 @@
-import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "react-query";
-import { api } from "../api";
-import { DataTable } from "../components/DataTable";
-import { Modal } from "../components/Modal";
-import { OrderForm } from "../components/OrderForm";
-import { toast } from "react-toastify";
-import type { IOrder } from "../types";
+import {useState} from "react"
+import {useQuery, useMutation, useQueryClient} from "react-query"
+import {api} from "../../modules/api"
+import {DataTable} from "../components/DataTable"
+import {Modal} from "../components/Modal"
+import {OrderForm} from "../components/OrderForm"
+import {toast} from "react-toastify"
+import type {IOrder} from "../types"
 
-import FormulaEditor from "../components/FormulaEditor";
-import columns from "../lib/tableColumnsData/columnsOrder";
-import { FormProvider, useForm } from "react-hook-form";
-import { reverseTransformDates } from "../lib/dateFormateer";
+import columns from "../lib/tableColumnsData/columnsOrder"
+import {FormProvider, useForm} from "react-hook-form"
+import {reverseTransformDates} from "../../modules/date_formateer/dateFormateer"
 
 export const OrdersPage = () => {
   const defaultValue = {
@@ -81,94 +80,86 @@ export const OrdersPage = () => {
     stuck_money_sum: null, // Сумма зависла
     mistake_is_it_name: null, // Чья ошибка?
     money_gone: false,
-  };
+  }
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isModalViewOpen, setIsModalViewOpen] = useState(false);
-  const [modalHeader, setModalHeader] = useState("");
-  const [item, setItem] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalViewOpen, setIsModalViewOpen] = useState(false)
+  const [modalHeader, setModalHeader] = useState("")
+  const [item, setItem] = useState({})
 
   const handleView = (item: any) => {
-    setIsModalViewOpen(true);
-    setItem(item);
-  };
+    setIsModalViewOpen(true)
+    setItem(item)
+  }
 
   const closeModal = () => {
-    setIsModalViewOpen(false);
-    setIsModalOpen(false);
-    reset(defaultValue);
-  };
+    setIsModalViewOpen(false)
+    setIsModalOpen(false)
+    reset(defaultValue)
+  }
 
-  const queryClient = useQueryClient();
-  const { data, refetch } = useQuery("orders", () => api.orders.getAll(), {
+  const queryClient = useQueryClient()
+  const {data, refetch} = useQuery("orders", () => api.orders.getAll(), {
     staleTime: 0.1 * 60 * 1000,
     cacheTime: 10 * 60 * 1000,
     refetchOnWindowFocus: true,
     refetchOnMount: true,
     enabled: true,
-  });
+  })
 
-  const createMutation = useMutation(
-    (newOrder: IOrder) => api.orders.create(newOrder),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries("orders");
-        closeModal();
-        toast.success("Заявка успешно создана!");
-      },
-    }
-  );
+  const createMutation = useMutation((newOrder: IOrder) => api.orders.create(newOrder), {
+    onSuccess: () => {
+      queryClient.invalidateQueries("orders")
+      closeModal()
+      toast.success("Заявка успешно создана!")
+    },
+  })
   const deleteMutation = useMutation((id: number) => api.orders.delete(id), {
     onSuccess: () => {
-      queryClient.invalidateQueries("orders");
-      toast.success("Заявка удалена успешно!");
+      queryClient.invalidateQueries("orders")
+      toast.success("Заявка удалена успешно!")
     },
-  });
-  const updateMutation = useMutation(
-    (data: IOrder) => api.orders.update(data.id as number, data),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries("orders");
-        closeModal();
-        toast.success("Заявка обновлена успешно!");
-      },
-    }
-  );
+  })
+  const updateMutation = useMutation((data: IOrder) => api.orders.update(data.id as number, data), {
+    onSuccess: () => {
+      queryClient.invalidateQueries("orders")
+      closeModal()
+      toast.success("Заявка обновлена успешно!")
+    },
+  })
 
   const handleDelete = async (order: IOrder) => {
     if (window.confirm("Удалить заявку?")) {
-      deleteMutation.mutate(order.id!);
+      deleteMutation.mutate(order.id!)
     }
-  };
+  }
   const submit = (data: IOrder) => {
     if (typeof data.id === "number") {
-      updateMutation.mutate(data);
+      updateMutation.mutate(data)
     } else {
-      createMutation.mutate(data);
+      createMutation.mutate(data)
     }
-  };
+  }
   const handleEdit = (order: IOrder) => {
     reset(reverseTransformDates(order))
-    setIsModalOpen(true);
-    setModalHeader("Изменить заявку");
-  };
+    setIsModalOpen(true)
+    setModalHeader("Изменить заявку")
+  }
 
-  
-
-  const methods = useForm<IOrder>({ defaultValues: defaultValue });
-  const { reset } = methods;
+  const methods = useForm<IOrder>({defaultValues: defaultValue})
+  const {reset} = methods
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="flex-1 overflow-hidden">
+    <div className='h-full flex flex-col'>
+      <div className='flex-1 overflow-hidden'>
         <DataTable
-          title="Заявки"
+          title='Заявки'
           data={data?.data || []}
           columns={columns}
           onRefresh={() => refetch()}
           onAdd={() => {
-            setIsModalOpen(true);
-            setModalHeader("Добавить новую заявку");
+            setIsModalOpen(true)
+            setModalHeader("Добавить новую заявку")
           }}
           onEdit={handleEdit}
           onDelete={handleDelete}
@@ -177,19 +168,15 @@ export const OrdersPage = () => {
           isModalViewOpen={isModalViewOpen}
           closeModal={closeModal}
           item={item}
-          relatedName={'orders'}
+          relatedName={"orders"}
         />
       </div>
 
       <Modal isOpen={isModalOpen} onClose={closeModal} title={modalHeader}>
         <FormProvider {...methods}>
-          <OrderForm
-            onSubmit={submit}
-            onClose={closeModal}
-            isLoading={createMutation.isLoading || updateMutation.isLoading}
-          />
+          <OrderForm onSubmit={submit} onClose={closeModal} isLoading={createMutation.isLoading || updateMutation.isLoading} />
         </FormProvider>
       </Modal>
     </div>
-  );
-};
+  )
+}

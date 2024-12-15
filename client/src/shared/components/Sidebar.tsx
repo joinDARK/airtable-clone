@@ -14,6 +14,7 @@ import {
   SunMoon
 } from 'lucide-react';
 import { clsx } from 'clsx';
+import useThemeStore from '../../modules/theme/useThemeStore';
 
 const navItems = [
   { path: '/orders', label: 'Заявки', icon: FileText },
@@ -28,12 +29,12 @@ const navItems = [
 
 export const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [dark, setDark] = useState(false)
+  const setTheme = useThemeStore((store) => store.setAltTheme)
 
   return (
     <div
       className={clsx(
-        'h-screen bg-gray-800 text-white left-0 top-0 z-30 transition-all duration-300',
+        'h-screen bg-gray-800 text-white left-0 top-0 z-30 transition-all',
         isCollapsed ? 'w-20' : 'w-64'
       )}
     >
@@ -85,14 +86,7 @@ export const Sidebar = () => {
               'flex items-center gap-3 p-3 rounded-lg transition-colors w-full text-gray-300 hover:bg-gray-700',
               isCollapsed ? 'justify-center' : ''
             )}
-            onClick={() => {
-              if (dark) {
-                document.documentElement.classList.add('dark');
-              } else {
-                document.documentElement.classList.remove('dark');
-              }
-              setDark(!dark)
-            }}
+            onClick={setTheme}
           >
             <SunMoon size={20} />
             {!isCollapsed && <span>Изменить тему</span>}
