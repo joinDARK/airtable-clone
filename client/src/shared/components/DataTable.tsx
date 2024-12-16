@@ -6,8 +6,8 @@ import {useTableSort} from "../../shared/hooks/useTableSort"
 import {useTableFilter} from "../../shared/hooks/useTableFilter"
 import {CellModal} from "../../shared/components/CellModal"
 import {formatDatesInArray} from "../../modules/date_formateer/dateFormateer"
-import {Modal} from "../../shared/components/Modal"
-import {RelatedDataModal} from "../../shared/components/RelatedData"
+import {Modal} from "./modal/Modal"
+import {RelatedDataModal} from "../../modules/relationship/RelatedData"
 
 interface Column {
   key: string

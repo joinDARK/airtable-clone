@@ -21,7 +21,7 @@ export interface IOrder { // ЗАЯВКИ
   currency: string | null, // Валюта
   sum_order: number | null, // Сумма заявки
   vip_condition: string | null, // Условия VIP
-  vip_commission: number | null, // VIP комиссия
+  vip_comission: number | null, // VIP комиссия
   hide_commission: number | null,  // Скрытая комиссия
   commision_plus_percent: number | null, // Комиссия +% банка
   commision_plus_accredit: number | null, // Комиссия + аккредитив
@@ -124,4 +124,10 @@ export interface ISubagent {
   name: string | null;
   payers: string[] | null | string;
   orders: number[] | null | string;
+}
+
+export interface IStatus {
+  value: string;
+  label: string;
+  style?: string;
 }

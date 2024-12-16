@@ -2,24 +2,22 @@ import {useState} from "react"
 import {useQuery, useMutation, useQueryClient} from "react-query"
 import {api} from "../../modules/api"
 import {DataTable} from "../components/DataTable"
-import {Modal} from "../components/Modal"
-import type {ISubagentPayer} from "../types"
-import {useForm, FormProvider} from "react-hook-form"
-import SubagentsSelect from "../components/SubagentSelect"
-import OrdersSelect from "../components/OrdersSelect"
+import {Modal} from "../components/modal/Modal"
+import type {IContragent} from "../types"
+import {FormProvider, useForm} from "react-hook-form"
+import OrdersSelect from "../components/select_components/OrdersSelect"
 import {toast} from "react-toastify"
 
-import columns from "../lib/tableColumnsData/columnsSubagentPayer"
+import columns from "../lib/tableColumnsData/columnsContractor"
 
-export const SubagentPayersPage = () => {
+export const ContractorsPage = () => {
   const defaultValue = {
     name: "",
-    subagents: [],
     orders: [],
   }
 
-  const [modalHeader, setModalHeader] = useState("")
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [modalHeader, setModalHeader] = useState("")
   const [isModalViewOpen, setIsModalViewOpen] = useState(false)
 
   const [item, setItem] = useState({})
@@ -36,7 +34,7 @@ export const SubagentPayersPage = () => {
   }
 
   const queryClient = useQueryClient()
-  const {data, refetch} = useQuery("subagent-payers", () => api.subagentPayers.getAll(), {
+  const {data, refetch} = useQuery("contractors", () => api.contractors.getAll(), {
     staleTime: 0.3 * 60 * 1000,
     cacheTime: 10 * 60 * 1000,
     refetchOnWindowFocus: true,
@@ -44,67 +42,67 @@ export const SubagentPayersPage = () => {
     enabled: true,
   })
 
-  const createMutation = useMutation((newPayer: ISubagentPayer) => api.subagentPayers.create(newPayer), {
+  const createMutation = useMutation((newContractor: IContragent) => api.contractors.create(newContractor), {
     onSuccess: () => {
-      queryClient.invalidateQueries("subagent-payers")
-      toast.success("Плательщик Субагента добавлен успешно!")
+      queryClient.invalidateQueries("contractors")
+      toast.success("Контрагент добавлен успешно!")
       closeModal()
     },
   })
-  const deleteMutation = useMutation((id: number) => api.subagentPayers.delete(id), {
+  const deleteMutation = useMutation((id: number) => api.contractors.delete(id), {
     onSuccess: () => {
-      queryClient.invalidateQueries("subagent-payers")
-      toast.success("Плательщик субагента удален успешно!")
+      queryClient.invalidateQueries("contractors")
+      toast.success("Контрагент удален успешно!")
     },
   })
-  const updateMutation = useMutation((data: ISubagentPayer) => api.subagentPayers.update(data.id as number, data), {
+  const updateMutation = useMutation((data: IContragent) => api.contractors.update(data.id as number, data), {
     onSuccess: () => {
-      queryClient.invalidateQueries("subagent-payers")
+      queryClient.invalidateQueries("contractors")
       closeModal()
-      toast.success("Плательщик Субагента обновлен успешно!")
+      toast.success("Контрагент успешно обновлен!")
     },
   })
 
-  const deleteSubagentPayer = async (subagentPayer: ISubagentPayer) => {
-    if (window.confirm("Удалить плательщика субагента из таблицы?")) {
-      deleteMutation.mutate(subagentPayer.id!)
+  const deleteContragent = async (contragent: IContragent) => {
+    if (window.confirm("Удалить контрагента из таблицы")) {
+      deleteMutation.mutate(contragent.id!)
     }
   }
-  const submit = (newSubagentPayer: ISubagentPayer) => {
-    if (typeof newSubagentPayer.id === "number") {
-      updateMutation.mutate(newSubagentPayer)
+  const submit = (newContragent: IContragent) => {
+    if (typeof newContragent.id === "number") {
+      updateMutation.mutate(newContragent)
     } else {
-      createMutation.mutate(newSubagentPayer)
+      createMutation.mutate(newContragent)
     }
   }
-  const edit = (subagentPayer: ISubagentPayer) => {
-    reset(subagentPayer)
+  const edit = (contragent: IContragent) => {
+    reset(contragent)
     setIsModalOpen(true)
-    setModalHeader("Изменить плательщика субагента")
+    setModalHeader("Изменить контрагента")
   }
 
-  const methods = useForm<ISubagentPayer>({defaultValues: defaultValue})
+  const methods = useForm<IContragent>({defaultValues: defaultValue})
   const {register, handleSubmit, reset} = methods
 
   return (
     <>
       <DataTable
-        title='Плаетльщики'
+        title='Котрагенты'
         data={data?.data || []}
         columns={columns}
         onRefresh={() => refetch()}
         onAdd={() => {
           setIsModalOpen(true)
-          setModalHeader("Добавить нового плаетльщика")
+          setModalHeader("Добавить нового контрагента")
         }}
         onEdit={edit}
-        onDelete={deleteSubagentPayer}
+        onDelete={deleteContragent}
         onCellUpdate={submit}
         onView={handleView}
         isModalViewOpen={isModalViewOpen}
         closeModal={closeModal}
         item={item}
-        relatedName={"subagentPayers"}
+        relatedName={"contractors"}
       />
 
       <Modal isOpen={isModalOpen} onClose={closeModal} title={modalHeader}>
@@ -117,12 +115,11 @@ export const SubagentPayersPage = () => {
               <input
                 type='text'
                 {...register("name")}
-                placeholder='Введите наименование субагента'
+                placeholder='Введите наименование контрагента'
                 className='mt-1 block w-full dark:bg-gray-700 placeholder:text-gray-700 dark:placeholder:text-gray-100 rounded-md shadow-sm hover:border-gray-400 transition-all focus:ring-blue-500 focus:border-blue-500'
                 required
               />
             </div>
-            <SubagentsSelect />
             <OrdersSelect />
             <div className='flex justify-end gap-2 mt-6'>
               <button
@@ -137,7 +134,7 @@ export const SubagentPayersPage = () => {
                 className='px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md transition-all duration-300 hover:bg-blue-700'
                 disabled={createMutation.isLoading || updateMutation.isLoading}
               >
-                {createMutation.isLoading || updateMutation.isLoading ? "Сохранение..." : "Сохранить"}
+                {createMutation.isLoading ? "Сохранение..." : "Сохранить"}
               </button>
             </div>
           </form>

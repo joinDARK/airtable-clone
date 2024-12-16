@@ -2,22 +2,23 @@ import {useState} from "react"
 import {useQuery, useMutation, useQueryClient} from "react-query"
 import {api} from "../../modules/api"
 import {DataTable} from "../components/DataTable"
-import {Modal} from "../components/Modal"
-import type {IContragent} from "../types"
+import {Modal} from "../components/modal/Modal"
+import type {ISubagent} from "../types"
 import {FormProvider, useForm} from "react-hook-form"
-import OrdersSelect from "../components/OrdersSelect"
+import SubagentPayersSelect from "../components/select_components/SubagentPayersSelect"
+import OrdersSelect from "../components/select_components/OrdersSelect"
 import {toast} from "react-toastify"
+import columns from "../lib/tableColumnsData/columnsSubagent"
 
-import columns from "../lib/tableColumnsData/columnsContractor"
-
-export const ContractorsPage = () => {
+export const SubagentsPage = () => {
   const defaultValue = {
     name: "",
+    payers: [],
     orders: [],
   }
 
-  const [isModalOpen, setIsModalOpen] = useState(false)
   const [modalHeader, setModalHeader] = useState("")
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [isModalViewOpen, setIsModalViewOpen] = useState(false)
 
   const [item, setItem] = useState({})
@@ -34,7 +35,7 @@ export const ContractorsPage = () => {
   }
 
   const queryClient = useQueryClient()
-  const {data, refetch} = useQuery("contractors", () => api.contractors.getAll(), {
+  const {data, refetch} = useQuery("subagents", () => api.subagents.getAll(), {
     staleTime: 0.3 * 60 * 1000,
     cacheTime: 10 * 60 * 1000,
     refetchOnWindowFocus: true,
@@ -42,69 +43,68 @@ export const ContractorsPage = () => {
     enabled: true,
   })
 
-  const createMutation = useMutation((newContractor: IContragent) => api.contractors.create(newContractor), {
+  const createMutation = useMutation((newSubagent: ISubagent) => api.subagents.create(newSubagent), {
     onSuccess: () => {
-      queryClient.invalidateQueries("contractors")
-      toast.success("Контрагент добавлен успешно!")
+      queryClient.invalidateQueries("subagents")
+      toast.success("Субагент добавлен успешно!")
       closeModal()
     },
   })
-  const deleteMutation = useMutation((id: number) => api.contractors.delete(id), {
+  const deleteMutation = useMutation((id: number) => api.subagents.delete(id), {
     onSuccess: () => {
-      queryClient.invalidateQueries("contractors")
-      toast.success("Контрагент удален успешно!")
+      queryClient.invalidateQueries("subagents")
+      toast.success("Субагент удален успешно!")
     },
   })
-  const updateMutation = useMutation((data: IContragent) => api.contractors.update(data.id as number, data), {
+  const updateMutation = useMutation((data: ISubagent) => api.subagents.update(data.id as number, data), {
     onSuccess: () => {
-      queryClient.invalidateQueries("contractors")
+      queryClient.invalidateQueries("subagents")
       closeModal()
-      toast.success("Контрагент успешно обновлен!")
+      toast.success("Субагент обновлен успешно!")
     },
   })
 
-  const deleteContragent = async (contragent: IContragent) => {
-    if (window.confirm("Удалить контрагента из таблицы")) {
-      deleteMutation.mutate(contragent.id!)
+  const deleteSubagent = async (subagent: ISubagent) => {
+    if (window.confirm("Удалить субагента из таблицы?")) {
+      deleteMutation.mutate(subagent.id!)
     }
   }
-  const submit = (newContragent: IContragent) => {
-    if (typeof newContragent.id === "number") {
-      updateMutation.mutate(newContragent)
+  const submit = (newSubagent: ISubagent) => {
+    if (typeof newSubagent.id === "number") {
+      updateMutation.mutate(newSubagent)
     } else {
-      createMutation.mutate(newContragent)
+      createMutation.mutate(newSubagent)
     }
   }
-  const edit = (contragent: IContragent) => {
-    reset(contragent)
+  const edit = (subagent: ISubagent) => {
+    reset(subagent)
     setIsModalOpen(true)
-    setModalHeader("Изменить контрагента")
+    setModalHeader("Изменить субагента")
   }
 
-  const methods = useForm<IContragent>({defaultValues: defaultValue})
+  const methods = useForm<ISubagent>({defaultValues: defaultValue})
   const {register, handleSubmit, reset} = methods
 
   return (
     <>
       <DataTable
-        title='Котрагенты'
+        title='Субагенты'
         data={data?.data || []}
         columns={columns}
         onRefresh={() => refetch()}
         onAdd={() => {
           setIsModalOpen(true)
-          setModalHeader("Добавить нового контрагента")
+          setModalHeader("Добавить нового субагента")
         }}
         onEdit={edit}
-        onDelete={deleteContragent}
+        onDelete={deleteSubagent}
         onCellUpdate={submit}
         onView={handleView}
         isModalViewOpen={isModalViewOpen}
         closeModal={closeModal}
         item={item}
-        relatedName={"contractors"}
+        relatedName={"subagents"}
       />
-
       <Modal isOpen={isModalOpen} onClose={closeModal} title={modalHeader}>
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(submit)} className='space-y-4'>
@@ -115,11 +115,12 @@ export const ContractorsPage = () => {
               <input
                 type='text'
                 {...register("name")}
-                placeholder='Введите наименование контрагента'
                 className='mt-1 block w-full dark:bg-gray-700 placeholder:text-gray-700 dark:placeholder:text-gray-100 rounded-md shadow-sm hover:border-gray-400 transition-all focus:ring-blue-500 focus:border-blue-500'
                 required
+                placeholder='Введите наименование субагента'
               />
             </div>
+            <SubagentPayersSelect />
             <OrdersSelect />
             <div className='flex justify-end gap-2 mt-6'>
               <button
@@ -134,7 +135,7 @@ export const ContractorsPage = () => {
                 className='px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md transition-all duration-300 hover:bg-blue-700'
                 disabled={createMutation.isLoading || updateMutation.isLoading}
               >
-                {createMutation.isLoading ? "Сохранение..." : "Сохранить"}
+                {createMutation.isLoading || updateMutation.isLoading ? "Сохранение..." : "Сохранить"}
               </button>
             </div>
           </form>

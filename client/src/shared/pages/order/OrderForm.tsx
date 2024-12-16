@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from "react"
 import {Controller, useFormContext} from "react-hook-form"
-import {queryClient} from "../lib/queryClient"
+import {queryClient} from "../../lib/queryClient"
 import {RelationshipSelect} from "./RelationshipSelect"
-import {FormField} from "./FormField"
-import type {IOrder, ISubagent} from "../shared/types"
-import {FormSelect} from "./FormSelect"
-import CountriesSelect from "./CountriesSelect"
-import {statusOptions, swiftStatus, currencyOptions, transactionOptions, conditionOptions} from "../lib/options"
-import {IClient} from "../shared/types"
-import PayersSelect from "./PayersSelect"
-import ReviewManagersSelect from "./ReviewManagersSelect"
+import {FormField} from "../../components/FormField"
+import type {IOrder, ISubagent} from "../../types/index"
+import {FormSelect} from "../../components/FormSelect"
+import CountriesSelect from "../../components/select_components/CountriesSelect"
+import {statusOptions, swiftStatus, currencyOptions, transactionOptions, conditionOptions} from "../../lib/options"
+import {IClient} from "../../types/index"
+import PayersSelect from "../../components/select_components/PayersSelect"
+import ReviewManagersSelect from "../../components/select_components/ReviewManagersSelect"
 
 interface OrderFormProps {
   onSubmit: (data: IOrder) => void
@@ -24,7 +24,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({onSubmit, onClose, isLoadin
   const cashedClient = queryClient.getQueryData(["clients"])
   const selectedSubagentsID = watch("subagents")
   const cashedSubagent = queryClient.getQueryData(["subagents"])
-
+  
   const [selectedPayersID, setSelectedPayersID] = useState<number[]>([])
 
   useEffect(() => {
@@ -175,7 +175,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({onSubmit, onClose, isLoadin
 
         <FormField label='Условия VIP' {...register("vip_condition")} type='text' placeholder='Введите условия VIP' />
 
-        <FormField label='VIP комиссия' {...register("vip_commission")} step={0.000001} type='number' placeholder='Введите VIP комиссию' />
+        <FormField label='VIP комиссия' {...register("vip_comission")} step={0.000001} type='number' placeholder='Введите VIP комиссию' />
 
         <FormField label='Скрытая комиссия' {...register("hide_commission")} step={0.000001} type='number' placeholder='Введите скрытую комиссию' />
 

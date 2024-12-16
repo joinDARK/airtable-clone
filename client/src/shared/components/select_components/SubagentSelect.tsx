@@ -1,24 +1,24 @@
 import { useFormContext } from "react-hook-form"
 import { Controller } from "react-hook-form"
-import { RelationshipSelect } from "./RelationshipSelect"
+import { RelationshipSelect } from "../RelationshipSelect"
 
-export default function SubagentPayersSelect() {
+export default function SubagentsSelect() {
   const { control } = useFormContext()
   
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-        Плательщик Субагентов
+      <label className="block text-sm font-medium text-gray-700  dark:text-gray-300">
+        Субагенты
       </label>
       <Controller
-        name='subagentPayers'
+        name='subagents'
         control={control}
         render={({field}) => (
           <RelationshipSelect
-            type='subagentPayers'
+            type='subagents'
             value={field.value || []}
             onChange={field.onChange}
-            placeholder='Выберите плательщиков субагентов'
+            placeholder='Выберите субагентов'
           />
         )}
       />

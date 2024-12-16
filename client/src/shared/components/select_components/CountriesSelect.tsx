@@ -1,6 +1,6 @@
 import { useFormContext } from "react-hook-form"
 import { Controller } from "react-hook-form"
-import { RelationshipSelect } from "./RelationshipSelect"
+import { RelationshipSelect } from "../RelationshipSelect"
 
 export default function CountriesSelect() {
   const { control } = useFormContext()

@@ -2,18 +2,19 @@ import {useState} from "react"
 import {useQuery, useMutation, useQueryClient} from "react-query"
 import {api} from "../../modules/api"
 import {DataTable} from "../components/DataTable"
-import {Modal} from "../components/Modal"
-import type {ISubagent} from "../types"
-import {FormProvider, useForm} from "react-hook-form"
-import SubagentPayersSelect from "../components/SubagentPayersSelect"
-import OrdersSelect from "../components/OrdersSelect"
+import {Modal} from "../components/modal/Modal"
+import type {ISubagentPayer} from "../types"
+import {useForm, FormProvider} from "react-hook-form"
+import SubagentsSelect from "../components/select_components/SubagentSelect"
+import OrdersSelect from "../components/select_components/OrdersSelect"
 import {toast} from "react-toastify"
-import columns from "../lib/tableColumnsData/columnsSubagent"
 
-export const SubagentsPage = () => {
+import columns from "../lib/tableColumnsData/columnsSubagentPayer"
+
+export const SubagentPayersPage = () => {
   const defaultValue = {
     name: "",
-    payers: [],
+    subagents: [],
     orders: [],
   }
 
@@ -35,7 +36,7 @@ export const SubagentsPage = () => {
   }
 
   const queryClient = useQueryClient()
-  const {data, refetch} = useQuery("subagents", () => api.subagents.getAll(), {
+  const {data, refetch} = useQuery("subagent-payers", () => api.subagentPayers.getAll(), {
     staleTime: 0.3 * 60 * 1000,
     cacheTime: 10 * 60 * 1000,
     refetchOnWindowFocus: true,
@@ -43,68 +44,69 @@ export const SubagentsPage = () => {
     enabled: true,
   })
 
-  const createMutation = useMutation((newSubagent: ISubagent) => api.subagents.create(newSubagent), {
+  const createMutation = useMutation((newPayer: ISubagentPayer) => api.subagentPayers.create(newPayer), {
     onSuccess: () => {
-      queryClient.invalidateQueries("subagents")
-      toast.success("Субагент добавлен успешно!")
+      queryClient.invalidateQueries("subagent-payers")
+      toast.success("Плательщик Субагента добавлен успешно!")
       closeModal()
     },
   })
-  const deleteMutation = useMutation((id: number) => api.subagents.delete(id), {
+  const deleteMutation = useMutation((id: number) => api.subagentPayers.delete(id), {
     onSuccess: () => {
-      queryClient.invalidateQueries("subagents")
-      toast.success("Субагент удален успешно!")
+      queryClient.invalidateQueries("subagent-payers")
+      toast.success("Плательщик субагента удален успешно!")
     },
   })
-  const updateMutation = useMutation((data: ISubagent) => api.subagents.update(data.id as number, data), {
+  const updateMutation = useMutation((data: ISubagentPayer) => api.subagentPayers.update(data.id as number, data), {
     onSuccess: () => {
-      queryClient.invalidateQueries("subagents")
+      queryClient.invalidateQueries("subagent-payers")
       closeModal()
-      toast.success("Субагент обновлен успешно!")
+      toast.success("Плательщик Субагента обновлен успешно!")
     },
   })
 
-  const deleteSubagent = async (subagent: ISubagent) => {
-    if (window.confirm("Удалить субагента из таблицы?")) {
-      deleteMutation.mutate(subagent.id!)
+  const deleteSubagentPayer = async (subagentPayer: ISubagentPayer) => {
+    if (window.confirm("Удалить плательщика субагента из таблицы?")) {
+      deleteMutation.mutate(subagentPayer.id!)
     }
   }
-  const submit = (newSubagent: ISubagent) => {
-    if (typeof newSubagent.id === "number") {
-      updateMutation.mutate(newSubagent)
+  const submit = (newSubagentPayer: ISubagentPayer) => {
+    if (typeof newSubagentPayer.id === "number") {
+      updateMutation.mutate(newSubagentPayer)
     } else {
-      createMutation.mutate(newSubagent)
+      createMutation.mutate(newSubagentPayer)
     }
   }
-  const edit = (subagent: ISubagent) => {
-    reset(subagent)
+  const edit = (subagentPayer: ISubagentPayer) => {
+    reset(subagentPayer)
     setIsModalOpen(true)
-    setModalHeader("Изменить субагента")
+    setModalHeader("Изменить плательщика субагента")
   }
 
-  const methods = useForm<ISubagent>({defaultValues: defaultValue})
+  const methods = useForm<ISubagentPayer>({defaultValues: defaultValue})
   const {register, handleSubmit, reset} = methods
 
   return (
     <>
       <DataTable
-        title='Субагенты'
+        title='Плаетльщики'
         data={data?.data || []}
         columns={columns}
         onRefresh={() => refetch()}
         onAdd={() => {
           setIsModalOpen(true)
-          setModalHeader("Добавить нового субагента")
+          setModalHeader("Добавить нового плаетльщика")
         }}
         onEdit={edit}
-        onDelete={deleteSubagent}
+        onDelete={deleteSubagentPayer}
         onCellUpdate={submit}
         onView={handleView}
         isModalViewOpen={isModalViewOpen}
         closeModal={closeModal}
         item={item}
-        relatedName={"subagents"}
+        relatedName={"subagentPayers"}
       />
+
       <Modal isOpen={isModalOpen} onClose={closeModal} title={modalHeader}>
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(submit)} className='space-y-4'>
@@ -115,12 +117,12 @@ export const SubagentsPage = () => {
               <input
                 type='text'
                 {...register("name")}
+                placeholder='Введите наименование субагента'
                 className='mt-1 block w-full dark:bg-gray-700 placeholder:text-gray-700 dark:placeholder:text-gray-100 rounded-md shadow-sm hover:border-gray-400 transition-all focus:ring-blue-500 focus:border-blue-500'
                 required
-                placeholder='Введите наименование субагента'
               />
             </div>
-            <SubagentPayersSelect />
+            <SubagentsSelect />
             <OrdersSelect />
             <div className='flex justify-end gap-2 mt-6'>
               <button

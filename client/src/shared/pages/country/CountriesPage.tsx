@@ -2,18 +2,19 @@ import {useState} from "react"
 import {useQuery, useMutation, useQueryClient} from "react-query"
 import {api} from "../../modules/api"
 import {DataTable} from "../components/DataTable"
-import {Modal} from "../components/Modal"
-import type {IClient} from "../types"
+import {Modal} from "../components/modal/Modal"
+import type {ICountry} from "../types"
 import {FormProvider, useForm} from "react-hook-form"
-import OrdersSelect from "../components/OrdersSelect"
+import OrdersSelect from "../components/select_components/OrdersSelect"
 import {toast} from "react-toastify"
 
-import columns from "../lib/tableColumnsData/columnsClient"
+import columns from "../lib/tableColumnsData/columnsCountry"
 
-export const ClientsPage = () => {
+export const CountriesPage = () => {
   const defaultValue = {
     name: "",
-    inn: "",
+    code: "",
+    full_name: "",
     orders: [],
   }
 
@@ -35,7 +36,7 @@ export const ClientsPage = () => {
   }
 
   const queryClient = useQueryClient()
-  const {data, refetch} = useQuery("clients", () => api.clients.getAll(), {
+  const {data, refetch} = useQuery("countries", () => api.countries.getAll(), {
     staleTime: 0.3 * 60 * 1000,
     cacheTime: 10 * 60 * 1000,
     refetchOnWindowFocus: true,
@@ -43,91 +44,104 @@ export const ClientsPage = () => {
     enabled: true,
   })
 
-  const createMutation = useMutation((newClient: IClient) => api.clients.create(newClient), {
+  const createMutation = useMutation((newCountry: ICountry) => api.countries.create(newCountry), {
     onSuccess: () => {
-      queryClient.invalidateQueries("clients")
-      toast.success("Клиент добавлен успешно!")
+      queryClient.invalidateQueries("countries")
+      toast.success("Страна добавлена успешно!")
       closeModal()
     },
   })
-  const deleteMutation = useMutation((id: number) => api.clients.delete(id), {
+  const deleteMutation = useMutation((id: number) => api.countries.delete(id), {
     onSuccess: () => {
-      queryClient.invalidateQueries("clients")
-      toast.success("Клиент удален успешно!")
+      queryClient.invalidateQueries("countries")
+      toast.success("Страна удалена успешно!")
     },
   })
-  const updateMutation = useMutation((data: IClient) => api.clients.update(data.id as number, data), {
+  const updateMutation = useMutation((data: ICountry) => api.countries.update(data.id as number, data), {
     onSuccess: () => {
-      queryClient.invalidateQueries("clients")
+      queryClient.invalidateQueries("countries")
       closeModal()
-      toast.success("Клиент обновлен успешно!")
+      toast.success("Страна обновлена успешно!")
     },
   })
 
-  const deleteClient = async (client: IClient) => {
-    if (window.confirm("Удалить клиента из таблицы?")) {
-      deleteMutation.mutate(client.id!)
+  const deleteCountry = async (country: ICountry) => {
+    if (window.confirm("Удалить страну из таблицы?")) {
+      deleteMutation.mutate(country.id!)
     }
   }
-  const submit = (newClient: IClient) => {
-    if (typeof newClient.id === "number") {
-      updateMutation.mutate(newClient)
+  const submit = (newCountry: ICountry) => {
+    if (typeof newCountry.id === "number") {
+      updateMutation.mutate(newCountry)
     } else {
-      createMutation.mutate(newClient)
+      createMutation.mutate(newCountry)
     }
   }
-  const edit = (client: IClient) => {
-    reset(client)
+  const edit = (country: ICountry) => {
+    reset(country)
     setIsModalOpen(true)
-    setModalHeader("Изменить клиента")
+    setModalHeader("Изменить страну")
   }
 
-  const methods = useForm<IClient>({defaultValues: defaultValue})
+  const methods = useForm<ICountry>({defaultValues: defaultValue})
   const {register, handleSubmit, reset} = methods
 
   return (
     <>
       <DataTable
-        title='Клиенты'
+        title='Страны'
         data={data?.data || []}
         columns={columns}
         onRefresh={() => refetch()}
         onAdd={() => {
           setIsModalOpen(true)
-          setModalHeader("Добавить нового клиента")
+          setModalHeader("Добавить новую страну")
         }}
         onEdit={edit}
-        onDelete={deleteClient}
+        onDelete={deleteCountry}
         onCellUpdate={submit}
         onView={handleView}
         isModalViewOpen={isModalViewOpen}
         closeModal={closeModal}
         item={item}
-        relatedName={"clients"}
+        relatedName={"countries"}
       />
+
       <Modal isOpen={isModalOpen} onClose={closeModal} title={modalHeader}>
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(submit)} className='space-y-4'>
             <div>
               <label className='block text-sm font-medium text-gray-700 dark:text-gray-300'>
-                Наименование<sup className='text-red-600'> обязательное</sup>
+                Краткое название<sup className='text-red-600'> обязательное</sup>
               </label>
               <input
                 type='text'
-                placeholder='Введите наименование'
                 {...register("name")}
+                className='mt-1 block w-full dark:bg-gray-700 placeholder:text-gray-700 dark:placeholder:text-gray-100 rounded-md shadow-sm hover:border-gray-400 transition-all focus:ring-blue-500 focus:border-blue-500'
+                required
+                placeholder='Введите краткое название страны'
+              />
+            </div>
+            <div>
+              <label className='block text-sm font-medium text-gray-700 dark:text-gray-300'>
+                Код<sup className='text-red-600'> обязательное</sup>
+              </label>
+              <input
+                {...register("code")}
+                type='text'
+                placeholder='Введите код страны'
                 className='mt-1 block w-full dark:bg-gray-700 placeholder:text-gray-700 dark:placeholder:text-gray-100 rounded-md shadow-sm hover:border-gray-400 transition-all focus:ring-blue-500 focus:border-blue-500'
                 required
               />
             </div>
             <div>
               <label className='block text-sm font-medium text-gray-700 dark:text-gray-300'>
-                ИНН<sup className='text-red-600'> обязательное</sup>
+                Полное наименование<sup className='text-red-600'> обязательное</sup>
               </label>
               <input
+                {...register("full_name")}
                 type='text'
-                {...register("inn")}
-                placeholder='Введите ИНН клиента'
+                placeholder='Введите полное наименование страны'
                 className='mt-1 block w-full dark:bg-gray-700 placeholder:text-gray-700 dark:placeholder:text-gray-100 rounded-md shadow-sm hover:border-gray-400 transition-all focus:ring-blue-500 focus:border-blue-500'
                 required
               />

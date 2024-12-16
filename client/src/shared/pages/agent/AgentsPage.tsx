@@ -1,14 +1,14 @@
 import {useState} from "react"
 import {useQuery, useMutation, useQueryClient} from "react-query"
-import {api} from "../../modules/api"
-import {DataTable} from "../components/DataTable"
-import {Modal} from "../components/Modal"
-import type {IAgent} from "../types"
+import {api} from "../../../modules/api"
+import {DataTable} from "../../components/DataTable"
+import {Modal} from "../../components/modal/Modal"
+import type {IAgent} from "../../types"
 import {FormProvider, useForm} from "react-hook-form"
-import OrdersSelect from "../components/OrdersSelect"
+import OrdersSelect from "../../components/select_components/OrdersSelect"
 import {toast} from "react-toastify"
 
-import columns from "../lib/tableColumnsData/columnsAgent"
+import columns from "../../lib/tableColumnsData/columnsAgent"
 
 export const AgentsPage = () => {
   const defaultValue = {
