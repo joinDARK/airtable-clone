@@ -1,16 +1,16 @@
 import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom"
 import {QueryClientProvider} from "react-query"
 import {ToastContainer} from "react-toastify"
-import {queryClient} from "./shared/lib/queryClient"
+import {queryClient} from "./modules/api/queryClient"
 import {Sidebar} from "./shared/components/Sidebar"
-import {OrdersPage} from "./shared/pages/OrdersPage"
-import {ManagersPage} from "./shared/pages/ManagersPage"
-import {ContractorsPage} from "./shared/pages/ContractorsPage"
+import OrdersPage from "./shared/pages/order/OrdersPage"
+import ManagersPage from "./shared/pages/manager/ManagersPage"
+import {ContractorsPage} from "./shared/pages/contragent/ContragentsPage"
 import {AgentsPage} from "./shared/pages/agent/AgentsPage"
-import {ClientsPage} from "./shared/pages/ClientsPage"
-import {CountriesPage} from "./shared/pages/CountriesPage"
-import {SubagentsPage} from "./shared/pages/SubagentsPage"
-import {SubagentPayersPage} from "./shared/pages/SubagentPayersPage"
+import {ClientsPage} from "./shared/pages/client/ClientsPage"
+import {CountriesPage} from "./shared/pages/country/CountriesPage"
+import {SubagentsPage} from "./shared/pages/subagent/SubagentsPage"
+import {SubagentPayersPage} from "./shared/pages/payer/SubagentPayersPage"
 import "react-toastify/dist/ReactToastify.css"
 
 function App() {
@@ -25,12 +25,12 @@ function App() {
                 <Route path='/' element={<Navigate to='/orders' replace />} />
                 <Route path='/orders' element={<OrdersPage />} />
                 <Route path='/managers' element={<ManagersPage />} />
-                <Route path='/contractors' element={<ContractorsPage />} />
+                {/* <Route path='/contractors' element={<ContractorsPage />} />
                 <Route path='/agents' element={<AgentsPage />} />
                 <Route path='/clients' element={<ClientsPage />} />
                 <Route path='/countries' element={<CountriesPage />} />
                 <Route path='/subagents' element={<SubagentsPage />} />
-                <Route path='/subagent-payers' element={<SubagentPayersPage />} />
+                <Route path='/subagent-payers' element={<SubagentPayersPage />} /> */}
               </Routes>
             </div>
           </main>

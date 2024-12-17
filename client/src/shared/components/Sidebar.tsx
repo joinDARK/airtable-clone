@@ -1,30 +1,18 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { 
-  FileText, 
-  Users, 
-  Building2, 
-  Globe2, 
-  UserCircle,
-  Briefcase,
-  UserCog,
-  CreditCard,
-  ChevronLeft,
-  ChevronRight,
-  SunMoon
-} from 'lucide-react';
+import { FileText, Users, ChevronLeft, ChevronRight, SunMoon } from 'lucide-react';
 import { clsx } from 'clsx';
 import useThemeStore from '../../modules/theme/useThemeStore';
 
 const navItems = [
   { path: '/orders', label: 'Заявки', icon: FileText },
   { path: '/managers', label: 'Менеджеры', icon: Users },
-  { path: '/contractors', label: 'Контрагенты', icon: Building2 },
-  { path: '/agents', label: 'Агенты', icon: Briefcase },
-  { path: '/clients', label: 'Клиенты', icon: UserCircle },
-  { path: '/countries', label: 'Страны', icon: Globe2 },
-  { path: '/subagents', label: 'Субагенты', icon: UserCog },
-  { path: '/subagent-payers', label: 'Плательщики Субагентов', icon: CreditCard },
+  // { path: '/contractors', label: 'Контрагенты', icon: Building2 },
+  // { path: '/agents', label: 'Агенты', icon: Briefcase },
+  // { path: '/clients', label: 'Клиенты', icon: UserCircle },
+  // { path: '/countries', label: 'Страны', icon: Globe2 },
+  // { path: '/subagents', label: 'Субагенты', icon: UserCog },
+  // { path: '/subagent-payers', label: 'Плательщики Субагентов', icon: CreditCard },
 ];
 
 export const Sidebar = () => {
@@ -63,7 +51,7 @@ export const Sidebar = () => {
                   to={item.path}
                   className={({ isActive }) =>
                     clsx(
-                      'flex items-center gap-3 p-3 rounded-lg transition-colors',
+                      'flex items-center gap-3 p-3 rounded-lg transition-all shadow-sm active:scale-90',
                       isCollapsed ? 'justify-center' : '',
                       isActive
                         ? 'bg-blue-600 text-white'
@@ -83,7 +71,7 @@ export const Sidebar = () => {
         <div className="p-4 border-t border-gray-700">
           <button
             className={clsx(
-              'flex items-center gap-3 p-3 rounded-lg transition-colors w-full text-gray-300 hover:bg-gray-700',
+              'flex items-center gap-3 p-3 rounded-lg transition-all shadow-sm active:scale-90 w-full text-gray-300 hover:bg-gray-700',
               isCollapsed ? 'justify-center' : ''
             )}
             onClick={setTheme}

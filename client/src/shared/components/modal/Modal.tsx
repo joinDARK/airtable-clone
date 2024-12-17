@@ -6,15 +6,15 @@ import { useModalStore } from "./store/useModalStore";
 
 
 interface ModalProps {
-  children: React.ReactNode;
-  value?: any;
+  // children: React.ReactNode;
+  // value?: any;
   setIsEditing?: any;
   isEditing?: boolean;
 }
 
 export const Modal: React.FC<ModalProps> = ({
-  children,
-  value,
+  // children,
+  // value,
   setIsEditing,
   isEditing
 }) => {
@@ -46,7 +46,7 @@ export const Modal: React.FC<ModalProps> = ({
                 </button>
               </div>
             </div>
-            <div className="max-h-[80vh] overflow-scroll p-4 resize-y">{children}</div>
+            <div className="max-h-[80vh] overflow-scroll p-4 resize-y">Модальное окно</div>
           </Dialog.Panel>
         </div>
       </Dialog>
