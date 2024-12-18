@@ -1,5 +1,5 @@
 const BaseService = require('./baseService');
-const { Client, Order } = require('../db/entities/enteties');
+const { Client, Order } = require('../db/models');
 
 class ClientService extends BaseService {
   constructor() {

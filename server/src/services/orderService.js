@@ -10,7 +10,7 @@ const {
   Country,
   SubagentPayer,
   File
-} = require('../db/entities/enteties');
+} = require('../db/models');
 
 class OrderService extends BaseService {
   constructor() {

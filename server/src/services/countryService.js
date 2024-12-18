@@ -1,5 +1,5 @@
 const BaseService = require('./baseService');
-const { Country, Order } = require('../db/entities/enteties');
+const { Country, Order } = require('../db/models');
 
 class CountryService extends BaseService {
   constructor() {

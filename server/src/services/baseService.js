@@ -10,7 +10,6 @@ class BaseService {
   filterSingleRecord(record) {
     const filteredRecord = record.toJSON();
 
-    // для файлов можно оставить обработку, если это нужно:
     this.includes.forEach((include) => {
       const alias = include.as;
       if (alias === 'files' && filteredRecord[alias]) {
@@ -77,9 +76,14 @@ class BaseService {
     }
 
     try {
-      const calculatedData = calculateFields(data);
+      let dataToSave = { ...data };
 
-      const dataToSave = { ...data, ...calculatedData };
+      // Вычисления только для таблицы orders
+      if (this.model.name.toLowerCase() === 'order') {
+        const calculatedData = calculateFields(data);
+        dataToSave = { ...data, ...calculatedData };
+      }
+
       const newEntity = await this.model.create(dataToSave, { transaction });
 
       for (const include of this.includes) {
@@ -87,7 +91,6 @@ class BaseService {
         const methodName = `set${alias.charAt(0).toUpperCase() + alias.slice(1)}`;
 
         if (data[alias] && typeof newEntity[methodName] === "function") {
-          // Просто устанавливаем связанные данные как есть.
           await newEntity[methodName](data[alias], { transaction });
         }
       }
@@ -121,8 +124,13 @@ class BaseService {
         throw new Error(`Record with id ${id} not found.`);
       }
 
-      const calculatedData = calculateFields(data);
-      const dataToUpdate = { ...data, ...calculatedData };
+      let dataToUpdate = { ...data };
+
+      // Вычисления только для таблицы orders
+      if (this.model.name.toLowerCase() === 'order') {
+        const calculatedData = calculateFields(data);
+        dataToUpdate = { ...data, ...calculatedData };
+      }
 
       await entity.update(dataToUpdate, { transaction });
 
@@ -133,8 +141,6 @@ class BaseService {
         if (data[alias] && typeof entity[methodName] === "function") {
           let relatedData = data[alias];
 
-          // Если это файлы, можно оставить так, если требуется идентификатор
-          // Если нет, вернуть их как есть.
           if (alias === "files" && Array.isArray(relatedData)) {
             relatedData = relatedData.map(file => file.id);
           }

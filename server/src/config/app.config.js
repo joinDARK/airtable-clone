@@ -8,4 +8,3 @@ module.exports = {
       PORT: process.env.PG_PORT || 8080,
     }
   };
-  
