@@ -51,6 +51,14 @@ const schema = buildSchema(`
     subagents: [Subagent]
   }
 
+  type File {
+    id: Int!
+    name: String!
+    fileUrl: String!
+    type: String!
+    orders: [Order]
+  }
+
   type Order {
     id: Int!
     status: String!
@@ -59,7 +67,7 @@ const schema = buildSchema(`
     reviewers: [Manager]
     date: String!
     date_hired: String
-    contragent: [Contragent]
+    contragents: [Contragent]
     agents: [Agent]
     clients: [Client]
     client_inn: String
@@ -118,12 +126,19 @@ const schema = buildSchema(`
     stuck_money_name: String
     stuck_money_sum: Float
     mistake_is_it_name: String
+    order_file: [File]
     order_link: String
+    invoice_file: [File]
     invoice_link: String
+    assignment_file: [File]
     assignment_link: String
+    swift_file: [File]
     swift_link: String
+    swift103_file: [File]
     swift103_link: String
+    swift199_file: [File]
     swift199_link: String
+    act_file: [File]
     act_link: String
     money_gone: Boolean!
   }
@@ -135,7 +150,7 @@ const schema = buildSchema(`
     reviewers: [Int]
     date: String!
     date_hired: String
-    contragent: [Int]
+    contragents: [Int]
     agents: [Int]
     clients: [Int]
     client_inn: String
@@ -212,7 +227,7 @@ const schema = buildSchema(`
     reviewers: [Int]
     date: String
     date_hired: String
-    contragent: [Int]
+    contragents: [Int]
     agents: [Int]
     clients: [Int]
     client_inn: String
@@ -394,6 +409,9 @@ const schema = buildSchema(`
 
     subagentPayers: [SubagentPayer]
     subagentPayer(id: Int!): SubagentPayer
+
+    files: [File]
+    file(id: Int!): File
   }
 
   type Mutation {
