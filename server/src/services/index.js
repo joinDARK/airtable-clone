@@ -7,6 +7,7 @@ const OrderService = require('./orderService');
 const SubagentService = require('./subagentServices');
 const SubagentPayerService = require('./subagentPayerService');
 const CountryService = require('./countryService');
+const fileService = require('./fileService');
 
 module.exports = {
   agentService: AgentService,
@@ -17,5 +18,6 @@ module.exports = {
   orderService: OrderService,
   subagentService: SubagentService,
   subagentPayerService: SubagentPayerService,
-  countryService: CountryService
+  countryService: CountryService,
+  fileService: fileService,
 };

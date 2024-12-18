@@ -53,10 +53,10 @@ const schema = buildSchema(`
 
   type File {
     id: Int!
-    name: String!
+    fileName: String!
     fileUrl: String!
-    type: String!
-    orders: [Order]
+    type: String
+    orderId: Int
   }
 
   type Order {
@@ -126,21 +126,15 @@ const schema = buildSchema(`
     stuck_money_name: String
     stuck_money_sum: Float
     mistake_is_it_name: String
-    order_file: [File]
     order_link: String
-    invoice_file: [File]
     invoice_link: String
-    assignment_file: [File]
     assignment_link: String
-    swift_file: [File]
     swift_link: String
-    swift103_file: [File]
     swift103_link: String
-    swift199_file: [File]
     swift199_link: String
-    act_file: [File]
     act_link: String
     money_gone: Boolean!
+    files: [File]
   }
 
   input CreateOrderInput {
@@ -286,14 +280,22 @@ const schema = buildSchema(`
     stuck_money_name: String
     stuck_money_sum: Float
     mistake_is_it_name: String
+    order_file: [Int]
     order_link: String
+    invoice_file: [Int]
     invoice_link: String
+    assignment_file: [Int]
     assignment_link: String
+    swift_file: [Int]
     swift_link: String
+    swift103_file: [Int]
     swift103_link: String
+    swift199_file: [Int]
     swift199_link: String
+    act_file: [Int]
     act_link: String
     money_gone: Boolean
+    files: [Int]
   }
 
   input CreateAgentInput {

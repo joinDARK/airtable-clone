@@ -10,10 +10,12 @@ const {
   subagentService,
   fileService
 } = require("../services/index.js");
+const { validateInput, schemas } = require("../utils/validation");
 
 module.exports = {
-  // Queries
-  // Orders
+  // ========================
+  // QUERIES
+  // ========================
   orders: async () => {
     const result = await orderService.getAll();
     return result || [];
@@ -22,65 +24,54 @@ module.exports = {
     return await orderService.getById(id);
   },
 
-  // Agents
   agents: async () => {
     const result = await agentService.getAll();
     return result || [];
   },
   agent: async ({ id }) => await agentService.getById(id),
 
-  // Clients
   clients: async () => {
     const result = await clientService.getAll();
     return result || [];
   },
-  client: async ({ id }) => {
-    return await clientService.getById(id);
-  },
+  client: async ({ id }) => await clientService.getById(id),
 
-  // Contragents
   contragents: async () => {
     const result = await contractorService.getAll();
     return result || [];
   },
   contragent: async ({ id }) => await contractorService.getById(id),
 
-  // Managers
   managers: async () => {
     const result = await managerService.getAll();
     return result || [];
   },
   manager: async ({ id }) => await managerService.getById(id),
 
-  // Countries
   countries: async () => {
     const result = await countryService.getAll();
     return result || [];
   },
   country: async ({ id }) => await countryService.getById(id),
 
-  // Subagents
   subagents: async () => {
     const result = await subagentService.getAll();
     return result || [];
   },
   subagent: async ({ id }) => await subagentService.getById(id),
 
-  // SubagentPayers
   subagentPayers: async () => {
     const result = await subagentPayerService.getAll();
     return result || [];
   },
   subagentPayer: async ({ id }) => await subagentPayerService.getById(id),
 
-  // Reviewers
   reviewers: async () => {
     const result = await reviewerService.getAll();
     return result || [];
   },
   reviewer: async ({ id }) => await reviewerService.getById(id),
 
-  // Files
   files: async () => {
     const result = await fileService.getAll();
     return result || [];
@@ -88,12 +79,17 @@ module.exports = {
   file: async ({ id }) => await fileService.getById(id),
 
 
-  // Mutations
+  // ========================
+  // MUTATIONS
+  // ========================
 
   // Orders
-  createOrder: async ({ input }) => await orderService.create(input),
+  createOrder: async ({ input }) => {
+    const validData = validateInput(input, schemas.createOrder);
+    return await orderService.create(validData);
+  },
   updateOrder: async ({ input }) => {
-    const { id, ...data } = input;
+    const { id, ...data } = validateInput(input, schemas.updateOrder);
     return await orderService.update(id, data);
   },
   deleteOrder: async ({ id }) => {
@@ -102,9 +98,12 @@ module.exports = {
   },
 
   // Agents
-  createAgent: async ({ input }) => await agentService.create(input),
+  createAgent: async ({ input }) => {
+    const validData = validateInput(input, schemas.createAgent);
+    return await agentService.create(validData);
+  },
   updateAgent: async ({ input }) => {
-    const { id, ...data } = input;
+    const { id, ...data } = validateInput(input, schemas.updateAgent);
     return await agentService.update(id, data);
   },
   deleteAgent: async ({ id }) => {
@@ -113,9 +112,12 @@ module.exports = {
   },
 
   // Clients
-  createClient: async ({ input }) => await clientService.create(input),
+  createClient: async ({ input }) => {
+    const validData = validateInput(input, schemas.createClient);
+    return await clientService.create(validData);
+  },
   updateClient: async ({ input }) => {
-    const { id, ...data } = input;
+    const { id, ...data } = validateInput(input, schemas.updateClient);
     return await clientService.update(id, data);
   },
   deleteClient: async ({ id }) => {
@@ -124,9 +126,12 @@ module.exports = {
   },
 
   // Contragents
-  createContragent: async ({ input }) => await contractorService.create(input),
+  createContragent: async ({ input }) => {
+    const validData = validateInput(input, schemas.createContragent);
+    return await contractorService.create(validData);
+  },
   updateContragent: async ({ input }) => {
-    const { id, ...data } = input;
+    const { id, ...data } = validateInput(input, schemas.updateContragent);
     return await contractorService.update(id, data);
   },
   deleteContragent: async ({ id }) => {
@@ -135,9 +140,12 @@ module.exports = {
   },
 
   // Managers
-  createManager: async ({ input }) => await managerService.create(input),
+  createManager: async ({ input }) => {
+    const validData = validateInput(input, schemas.createManager);
+    return await managerService.create(validData);
+  },
   updateManager: async ({ input }) => {
-    const { id, ...data } = input;
+    const { id, ...data } = validateInput(input, schemas.updateManager);
     return await managerService.update(id, data);
   },
   deleteManager: async ({ id }) => {
@@ -146,9 +154,15 @@ module.exports = {
   },
 
   // Reviewers
-  createReviewer: async ({ input }) => await reviewerService.create(input),
+  // Если у вас есть create/update для reviewer, добавьте их аналогично:
+  createReviewer: async ({ input }) => {
+    const validData = validateInput(input, schemas.createManager); 
+    // Предполагаем, что Reviewer может иметь похожую схему, или создайте отдельную
+    return await reviewerService.create(validData);
+  },
   updateReviewer: async ({ input }) => {
-    const { id, ...data } = input;
+    const { id, ...data } = validateInput(input, schemas.updateManager); 
+    // Аналогично, используйте соответствующую схему, если нужна отдельная
     return await reviewerService.update(id, data);
   },
   deleteReviewer: async ({ id }) => {
@@ -157,9 +171,12 @@ module.exports = {
   },
 
   // Countries
-  createCountry: async ({ input }) => await countryService.create(input),
+  createCountry: async ({ input }) => {
+    const validData = validateInput(input, schemas.createCountry);
+    return await countryService.create(validData);
+  },
   updateCountry: async ({ input }) => {
-    const { id, ...data } = input;
+    const { id, ...data } = validateInput(input, schemas.updateCountry);
     return await countryService.update(id, data);
   },
   deleteCountry: async ({ id }) => {
@@ -168,9 +185,12 @@ module.exports = {
   },
 
   // Subagents
-  createSubagent: async ({ input }) => await subagentService.create(input),
+  createSubagent: async ({ input }) => {
+    const validData = validateInput(input, schemas.createSubagent);
+    return await subagentService.create(validData);
+  },
   updateSubagent: async ({ input }) => {
-    const { id, ...data } = input;
+    const { id, ...data } = validateInput(input, schemas.updateSubagent);
     return await subagentService.update(id, data);
   },
   deleteSubagent: async ({ id }) => {
@@ -179,9 +199,12 @@ module.exports = {
   },
 
   // SubagentPayers
-  createSubagentPayer: async ({ input }) => await subagentPayerService.create(input),
+  createSubagentPayer: async ({ input }) => {
+    const validData = validateInput(input, schemas.createSubagentPayer);
+    return await subagentPayerService.create(validData);
+  },
   updateSubagentPayer: async ({ input }) => {
-    const { id, ...data } = input;
+    const { id, ...data } = validateInput(input, schemas.updateSubagentPayer);
     return await subagentPayerService.update(id, data);
   },
   deleteSubagentPayer: async ({ id }) => {
@@ -190,9 +213,12 @@ module.exports = {
   },
 
   // Files
-  createFile: async ({ input }) => await fileService.create(input),
+  createFile: async ({ input }) => {
+    const validData = validateInput(input, schemas.createFile);
+    return await fileService.create(validData);
+  },
   updateFile: async ({ input }) => {
-    const { id, ...data } = input;
+    const { id, ...data } = validateInput(input, schemas.updateFile);
     return await fileService.update(id, data);
   },
   deleteFile: async ({ id }) => {

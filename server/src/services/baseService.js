@@ -1,5 +1,5 @@
-const calculateFields = require("../utils/calculation");
 const sequelize = require("../db/index");
+const { formatDate } = require("../utils/dateUtils");
 
 class BaseService {
   constructor(model, includes = []) {
@@ -10,14 +10,27 @@ class BaseService {
   filterSingleRecord(record) {
     const filteredRecord = record.toJSON();
 
+    if (filteredRecord.date) {
+      filteredRecord.date = formatDate(filteredRecord.date);
+    }
+    if (filteredRecord.date_hired) {
+      filteredRecord.date_hired = formatDate(filteredRecord.date_hired);
+    }
+
     this.includes.forEach((include) => {
       const alias = include.as;
-      if (alias === 'files' && filteredRecord[alias]) {
-        filteredRecord[alias] = filteredRecord[alias].map(fileRecord => ({
+
+      if (!filteredRecord[alias]) {
+        filteredRecord[alias] = [];
+      }
+
+      if (alias === "files" && Array.isArray(filteredRecord[alias])) {
+        filteredRecord[alias] = filteredRecord[alias].map((fileRecord) => ({
           id: fileRecord.id,
-          name: fileRecord.name || fileRecord.fileName,
-          link: fileRecord.fileUrl || null,
+          fileName: fileRecord.fileName,
+          fileUrl: fileRecord.fileUrl,
           type: fileRecord.type || alias,
+          orderId: fileRecord.orderId,
         }));
       }
     });
@@ -76,19 +89,17 @@ class BaseService {
     }
 
     try {
-      let dataToSave = { ...data };
+      // Форматируем даты перед созданием
+      if (data.date) data.date = formatDate(data.date);
+      if (data.date_hired) data.date_hired = formatDate(data.date_hired);
 
-      // Вычисления только для таблицы orders
-      if (this.model.name.toLowerCase() === 'order') {
-        const calculatedData = calculateFields(data);
-        dataToSave = { ...data, ...calculatedData };
-      }
-
-      const newEntity = await this.model.create(dataToSave, { transaction });
+      const newEntity = await this.model.create(data, { transaction });
 
       for (const include of this.includes) {
         const alias = include.as;
-        const methodName = `set${alias.charAt(0).toUpperCase() + alias.slice(1)}`;
+        const methodName = `set${
+          alias.charAt(0).toUpperCase() + alias.slice(1)
+        }`;
 
         if (data[alias] && typeof newEntity[methodName] === "function") {
           await newEntity[methodName](data[alias], { transaction });
@@ -97,7 +108,11 @@ class BaseService {
 
       await transaction.commit();
 
-      return this.filterSingleRecord(newEntity);
+      // После коммита повторно загрузим объект со всеми include
+      const reloadedEntity = await this.model.findByPk(newEntity.id, {
+        include: this.includes,
+      });
+      return this.filterSingleRecord(reloadedEntity);
     } catch (error) {
       if (transaction) await transaction.rollback();
       console.error(`Error creating record for ${this.model.name}:`, error);
@@ -124,25 +139,23 @@ class BaseService {
         throw new Error(`Record with id ${id} not found.`);
       }
 
-      let dataToUpdate = { ...data };
+      // Форматируем даты перед обновлением
+      if (data.date) data.date = formatDate(data.date);
+      if (data.date_hired) data.date_hired = formatDate(data.date_hired);
 
-      // Вычисления только для таблицы orders
-      if (this.model.name.toLowerCase() === 'order') {
-        const calculatedData = calculateFields(data);
-        dataToUpdate = { ...data, ...calculatedData };
-      }
-
-      await entity.update(dataToUpdate, { transaction });
+      await entity.update(data, { transaction });
 
       for (const include of this.includes) {
         const alias = include.as;
-        const methodName = `set${alias.charAt(0).toUpperCase() + alias.slice(1)}`;
+        const methodName = `set${
+          alias.charAt(0).toUpperCase() + alias.slice(1)
+        }`;
 
         if (data[alias] && typeof entity[methodName] === "function") {
           let relatedData = data[alias];
 
           if (alias === "files" && Array.isArray(relatedData)) {
-            relatedData = relatedData.map(file => file.id);
+            relatedData = relatedData.map((file) => file.id);
           }
 
           await entity[methodName](relatedData, { transaction });
@@ -151,7 +164,11 @@ class BaseService {
 
       await transaction.commit();
 
-      return this.filterSingleRecord(entity);
+      // После обновления перезагрузим данные с include
+      const reloadedEntity = await this.model.findByPk(id, {
+        include: this.includes,
+      });
+      return this.filterSingleRecord(reloadedEntity);
     } catch (error) {
       if (transaction) await transaction.rollback();
       console.error(`Error updating record for ${this.model.name}:`, error);

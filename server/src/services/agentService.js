@@ -4,7 +4,7 @@ const { Agent, Order } = require('../db/models');
 class AgentService extends BaseService {
   constructor() {
     super(Agent, [
-      { model: Order, as: 'orders' } // Ассоциация агентов с заявками
+      { model: Order, as: 'orders' }
     ]);
   }
 }
