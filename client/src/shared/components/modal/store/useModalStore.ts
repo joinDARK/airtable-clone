@@ -3,14 +3,20 @@ import {create} from "zustand"
 interface ModalStore {
   open: boolean;
   title: string | number;
-  modalHandler: (newTitle?: string | number) => void
+  content?: string;
+  data?: string;
+  modalHandler: (newTitle?: string | number, newContent?: string, newData?: string) => void
 }
 
-export const useModalStore = create<ModalStore>((set) => ({
+export const useModalStore = create<ModalStore>((set, get) => ({
   open: false,
   title: "",
-  modalHandler: (newTitle?: string | number) => set((state) => ({
-    open: !state.open,
+  content: "",
+  data: "",
+  modalHandler: (newTitle?: string | number, newContent: string = "", newData: string = "") => set(() => ({
+    open: !get().open,
+    content: newContent,
+    data: newData,
     title: newTitle ?? "Нету загаловка"
   }))
 }))

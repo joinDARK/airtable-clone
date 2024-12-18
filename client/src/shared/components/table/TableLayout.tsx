@@ -1,14 +1,23 @@
 import {RefreshCw, Plus, Search} from "lucide-react"
 import Table from "./ui/Table";
 import config from "../../configs/index.ts"
+import { useModalStore } from "../modal/store/useModalStore.ts";
+import { createContext } from "react";
 
 interface Props {
   type: "orders" | "managers"
 }
 
+interface ITableContext {
+  type: string;
+}
+
+export const TableLayoutContext = createContext<ITableContext | undefined>(undefined)
+
 function TableLayout({type}:Props) {
   const tableConfig = config[type]
-  
+  const modalHandler = useModalStore(store => store.modalHandler);
+
   return (
     <div className='flex flex-col h-full transition-all duration-300'>
       <div className='sticky mx-a top-0 z-20 bg-white p-6 border-b border-gray-200 dark:bg-gray-800 dark:border-gray-600 transition-all'>
@@ -17,6 +26,7 @@ function TableLayout({type}:Props) {
             <div className='flex items-center gap-3'>
             <button
                 className='bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition-all shadow-sm active:scale-90'
+                onClick={() => modalHandler(`Добавить нового ${tableConfig.label}`, type)}
               >
                 <Plus size={20} />
                 <span>Добавить</span>
@@ -40,7 +50,9 @@ function TableLayout({type}:Props) {
       </div>
       <div className='flex-1 overflow-x-auto'>
         <div className='inline-block min-w-full align-middle'>
-          <Table columns={tableConfig.columns} />
+          <TableLayoutContext.Provider value={{type}}>
+            <Table columns={tableConfig.columns} />
+          </TableLayoutContext.Provider>
         </div>
       </div>
     </div>

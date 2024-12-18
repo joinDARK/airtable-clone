@@ -9,7 +9,9 @@ interface ITableStore {
 }
 const useTableStore = create<ITableStore>((set) => ({
   data: [],
-  setData: (newData: Data) => set({data: newData})
+  setData: (newData: Data) => set({
+    data: newData
+  })
 }))
 
 export default useTableStore

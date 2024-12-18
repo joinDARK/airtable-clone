@@ -1,4 +1,4 @@
-import TableLayout from "../../components/table/TableLayout";
+import TableLayout from "../components/table/TableLayout";
 
 function OrdersPage() {
   return (
