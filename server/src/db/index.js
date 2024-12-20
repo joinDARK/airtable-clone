@@ -14,4 +14,9 @@ sequelize
   .then(() => console.log("Подключение к бд успешное!"))
   .catch((err) => console.log(`Ошибка подключения к бд: ${err}`));
 
+sequelize.sync({ alter: true })
+  .catch(err => {
+    console.error('Ошибка синхронизации с БД:', err);
+  });
+
 module.exports = sequelize;

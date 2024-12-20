@@ -8,6 +8,8 @@ const Order = require('./Order');
 const Reviewer = require('./Reviewer');
 const Subagent = require('./Subagent');
 const SubagentPayer = require('./SubagentPayer');
+const User = require('./User');
+
 
 module.exports = {
   Agent,
@@ -20,4 +22,5 @@ module.exports = {
   Reviewer,
   Subagent,
   SubagentPayer,
+  User,
 };

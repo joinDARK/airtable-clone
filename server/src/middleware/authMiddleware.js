@@ -1,22 +1,27 @@
+// middleware/authMiddleware.js
 const jwt = require("jsonwebtoken");
-const { JWT_SECRET } = require("../config/app.config")
+const { JWT_SECRET } = require("../config/app.config");
+const { User } = require("../db/models");
 
-function authMiddleware(req, res, next) {
+async function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
-    // Может быть, не останавливаем запрос, а просто назначаем user = null.
-    // Тогда в резольверах можно проверять контекст
     req.user = null;
-    console.log(`authHeader: ${authHeader}`);
-    return next();
+    return res.status(403).json({ message: "authHeader is missing" });
   }
 
   const token = authHeader.split(" ")[1];
-  console.log(`token: ${token}, \nJWT_SECRET: ${JWT_SECRET}`);
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    req.user = decoded;
+
+    const user = await User.findOne({ where: { login: decoded.login } });
+    if (!user) {
+      req.user = null;
+      return res.status(403).json({ message: "Invalid token: user not found" });
+    }
+
+    req.user = { id: user.id, login: user.login };
     next();
   } catch (error) {
     return res.status(403).json({ message: "Invalid token" });
