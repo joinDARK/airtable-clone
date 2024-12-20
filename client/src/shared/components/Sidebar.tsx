@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import { FileText, Users, ChevronLeft, ChevronRight, SunMoon } from 'lucide-react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { FileText, Users, ChevronLeft, ChevronRight, SunMoon, LogOut } from 'lucide-react';
 import { clsx } from 'clsx';
 import useThemeStore from '../../modules/theme/useThemeStore';
+import { toast } from 'react-toastify';
 
 const navItems = [
   { path: '/orders', label: 'Заявки', icon: FileText },
@@ -15,9 +16,14 @@ const navItems = [
   // { path: '/subagent-payers', label: 'Плательщики Субагентов', icon: CreditCard },
 ];
 
-export const Sidebar = () => {
+interface Props {
+  exitApp: (state: boolean) => void
+}
+
+export const Sidebar = ({exitApp}: Props) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const setTheme = useThemeStore((store) => store.setAltTheme)
+  const exit = useNavigate()
 
   return (
     <div
@@ -71,13 +77,21 @@ export const Sidebar = () => {
         <div className="p-4 border-t border-gray-700">
           <button
             className={clsx(
-              'flex items-center gap-3 p-3 rounded-lg transition-all shadow-sm active:scale-90 w-full text-gray-300 hover:bg-gray-700',
+              'flex items-center gap-3 p-3 rounded-lg transition-all shadow-sm active:scale-90 mb-3 w-full text-gray-300 hover:bg-gray-700',
               isCollapsed ? 'justify-center' : ''
             )}
             onClick={setTheme}
           >
             <SunMoon size={20} />
             {!isCollapsed && <span>Изменить тему</span>}
+          </button>
+          <button onClick={() => {
+            exit("/login")
+            exitApp(false)
+            toast.info("Вы вышли из аккаунта")
+          }} className='bg-red-600 flex items-center gap-3 p-3 rounded-lg transition-all shadow-sm active:scale-90 w-full hover:bg-red-700'>
+            <LogOut size={20}/>
+            {!isCollapsed && <span>Выйти</span>}
           </button>
         </div>
       </div>

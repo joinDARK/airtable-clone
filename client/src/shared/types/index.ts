@@ -139,3 +139,8 @@ export interface IColumn {
   type?: string;
   readonly?: boolean
 }
+
+export interface IRelatedData {
+  id: number;
+  name?: string;
+}

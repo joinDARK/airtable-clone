@@ -1,12 +1,14 @@
+import { IRelatedData } from "../../../../types"
 import {useModalStore} from "../../../modal/store/useModalStore"
 
 interface Props {
-  value: {id: number; name?: string}[]
+  value: IRelatedData[]
   title?: string
 }
 
 function Related({value}: Props) {
   const modalHandler = useModalStore(store => store.modalHandler)
+  
   return (
     <div className='flex flex-wrap gap-2 px-6 py-4'>
       {value.map((item, i) => (

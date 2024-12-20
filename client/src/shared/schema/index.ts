@@ -81,7 +81,7 @@ const OrderSchema: ZodType = z.lazy(() =>
 
 const ClientSchema: ZodType = z.lazy(() =>
   z.object({
-    id: z.number(),
+    id: z.number().optional(),
     name: z.string().min(1),
     inn: z.string().min(1),
     orders: z.array(OrderSchema),
@@ -116,9 +116,9 @@ const CountrySchema: ZodType = z.lazy(() =>
 
 const ManagerSchema: ZodType = z.lazy(() =>
   z.object({
-    id: z.number(),
+    id: z.number().optional(),
     name: z.string().min(1),
-    tel: z.string(),
+    tel: z.string().min(1),
     date: z.string().date(),
     orders: z.array(OrderSchema),
     review_table: z.array(OrderSchema),
@@ -143,4 +143,9 @@ const SubagentPayerSchema: ZodType = z.lazy(() =>
   })
 )
 
-export {ClientSchema, ContragentSchema, AgentSchema, CountrySchema, OrderSchema, SubagentPayerSchema, SubagentSchema, ManagerSchema}
+const UserShema: ZodType = z.object({
+  login: z.string().min(1),
+  password: z.string().min(1)
+})
+
+export {ClientSchema, ContragentSchema, AgentSchema, CountrySchema, OrderSchema, SubagentPayerSchema, SubagentSchema, ManagerSchema, UserShema}
