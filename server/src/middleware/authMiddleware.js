@@ -1,4 +1,3 @@
-// middleware/authMiddleware.js
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config/app.config");
 const { User } = require("../db/models");
