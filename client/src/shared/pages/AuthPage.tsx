@@ -4,6 +4,7 @@ import { z } from 'zod'
 import { UserShema } from '../schema';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from 'react-toastify';
+import auth from '../../modules/api/auth';
 
 interface AuthPageProps {
   onLogin: (state: boolean) => void;
@@ -22,7 +23,8 @@ function AuthPage({onLogin}: AuthPageProps) {
     }
   })
 
-  const onSubmit = (newUser: User) => {
+  const onSubmit = async (newUser: User) => {
+    console.log(await auth())
     if (newUser.login == "root" && newUser.password == "1234") {
       toast.success("Вы вошли в аккаунт!")
       onLogin(true); // Устанавливаем авторизацию
