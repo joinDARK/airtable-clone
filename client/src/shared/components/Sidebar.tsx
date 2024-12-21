@@ -88,6 +88,7 @@ export const Sidebar = ({exitApp}: Props) => {
           <button onClick={() => {
             exit("/login")
             exitApp(false)
+            localStorage.removeItem("jwt");
             toast.info("Вы вышли из аккаунта")
           }} className='bg-red-600 flex items-center gap-3 p-3 rounded-lg transition-all shadow-sm active:scale-90 w-full hover:bg-red-700'>
             <LogOut size={20}/>

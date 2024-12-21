@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import { IAgent, IClient, IContragent, ICountry, IManager, IOrder, ISubagent, ISubagentPayer } from "../../../types"
+import { IAgent, IClient, IContragent, ICountry, IManager, IOrder, ISubagent, ISubagentPayer } from "../types"
 
 type Data = (IOrder | IClient | IManager | ISubagent | ISubagentPayer | IAgent | IContragent | ICountry | object | never)[]
 

@@ -15,6 +15,8 @@ import "react-toastify/dist/ReactToastify.css"
 import AuthPage from "./shared/pages/AuthPage"
 import ProtectedRoute from "./ProtectedRoute"
 import { useState } from "react"
+import Loader from "./shared/components/Loader"
+import useLoaderStore from "./shared/store/useLoaderStore"
 
 function App() {
   const [isLogin, setIsLogin] = useState(false)
@@ -22,6 +24,8 @@ function App() {
   const handleLogin = (state: boolean) => {
     setIsLogin(state);
   };
+
+  const isLoading = useLoaderStore(store => store.isLoading)
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -57,6 +61,7 @@ function App() {
             draggable
             pauseOnHover
           />
+          { isLoading ? <Loader/> : "" }
         </div>
       </BrowserRouter>
     </QueryClientProvider>

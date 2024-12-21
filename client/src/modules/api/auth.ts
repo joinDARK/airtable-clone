@@ -1,16 +1,24 @@
 import axios from "axios"
 
-const API_URL = "https://wild-schools-move.loca.lt/api"
+const API_URL = "https://little-rabbits-refuse.loca.lt/api"
 
-export default async function auth() {
-    const res = await axios.post(`${API_URL}/login`, {
-        headers: {
-            "User-Agent": "Developer"
-        },
-        data: {
-            login: "root",
-            password: "1234"
-        }
-    })
-    return res
+export default async function auth(userLogin: string, userPassword: string) {
+    try {
+        const res = await axios.post(
+            `${API_URL}/login`, 
+            {
+                login: userLogin,
+                password: userPassword
+            },
+            {
+                headers: {
+                    "User-Agent": "Developer",
+                    "bypass-tunnel-reminder": "12234"
+                }
+            }
+        )
+        return res
+    } catch(e: any) {
+        throw e
+    }
 }

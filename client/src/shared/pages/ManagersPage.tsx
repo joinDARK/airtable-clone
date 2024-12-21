@@ -1,6 +1,5 @@
-import { useEffect } from "react"
 import TableLayout from "../components/table/TableLayout.tsx"
-import useTableStore from "../components/table/store/useTableStore.ts"
+import useTableStore from "../store/useTableStore.ts"
 import { Modal } from "../components/modal/Modal.tsx"
 
 function ManagersPage() {
