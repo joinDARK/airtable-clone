@@ -6,7 +6,8 @@ async function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
     req.user = null;
-    return res.status(403).json({ message: "authHeader is missing" });
+    return next();
+    // return res.status(403).json({ message: "authHeader is missing" });
   }
 
   const token = authHeader.split(" ")[1];

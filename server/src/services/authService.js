@@ -16,7 +16,7 @@ class AuthService {
     }
 
     const token = jwt.sign({ login: user.login }, JWT_SECRET, {
-      expiresIn: "1h",
+      expiresIn: "96h",
     });
     return { token };
   }
