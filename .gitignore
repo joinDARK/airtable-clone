@@ -1,0 +1,6 @@
+client/node_modules
+server/node_modules
+test_data
+modules(old)
+shared(old)/
+.DS_Store
