@@ -37,7 +37,7 @@ function Table({columns}: Props) {
         {tableData.map((item, index) => (
           <tr key={index} className='hover:bg-gray-50 dark:hover:bg-gray-500'>
             <td className='px-4 whitespace-nowrap text-right text-sm font-medium'>
-              <TableActions/>
+              <TableActions value={item}/>
             </td>
             {columns.map(column => (
               <Cell key={column.key} column={column} item={item}/>

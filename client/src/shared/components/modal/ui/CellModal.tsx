@@ -27,9 +27,6 @@ function CellModal({data}: Props) {
       <div className="text-gray-900 dark:text-gray-100">
         {render}
       </div>
-      <button type="button" onClick={() => {
-        console.log(typeof data, data)
-      }}>Check</button>
     </div>
   )
 }
