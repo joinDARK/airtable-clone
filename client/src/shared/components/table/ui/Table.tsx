@@ -25,7 +25,6 @@ function Table({columns}: Props) {
               key={column.key}
               scope='col'
               className='px-6 py-5 text-left text-xs font-medium text-gray-500 dark:text-gray-100 uppercase tracking-wider whitespace-nowrap sticky top-0 bg-gray-50 dark:bg-gray-700'
-              style={{cursor: column.sortable ? "pointer" : "default"}}
             >
               <div className='flex items-center gap-1'>
                 {column.label}
