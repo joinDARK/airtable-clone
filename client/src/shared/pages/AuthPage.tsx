@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import auth from '../../modules/api/auth';
 import axios from 'axios';
 import useLoaderStore from '../store/useLoaderStore';
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import { validateToken } from '../../modules/jwt';
 
 interface AuthPageProps {
@@ -48,7 +48,7 @@ function AuthPage({onLogin}: AuthPageProps) {
     }
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const token = localStorage.getItem("jwt")
     const isValide = validateToken(token)
 
