@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const API_URL = "https://kind-readers-enter.loca.lt/api"
+const API_URL = "https://legal-parents-nail.loca.lt/api"
 
 export default async function auth(userLogin: string, userPassword: string) {
     try {

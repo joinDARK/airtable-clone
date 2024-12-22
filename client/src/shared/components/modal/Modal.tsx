@@ -18,13 +18,13 @@ export const Modal: React.FC<ModalProps> = ({
   // setIsEditing,
   // isEditing,
 }) => {
-  const { open, title, modalHandler, content, data } = useModalStore()
+  const { open, title, modalHandler, content, data, formData } = useModalStore()
 
   let renderContent;
 
   switch (content) {
     case "managers":
-      renderContent = <ManagerForm/>
+      renderContent = <ManagerForm data={formData}/>
       break
     default:
       renderContent = <CellModal data={data}/>

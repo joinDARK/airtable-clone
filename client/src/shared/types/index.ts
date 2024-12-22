@@ -144,3 +144,10 @@ export interface IRelatedData {
   id: number;
   name?: string;
 }
+
+export interface IBaseTableField {
+  id?: number;
+  name?: string;
+}
+
+export type ITable = IOrder | IAgent | IClient | IContragent | ICountry | IManager | ISubagentPayer | ISubagent | {}
