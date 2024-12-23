@@ -3,9 +3,10 @@ import Table from "./ui/Table";
 import config from "../../configs/index.ts"
 import { useModalStore } from "../../store/useModalStore.ts";
 import { createContext } from "react";
+import { ITableNames } from "../../types/index.ts";
 
 interface Props {
-  type: "orders" | "managers"
+  type: ITableNames;
 }
 
 interface ITableContext {

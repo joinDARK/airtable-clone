@@ -150,4 +150,6 @@ export interface IBaseTableField {
   name?: string;
 }
 
+export type ITableNames = "orders" | "agents" | "clients" | "contragents" | "countries" | "managers" | "subagentPayers" | "subagents"
+
 export type ITable = IOrder | IAgent | IClient | IContragent | ICountry | IManager | ISubagentPayer | ISubagent | {}

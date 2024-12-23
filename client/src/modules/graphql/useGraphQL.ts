@@ -1,5 +1,7 @@
 import { GraphQLClient } from 'graphql-request'
 import { useQuery } from 'react-query';
+import queryConfig from './queryConfig';
+import { ITableNames } from '../../shared/types';
 
 const GQL_API = "http://localhost:5000/graphql"
 
@@ -11,30 +13,13 @@ const client = new GraphQLClient(GQL_API, {
   }
 });
 
-const GQL_TEST_QUERY = `
-  query {
-    managers {
-      id
-      name
-      tel
-      date
-      orders {
-        id
-      }
-      review_table {
-        id
-      }
-    }
-  }
-`
-
-type ReqType = "managers" | "orders"
+type ReqType = ITableNames
 
 export const useGraphQL = (type: ReqType) => {
   return useQuery(
     type, 
     async () => {
-      const data = await client.request(GQL_TEST_QUERY)
+      const data = await client.request(`query { ${ queryConfig[type] } }`);
       return data;
     },
     {
