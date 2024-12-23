@@ -1,5 +1,5 @@
 import {create} from "zustand"
-import { ITable } from "../../../types";
+import { ITable } from "../types/index";
 
 interface ModalStore {
   open: boolean;

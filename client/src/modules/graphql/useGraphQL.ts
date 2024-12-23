@@ -1,7 +1,7 @@
 import { GraphQLClient } from 'graphql-request'
 import { useQuery } from 'react-query';
 
-const GQL_API = "https://0f94d502607d728a05a2702f33ad2782.serveo.net/graphql"
+const GQL_API = "http://localhost:5000/graphql"
 
 const client = new GraphQLClient(GQL_API, {
   headers: {

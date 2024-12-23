@@ -2,7 +2,7 @@ import React from "react";
 import { Dialog } from "@headlessui/react";
 import { X } from "lucide-react";
 import { Edit } from 'lucide-react';
-import { useModalStore } from "./store/useModalStore";
+import { useModalStore } from "../../store/useModalStore";
 import ManagerForm from "./ui/ManagerForm";
 import CellModal from "./ui/CellModal";
 

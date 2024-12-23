@@ -1,6 +1,6 @@
 import {IColumn, ITable} from "../../../types"
 import TypeCell from "./TypeCell"
-import {useModalStore} from "../../modal/store/useModalStore"
+import {useModalStore} from "../../../store/useModalStore"
 
 interface Props {
   item: ITable
