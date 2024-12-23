@@ -1,7 +1,9 @@
 import { GraphQLClient } from 'graphql-request'
 import { useQuery } from 'react-query';
+import queryConfig from './queryConfig';
+import { ITableNames } from '../../shared/types';
 
-const GQL_API = "https://0f94d502607d728a05a2702f33ad2782.serveo.net/graphql"
+const GQL_API = "https://dirty-ways-invite.loca.lt/graphql"
 
 const client = new GraphQLClient(GQL_API, {
   headers: {
@@ -11,30 +13,13 @@ const client = new GraphQLClient(GQL_API, {
   }
 });
 
-const GQL_TEST_QUERY = `
-  query {
-    managers {
-      id
-      name
-      tel
-      date
-      orders {
-        id
-      }
-      review_table {
-        id
-      }
-    }
-  }
-`
-
-type ReqType = "managers" | "orders"
+type ReqType = ITableNames
 
 export const useGraphQL = (type: ReqType) => {
   return useQuery(
     type, 
     async () => {
-      const data = await client.request(GQL_TEST_QUERY)
+      const data = await client.request(`query { ${ queryConfig[type] } }`);
       return data;
     },
     {

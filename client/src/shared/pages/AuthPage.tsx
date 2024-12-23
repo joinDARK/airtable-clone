@@ -34,7 +34,7 @@ function AuthPage({onLogin}: AuthPageProps) {
       const res = await auth(newUser.login, newUser.password)
       toast.success("Вы вошли в аккаунт!")
       onLogin(true); // Устанавливаем авторизацию
-      navigate("/managers")
+      navigate("/orders")
       localStorage.setItem("jwt", res.data.token)
     } catch(e) {
       if (axios.isAxiosError(e)) {
@@ -54,7 +54,7 @@ function AuthPage({onLogin}: AuthPageProps) {
 
     if (isValide) {
       onLogin(isValide)
-      navigate("/managers")
+      navigate("/orders")
     } else {
       localStorage.removeItem("jwt")
     }

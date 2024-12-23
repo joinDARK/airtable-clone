@@ -18,7 +18,7 @@ function Related({value}: Props) {
             e.stopPropagation() // Останавливает всплытие события (при нажатии на span также учитывается клик на div)
             modalHandler(item.name ?? item.id)
           }}
-          className='inline-flex w-full justify-center items-center py-1 rounded-xl transition-all text-sm font-medium bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200 cursor-pointer hover:text-gray-600 hover:bg-gray-300 active:scale-90'
+          className='inline-flex w-full justify-center items-center py-1 px-3 rounded-xl transition-all text-sm font-medium bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200 cursor-pointer hover:text-gray-600 hover:bg-gray-300 active:scale-90'
         >
           {item.name ?? item.id}
         </span>
