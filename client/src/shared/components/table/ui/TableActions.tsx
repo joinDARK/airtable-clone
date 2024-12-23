@@ -1,5 +1,5 @@
 import { Edit, Trash2, SquareGantt } from "lucide-react";
-import { useModalStore } from "../../modal/store/useModalStore";
+import { useModalStore } from "../../../store/useModalStore";
 import { useContext } from "react";
 import { TableLayoutContext } from "../TableLayout";
 import { IBaseTableField } from "../../../types";

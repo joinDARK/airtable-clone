@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const API_URL = "https://dirty-ways-invite.loca.lt/api"
+const API_URL = "http://localhost:5000/api"
 
 export default async function auth(userLogin: string, userPassword: string) {
     try {

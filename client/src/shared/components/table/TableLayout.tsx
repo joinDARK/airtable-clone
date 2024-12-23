@@ -1,7 +1,7 @@
 import {RefreshCw, Plus, Search} from "lucide-react"
 import Table from "./ui/Table";
 import config from "../../configs/index.ts"
-import { useModalStore } from "../modal/store/useModalStore.ts";
+import { useModalStore } from "../../store/useModalStore.ts";
 import { createContext } from "react";
 import { ITableNames } from "../../types/index.ts";
 
@@ -17,7 +17,7 @@ export const TableLayoutContext = createContext<ITableContext | undefined>(undef
 
 function TableLayout({type}:Props) {
   const tableConfig = config[type]
-  const modalHandler = useModalStore(store => store.modalHandler);
+  const modalHandler = useModalStore((store: { modalHandler: any; }) => store.modalHandler);
 
   return (
     <div className='flex flex-col h-full transition-all duration-300'>

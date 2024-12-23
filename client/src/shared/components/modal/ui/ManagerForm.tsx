@@ -3,7 +3,7 @@ import { z }from "zod"
 import { ManagerSchema } from "../../../schema"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
-import { useModalStore } from "../store/useModalStore";
+import { useModalStore } from "../../../store/useModalStore";
 
 type Manager = z.infer<typeof ManagerSchema>;
 
