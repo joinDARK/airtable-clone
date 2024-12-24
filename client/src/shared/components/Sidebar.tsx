@@ -43,7 +43,7 @@ export const Sidebar = ({exitApp}: Props) => {
             className="p-2 rounded-lg hover:bg-gray-700 transition-colors"
             title={isCollapsed ? 'Expand' : 'Collapse'}
           >
-            {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+            {isCollapsed ? <ChevronRight size={20}/> : <ChevronLeft size={20} />}
           </button>
         </div>
 

@@ -1,5 +1,5 @@
 import { IRelatedData } from "../../../../types"
-import {useModalStore} from "../../../modal/store/useModalStore"
+import {useModalStore} from "../../../../store/useModalStore"
 
 interface Props {
   value: IRelatedData[]
