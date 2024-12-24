@@ -28,7 +28,7 @@ export const Sidebar = ({exitApp}: Props) => {
   return (
     <div
       className={clsx(
-        'h-screen bg-gray-800 text-white left-0 top-0 z-30 transition-all',
+        'h-screen bg-gray-800 text-white left-0 top-0 z-40 transition-all',
         isCollapsed ? 'w-20' : 'w-64'
       )}
     >

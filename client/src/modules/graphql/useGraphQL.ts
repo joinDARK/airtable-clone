@@ -3,7 +3,7 @@ import { useQuery } from 'react-query';
 import queryConfig from './queryConfig';
 import { ITableNames } from '../../shared/types';
 
-const GQL_API = "https://dirty-ways-invite.loca.lt/graphql"
+const GQL_API = "https://grumpy-planets-march.loca.lt/graphql";
 
 const client = new GraphQLClient(GQL_API, {
   headers: {
