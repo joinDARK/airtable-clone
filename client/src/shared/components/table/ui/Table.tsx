@@ -35,7 +35,7 @@ function Table({columns}: Props) {
       </thead>
       <tbody className='bg-white dark:bg-gray-600 divide-y divide-gray-200 dark:divide-gray-500'>
         {tableData.map((item, index) => (
-          <tr key={index} className='hover:bg-gray-50 dark:hover:bg-gray-500'>
+          <tr key={index} className='hover:bg-gray-50 dark:hover:bg-gray-500 h-14'>
             <td className='px-4 whitespace-nowrap text-right text-sm font-medium'>
               <TableActions value={item}/>
             </td>
