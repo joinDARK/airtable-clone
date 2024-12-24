@@ -16,7 +16,7 @@ function Cell({item, column}: Props) {
       className='whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-400'
       onClick={() => modalHandler(column.label, "", item[key])}
     >
-      <TypeCell title={column.label} type={column.type} value={item[key]} />
+      <TypeCell title={column.label} type={column.type} value={item[key]}  />
     </td>
   )
 }

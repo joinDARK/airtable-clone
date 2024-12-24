@@ -8,12 +8,13 @@ interface Props {
   value: string | IRelatedData[] | boolean | null;
   title?: string;
   type?: string;
+  key?: string;
 }
 
 function TypeCell({type, value, title}: Props) {
   switch (type) {
     case "option":
-      return <Option />
+      return <Option value={value as string} />
     case "related":
       if (value) {
         return <Related title={title} value={value as IRelatedData[]} />

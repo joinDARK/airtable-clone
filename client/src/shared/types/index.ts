@@ -152,4 +152,17 @@ export interface IBaseTableField {
 
 export type ITableNames = "orders" | "agents" | "clients" | "contragents" | "countries" | "managers" | "subagentPayers" | "subagents"
 
+export interface IData {
+  data: {
+    orders?: ITable[];
+    agents?: ITable[];
+    clients?: ITable[];
+    contragents?: ITable[];
+    countries?: ITable[];
+    managers?: ITable[];
+    subagentPayers?: ITable[];
+    subagents?: ITable[];
+  }
+}
+
 export type ITable = IOrder | IAgent | IClient | IContragent | ICountry | IManager | ISubagentPayer | ISubagent | {}
