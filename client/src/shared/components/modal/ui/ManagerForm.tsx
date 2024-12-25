@@ -3,13 +3,18 @@ import { z }from "zod"
 import { ManagerSchema } from "../../../schema"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
+import { useModalStore } from "../../../store/useModalStore";
 
 type Manager = z.infer<typeof ManagerSchema>;
 
-function ManagerForm() {
+interface ManagerFormProps {
+  data?: Manager
+}
+
+function ManagerForm({ data }: ManagerFormProps) {
   const methods = useForm<Manager>({
     resolver: zodResolver(ManagerSchema),
-    defaultValues: {
+    defaultValues: data ?? {
       name: "",
       tel: "",
       date: "",
@@ -28,7 +33,9 @@ function ManagerForm() {
     console.debug("Ошибки при отправке:", errors);
   };
 
-  const {register, handleSubmit, } = methods
+  const {register, handleSubmit } = methods
+
+  const modalHandler = useModalStore(store => store.modalHandler)
 
   return (
     <form className='space-y-4' onSubmit={handleSubmit(onSubmit, onError)}>
@@ -69,6 +76,7 @@ function ManagerForm() {
         <button
           type='button'
           className='px-4 py-2 text-sm font-medium border border-transparent rounded-md bg-red-600 hover:bg-red-700 transition-all duration-300 text-white'
+          onClick={() => modalHandler()}
         >
           Закрыть
         </button>

@@ -1,11 +1,20 @@
 import { Edit, Trash2, SquareGantt } from "lucide-react";
-import { useModalStore } from "../../modal/store/useModalStore";
+import { useModalStore } from "../../../store/useModalStore";
 import { useContext } from "react";
 import { TableLayoutContext } from "../TableLayout";
+import { IBaseTableField } from "../../../types";
 
-function TableActions() {
+interface TableActionsProps {
+  value: IBaseTableField;
+  // setIsEditing?: any;
+  // isEditing?: boolean;
+}
+
+function TableActions({ value }: TableActionsProps) {
   const modalHandler = useModalStore(store => store.modalHandler)
   const context = useContext(TableLayoutContext)
+  const name = value.name ?? value.id
+
   return (
     <div className="flex items-center w-fit gap-2">
       <button
@@ -17,7 +26,7 @@ function TableActions() {
       <button
         className="p-1 text-gray-500 dark:text-gray-300 hover:text-yellow-600 transition-all active:scale-90"
         title="Редактировать"
-        onClick={() => modalHandler('Изменить', context?.type)}
+        onClick={() => modalHandler(`Изменить ${name}`, context?.type, "", value)}
       >
         <Edit size={18} />
       </button>
