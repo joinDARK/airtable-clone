@@ -140,7 +140,6 @@ export const Sidebar = ({ exitApp }: Props) => {
             <SunMoon size={20} />
             {!isCollapsed && !isAnimating && <span>Изменить тему</span>}
           </button>
-
           <button
             title="Выйти"
             onClick={handleLogout}

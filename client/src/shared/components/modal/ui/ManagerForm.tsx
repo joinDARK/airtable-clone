@@ -4,6 +4,10 @@ import { ManagerSchema } from "../../../schema"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
 import { useModalStore } from "../../../store/useModalStore";
+import { useGraphQL } from "../../../../modules/graphql/useGraphQL";
+import { queryClient } from "../../../../modules/api/queryClient";
+import relationshipConfig from "../../../../modules/relationship/config";
+import useRelatedData from "../../../../modules/relationship/useRelatedData";
 
 type Manager = z.infer<typeof ManagerSchema>;
 
@@ -22,6 +26,8 @@ function ManagerForm({ data }: ManagerFormProps) {
       review_table: []
     }
   })
+
+  const related = useRelatedData("managers", "orders", data.orders)
 
   const onSubmit = (newData: Manager) => {
     toast.success("Данные успешно отправлены! Проверьте данные в консоли, как отправились данные в консоли.")
@@ -79,6 +85,12 @@ function ManagerForm({ data }: ManagerFormProps) {
           onClick={() => modalHandler()}
         >
           Закрыть
+        </button>
+        <button type="button"
+          className='px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-md transition-all duration-300 hover:bg-green-700'
+          onClick={() => console.log(related)}
+        >
+          Получить связанные данные из кэша
         </button>
         <button
           type="submit"

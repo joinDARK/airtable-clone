@@ -3,7 +3,7 @@ import { useQuery } from 'react-query';
 import queryConfig from './queryConfig';
 import { ITableNames } from '../../shared/types';
 
-const GQL_API = "http://localhost:5000/graphql"
+const GQL_API = "https://cswrljhh-5000.euw.devtunnels.ms/graphql";
 
 const client = new GraphQLClient(GQL_API, {
   headers: {

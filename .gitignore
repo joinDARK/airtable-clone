@@ -6,3 +6,6 @@ test_data
 modules(old)
 shared(old)/
 .DS_Store
+.idea
+.gigaide
+.env

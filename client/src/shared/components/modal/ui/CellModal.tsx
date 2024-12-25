@@ -2,7 +2,7 @@ import { IRelatedData } from "../../../types";
 import { transformDate } from "../../../../modules/date_formateer/dateFormateer";
 
 interface Props {
-  data?: string | IRelatedData[]
+  data?: string | IRelatedData[] | number
 }
 
 function CellModal({data}: Props) {
@@ -11,7 +11,7 @@ function CellModal({data}: Props) {
   if (typeof data === "string") {
     render = data.length != 0 ? transformDate(data) : "Нету данных"
   } else if (typeof data === "number") {
-    render = "Это число"
+    render = data.toString()
   } else if (Array.isArray(data)) {
     render = <div className='flex flex-wrap gap-2'>
       {data.map((tag: IRelatedData, i) => (

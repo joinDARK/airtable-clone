@@ -1,8 +1,23 @@
-import React from 'react'
+import clsx from 'clsx'
 
-function Option() {
+interface Props {
+  // value: {
+  //   label: string
+  //   style: string
+  // }
+  value: string;
+}
+
+function Option({value}: Props) {
   return (
-    <div>Option</div>
+    <span
+      className={clsx(
+        'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border',
+        // value.style
+      )}
+    >
+      {value}
+    </span>
   )
 }
 

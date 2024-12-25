@@ -25,7 +25,7 @@ function App() {
     setIsLogin(state);
   };
 
-  const isLoading = useLoaderStore((store) => store.isLoading);
+  const isLoading = useLoaderStore(store => store.isLoading)
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -69,6 +69,7 @@ function App() {
             draggable
             pauseOnHover
           />
+          { isLoading ? <Loader/> : "" }
         </div>
       </BrowserRouter>
     </QueryClientProvider>
