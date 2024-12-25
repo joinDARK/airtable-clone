@@ -73,6 +73,14 @@ function AuthPage({onLogin}: AuthPageProps) {
           <input {...register("password")} placeholder='Введите пароль' type='password' autoComplete='current-password' className='w-full bg-transparent rounded-md py-2.5'/>
         </div>
         <button type='submit' className='bg-blue-600 transition-all rounded-md py-2.5 text-lg hover:bg-blue-700 active:scale-95'>Войти</button>
+        <button 
+          type='button' 
+          onClick={() => {
+            onLogin(true); // Устанавливаем авторизацию
+            navigate("/orders")
+          }}
+          className='bg-green-600 transition-all rounded-md py-2.5 text-lg hover:bg-green-700 active:scale-95'
+        >Пропустить авторизацию</button>
       </form>
     </div>
   )

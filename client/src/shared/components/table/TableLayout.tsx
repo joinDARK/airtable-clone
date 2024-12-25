@@ -10,7 +10,7 @@ interface Props {
 }
 
 interface ITableContext {
-  type: string;
+  type: ITableNames;
 }
 
 export const TableLayoutContext = createContext<ITableContext | undefined>(undefined)

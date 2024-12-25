@@ -4,9 +4,6 @@ import { ManagerSchema } from "../../../schema"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
 import { useModalStore } from "../../../store/useModalStore";
-import { useGraphQL } from "../../../../modules/graphql/useGraphQL";
-import { queryClient } from "../../../../modules/api/queryClient";
-import relationshipConfig from "../../../../modules/relationship/config";
 import useRelatedData from "../../../../modules/relationship/useRelatedData";
 
 type Manager = z.infer<typeof ManagerSchema>;

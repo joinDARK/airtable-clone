@@ -15,7 +15,9 @@ export default {
   },
   managers: {
     columns: columnsManager,
-    // apiMethod: api.managers.getById,
+    api: {
+      
+    },
     label: "Менеджеры",
   },
   contragents: {

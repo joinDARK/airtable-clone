@@ -50,6 +50,8 @@ export const Modal: React.FC<ModalProps> = ({
                   <Edit size={18} />
                 </button>)} */}
                 <button
+                  title="Закрыть"
+                  type="button"
                   onClick={() => modalHandler()}
                   className="p-1 hover:bg-gray-100 hover:dark:bg-gray-600 transition-all duration-200 rounded-full"
                 >
