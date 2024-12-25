@@ -95,6 +95,7 @@ export default {
     swift199_link
     act_link
     money_gone
+    files { id fileName fileUrl type}
   }`,
   contragents: `contragents { id name orders { id } }`,
   agents: `agents { id name orders { id } }`,

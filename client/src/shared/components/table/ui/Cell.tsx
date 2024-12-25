@@ -1,22 +1,32 @@
-import {IColumn, ITable} from "../../../types"
+import { IColumn, ITable } from "../../../types"
 import TypeCell from "./TypeCell"
-import {useModalStore} from "../../../store/useModalStore"
+import { useModalStore } from "../../../store/useModalStore"
 
 interface Props {
   item: ITable
   column: IColumn
 }
 
-function Cell({item, column}: Props) {
-  const modalHandler = useModalStore(store => store.modalHandler)
-  const key = column.key as keyof ITable;
+function Cell({ item, column }: Props) {
+  const modalHandler = useModalStore((store) => store.modalHandler)
+  const key = column.key as keyof ITable
 
   return (
     <td
-      className='whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-400'
-      onClick={() => modalHandler(column.label, "", item[key])}
+      className="text-sm text-gray-900 dark:text-gray-100
+                 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-400
+                 px-2 py-1"
+      onClick={() => {
+        if(item[key])
+          modalHandler(column.label, "", item[key]);
+        else
+          modalHandler(column.label, "", item.files.map(file => {
+            if(file.type === key)
+              return file;
+          }))
+      }}
     >
-      <TypeCell title={column.label} type={column.type} value={item[key]}  />
+      <TypeCell title={column.label} type={column.type} value={item[key]} />
     </td>
   )
 }

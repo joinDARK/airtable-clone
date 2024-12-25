@@ -24,7 +24,7 @@ function CellModal({data}: Props) {
 
   return (
     <div className="text-red-400">
-      <div className="p-[10px] bg-gray-300 text-gray-600 rounded-md dark:bg-gray-600 dark:text-gray-200">
+      <div className="text-gray-900 dark:text-gray-100 p-[10px] bg-gray-300 text-gray-600 rounded-md dark:bg-gray-600 dark:text-gray-200">
         {render}
       </div>
     </div>
