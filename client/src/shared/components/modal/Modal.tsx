@@ -2,7 +2,7 @@ import React from "react";
 import { Dialog } from "@headlessui/react";
 import { X } from "lucide-react";
 import { Edit } from 'lucide-react';
-import { useModalStore } from "./store/useModalStore";
+import { useModalStore } from "../../store/useModalStore";
 import ManagerForm from "./ui/ManagerForm";
 import CellModal from "./ui/CellModal";
 
@@ -18,13 +18,13 @@ export const Modal: React.FC<ModalProps> = ({
   // setIsEditing,
   // isEditing,
 }) => {
-  const { open, title, modalHandler, content, data } = useModalStore()
+  const { open, title, modalHandler, content, data, formData } = useModalStore()
 
   let renderContent;
 
   switch (content) {
     case "managers":
-      renderContent = <ManagerForm/>
+      renderContent = <ManagerForm data={formData}/>
       break
     default:
       renderContent = <CellModal data={data}/>

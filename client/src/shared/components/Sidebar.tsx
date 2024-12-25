@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { FileText, Users, ChevronLeft, ChevronRight, SunMoon, LogOut } from 'lucide-react';
+import { FileText, Users, ChevronLeft, ChevronRight, SunMoon, LogOut, Building2, Briefcase, UserCircle, Globe2, UserCog, CreditCard } from 'lucide-react';
 import { clsx } from 'clsx';
 import useThemeStore from '../../modules/theme/useThemeStore';
 import { toast } from 'react-toastify';
@@ -8,12 +8,12 @@ import { toast } from 'react-toastify';
 const navItems = [
   { path: '/orders', label: 'Заявки', icon: FileText },
   { path: '/managers', label: 'Менеджеры', icon: Users },
-  // { path: '/contractors', label: 'Контрагенты', icon: Building2 },
-  // { path: '/agents', label: 'Агенты', icon: Briefcase },
-  // { path: '/clients', label: 'Клиенты', icon: UserCircle },
-  // { path: '/countries', label: 'Страны', icon: Globe2 },
-  // { path: '/subagents', label: 'Субагенты', icon: UserCog },
-  // { path: '/subagent-payers', label: 'Плательщики Субагентов', icon: CreditCard },
+  { path: '/contagents', label: 'Контрагенты', icon: Building2 },
+  { path: '/agents', label: 'Агенты', icon: Briefcase },
+  { path: '/clients', label: 'Клиенты', icon: UserCircle },
+  { path: '/countries', label: 'Страны', icon: Globe2 },
+  { path: '/subagents', label: 'Субагенты', icon: UserCog },
+  { path: '/subagent-payers', label: 'Плательщики Субагентов', icon: CreditCard },
 ];
 
 interface Props {
@@ -28,7 +28,7 @@ export const Sidebar = ({exitApp}: Props) => {
   return (
     <div
       className={clsx(
-        'h-screen bg-gray-800 text-white left-0 top-0 z-30 transition-all',
+        'h-screen bg-gray-800 text-white left-0 top-0 z-40 transition-all',
         isCollapsed ? 'w-20' : 'w-64'
       )}
     >
@@ -43,7 +43,7 @@ export const Sidebar = ({exitApp}: Props) => {
             className="p-2 rounded-lg hover:bg-gray-700 transition-colors"
             title={isCollapsed ? 'Expand' : 'Collapse'}
           >
-            {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+            {isCollapsed ? <ChevronRight size={20}/> : <ChevronLeft size={20} />}
           </button>
         </div>
 

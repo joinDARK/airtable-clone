@@ -2,7 +2,7 @@ import { IRelatedData } from "../../../types";
 import { transformDate } from "../../../../modules/date_formateer/dateFormateer";
 
 interface Props {
-  data?: string | IRelatedData[]
+  data?: string | IRelatedData[] | number
 }
 
 function CellModal({data}: Props) {
@@ -11,11 +11,11 @@ function CellModal({data}: Props) {
   if (typeof data === "string") {
     render = data.length != 0 ? transformDate(data) : "Нету данных"
   } else if (typeof data === "number") {
-    render = "Это число"
+    render = data.toString()
   } else if (Array.isArray(data)) {
     render = <div className='flex flex-wrap gap-2'>
       {data.map((tag: IRelatedData, i) => (
-        <span key={i} className='inline-flex items-center px-8 py-1 rounded-xl text-sm font-medium bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200'>
+        <span key={i} className='inline-flex items-center px-8 py-1 rounded-xl text-sm font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'>
           {tag.name ?? tag.id}
         </span>
       ))}
@@ -24,12 +24,9 @@ function CellModal({data}: Props) {
 
   return (
     <div className="text-red-400">
-      <div className="text-gray-900 dark:text-gray-100">
+      <div className="p-[10px] bg-gray-300 text-gray-600 rounded-md dark:bg-gray-600 dark:text-gray-200">
         {render}
       </div>
-      <button type="button" onClick={() => {
-        console.log(typeof data, data)
-      }}>Check</button>
     </div>
   )
 }

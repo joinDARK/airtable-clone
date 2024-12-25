@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const API_URL = "https://little-rabbits-refuse.loca.lt/api"
+const API_URL = "https://cswrljhh-5000.euw.devtunnels.ms/api"
 
 export default async function auth(userLogin: string, userPassword: string) {
     try {

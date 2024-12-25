@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import auth from '../../modules/api/auth';
 import axios from 'axios';
 import useLoaderStore from '../store/useLoaderStore';
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import { validateToken } from '../../modules/jwt';
 
 interface AuthPageProps {
@@ -34,7 +34,7 @@ function AuthPage({onLogin}: AuthPageProps) {
       const res = await auth(newUser.login, newUser.password)
       toast.success("Вы вошли в аккаунт!")
       onLogin(true); // Устанавливаем авторизацию
-      navigate("/managers")
+      navigate("/orders")
       localStorage.setItem("jwt", res.data.token)
     } catch(e) {
       if (axios.isAxiosError(e)) {
@@ -48,13 +48,13 @@ function AuthPage({onLogin}: AuthPageProps) {
     }
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const token = localStorage.getItem("jwt")
     const isValide = validateToken(token)
 
     if (isValide) {
       onLogin(isValide)
-      navigate("/managers")
+      navigate("/orders")
     } else {
       localStorage.removeItem("jwt")
     }
@@ -65,11 +65,11 @@ function AuthPage({onLogin}: AuthPageProps) {
       <form className='w-[500px] h-fit border p-5 rounded-md dark:border-gray-600 flex flex-col' onSubmit={handleSubmit(onSubmit)}>
         <h1 className='text-3xl font-black mb-3 text-center'>Вход</h1>
         <div className='mb-2'>
-          <span className={`${errors.login ? "text-red-500" : "text-transparent"}`}>Логин не может быть пустым</span>
+          <span className={`${errors.login ? "text-red-500" : "text-transparent"} select-none`}>Логин не может быть пустым</span>
           <input {...register("login")} autoComplete='login' placeholder='Введите логин' className='w-full bg-transparent rounded-md py-2.5'/>
         </div>
         <div className='mb-6'>
-          <span className={`${errors.password ? "text-red-500" : "text-transparent"}`}>Пароль не может быть пустым</span>
+          <span className={`${errors.password ? "text-red-500" : "text-transparent"} select-none`}>Пароль не может быть пустым</span>
           <input {...register("password")} placeholder='Введите пароль' type='password' autoComplete='current-password' className='w-full bg-transparent rounded-md py-2.5'/>
         </div>
         <button type='submit' className='bg-blue-600 transition-all rounded-md py-2.5 text-lg hover:bg-blue-700 active:scale-95'>Войти</button>

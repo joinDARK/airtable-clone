@@ -25,7 +25,6 @@ function Table({columns}: Props) {
               key={column.key}
               scope='col'
               className='px-6 py-5 text-left text-xs font-medium text-gray-500 dark:text-gray-100 uppercase tracking-wider whitespace-nowrap sticky top-0 bg-gray-50 dark:bg-gray-700'
-              style={{cursor: column.sortable ? "pointer" : "default"}}
             >
               <div className='flex items-center gap-1'>
                 {column.label}
@@ -38,7 +37,7 @@ function Table({columns}: Props) {
         {tableData.map((item, index) => (
           <tr key={index} className='hover:bg-gray-50 dark:hover:bg-gray-500'>
             <td className='px-4 whitespace-nowrap text-right text-sm font-medium'>
-              <TableActions/>
+              <TableActions value={item}/>
             </td>
             {columns.map(column => (
               <Cell key={column.key} column={column} item={item}/>
