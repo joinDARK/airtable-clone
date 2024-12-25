@@ -11,6 +11,18 @@ lerna-debug.log*
 client/node_modules
 server/node_modules
 
+server/.env
+server/.env.development.local
+server/.env.test.local
+server/.env.production.local
+server/.env.local
+
+client/.env
+client/.env.development.local
+client/.env.test.local
+client/.env.production.local
+client/.env.local
+
 # other
 test_data
 modules(old)
@@ -24,14 +36,3 @@ shared(old)/
 .env.production.local
 .env.local
 
-server/.env
-server/.env.development.local
-server/.env.test.local
-server/.env.production.local
-server/.env.local
-
-client/.env
-client/.env.development.local
-client/.env.test.local
-client/.env.production.local
-client/.env.local
