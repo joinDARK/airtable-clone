@@ -11,7 +11,7 @@ const authMiddleware = require("./middleware/authMiddleware.js");
 
 const winston = require("./utils/logger.js");
 const schema = require("./graphql/schema.js");
-const root = require("./graphql/resolvers.js");
+const root = require("./graphql/index.js");
 const routes = require("./restAPI/routes");
 const { associateModels } = require("./db/seeders/associations.js");
 

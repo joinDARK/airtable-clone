@@ -17,7 +17,7 @@ class AuthController {
 
   static async me(req, res) {
     if (!req.user) {
-      return res.status(403).json({ message: 'Нету такого пользователя.' });
+      return res.status(403).json({ message: 'Нету такого пользователя!' });
     }
     return res.json(req.user);
   }
