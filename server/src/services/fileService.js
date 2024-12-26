@@ -15,8 +15,8 @@ const s3Client = new S3Client({
   region: "ru-central1",
   endpoint: "https://storage.yandexcloud.net",
   credentials: {
-    accessKeyId: S3_CLIENT.S3_ACCESS_KEY || "",
-    secretAccessKey: S3_CLIENT.S3_SECRET_KEY || "",
+    accessKeyId: S3_CLIENT.S3_ACCESS_KEY,
+    secretAccessKey: S3_CLIENT.S3_SECRET_KEY,
   },
 });
 

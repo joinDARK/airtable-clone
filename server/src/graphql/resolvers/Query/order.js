@@ -1,11 +1,8 @@
 const { orderService } = require("../../../services/index.js");
+const BaseResolver = require("./baseResolver.js");
 
+const orderResolver = new BaseResolver(orderService);
 module.exports = {
-  orders: async () => {
-    const result = await orderService.getAll();
-    return result || [];
-  },
-  order: async ({ id }) => {
-    return await orderService.getById(id);
-  },
+  orders: orderResolver.getAll(),
+  order: orderResolver.getById(),
 };
