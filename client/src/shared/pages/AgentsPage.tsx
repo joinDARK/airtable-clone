@@ -4,21 +4,29 @@ import { useEffect } from "react"
 import useLoaderStore from "../store/useLoaderStore"
 import { useGet } from "../../modules/graphql"
 import useTableStore from "../store/useTableStore"
+import { TableKey } from "../types/TableKey"
+import { ResAgentSchema } from "../schema/response"
+import { z } from "zod"
 
 function AgentsPage() {
-  const type = 'agents'
+  const type: TableKey = 'agents'
   const setTableData = useTableStore((store) => store.setData)
   const handlerLoader = useLoaderStore((store) => store.setIsLoading)
-  const { data, isLoading, isSuccess } = useGet(type)
+  const { data, isLoading } = useGet(type)
 
   useEffect(() => {
     if (isLoading) {
       handlerLoader(true);
-    } else if (isSuccess) {
+    } else {
       handlerLoader(false);
-      setTableData(data[type]);
+      try {
+        const validatedData = z.array(ResAgentSchema).parse(data[type])
+        setTableData(validatedData)
+      } catch (error) {
+        console.error('Ошибка валидации страницы:', error)
+      }
     }
-  }, [isLoading, isSuccess, data, handlerLoader, setTableData, type]);
+  }, [isLoading, data, handlerLoader, setTableData]);
 
   return (
     <>

@@ -4,21 +4,29 @@ import useTableStore from "../store/useTableStore"
 import useLoaderStore from "../store/useLoaderStore"
 import { useGet } from "../../modules/graphql"
 import { useEffect } from "react"
+import { TableKey } from "../types/TableKey"
+import { z } from "zod"
+import { ResSubagentPayerSchema } from "../schema/response"
 
 function SubagentPayersPage() {
-  const type = "subagentPayers"
+  const type: TableKey = "subagentPayers"
   const setTableData = useTableStore(store => store.setData)
   const handlerLoader = useLoaderStore(store => store.setIsLoading)
-  const { data, isLoading, isSuccess } = useGet(type)
+  const { data, isLoading } = useGet(type)
 
   useEffect(() => {
     if (isLoading) {
       handlerLoader(true);
-    } else if (isSuccess) {
+    } else {
       handlerLoader(false);
-      setTableData(data[type]);
+      try {
+        const validatedData = z.array(ResSubagentPayerSchema).parse(data[type])
+        setTableData(validatedData)
+      } catch (error) {
+        console.error('Ошибка валидации страницы:', error)
+      }
     }
-  }, [isLoading, isSuccess, data, handlerLoader, setTableData, type]);
+  }, [isLoading, data, handlerLoader, setTableData]);
 
   return (
     <>

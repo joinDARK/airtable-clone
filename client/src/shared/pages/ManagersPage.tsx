@@ -26,7 +26,7 @@ function ManagersPage() {
         console.error('Ошибка валидации страницы:', error)
       }
     }
-  }, [handlerLoader, setTableData, type, isLoading])
+  }, [handlerLoader, setTableData, isLoading, data])
 
   return (
     <>

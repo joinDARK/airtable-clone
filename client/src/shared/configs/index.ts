@@ -8,4 +8,3 @@ import subagents from "./table/subagents"
 import clients from "./table/clients"
 
 export default { managers, agents, clients, contragents, countries, orders, subagents, subagentPayers }
-export * from "./options/optionConfig"

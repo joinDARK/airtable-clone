@@ -1,6 +1,6 @@
 import IOption from "../../interfaces/IOption"
 
-export const swiftOptions: IOption[] = [
+export const status_swift: IOption[] = [
   {value: "Заявка закрыта", label: "Заявка закрыта"},
   {value: "Возврат", label: "Возврат"},
   {value: "Деньги у получателя", label: "Деньги у получателя"},
@@ -9,26 +9,26 @@ export const swiftOptions: IOption[] = [
   {value: "Заявление отправлено", label: "Заявление отправлено"},
 ]
 
-export const transactionOptions: IOption[] = [
+export const type_transaction: IOption[] = [
   {value: "Импорт", label: "Импорт"},
   {value: "Экспорт", label: "Экспорт"},
 ]
 
-export const conditionOptions: IOption[] = [
+export const calc_condition: IOption[] = [
   {value: "Аккредитив", label: "Аккредитив", style: "bg-gray-100 text-gray-800 border-gray-200"},
   {value: "Предоплата", label: "Предоплата", style: "bg-gray-100 text-gray-800 border-gray-200"},
   {value: "Постоплата", label: "Постоплата", style: "bg-gray-100 text-gray-800 border-gray-200"},
   {value: "Эскроу", label: "Эскроу", style: "bg-gray-100 text-gray-800 border-gray-200"},
 ]
 
-export const currencyOptions: IOption[] = [
+export const currency: IOption[] = [
   {value: "Юань", label: "Юань"},
   {value: "Доллар", label: "Доллар"},
   {value: "Евро", label: "Евро"},
   {value: "Дирхам", label: "Дирхам"},
 ]
 
-export const statusOptions: IOption[] = [
+export const status: IOption[] = [
   {value: "Заявка закрыта", label: "Заявка закрыта", style: "bg-green-100 text-green-800 border-green-200"},
   {value: "15. Возврат", label: "15. Возврат", style: "bg-amber-100 text-amber-800 border-amber-200"},
   {value: "17. Деньги у получателя", label: "17. Деньги у получателя", style: "bg-yellow-100 text-yellow-800 border-yellow-200"},
@@ -63,13 +63,15 @@ export const statusOptions: IOption[] = [
 //   { value: "false", label: "Нет" },
 // ];
 
-export const stageProblemOptions: IOption[] = [
+export const stage_problem: IOption[] = [
   {value: "Деньги не сели поставщику", label: "Деньги не сели поставщику"},
   {value: "Возврат с повторной оплатой", label: "Возврат с повторной оплатой"},
   {value: "Возврат с последующей отменой", label: "Возврат с последующей отменой"},
 ]
 
-export const nameMistakeOptions: IOption[] = [
+export const mistake_is_it_name: IOption[] = [
   {value: "Менеджер", label: "Менеджер"},
   {value: "Клиент", label: "Клиент"},
 ]
+
+export const stuck_money_name: IOption[] = [...currency]

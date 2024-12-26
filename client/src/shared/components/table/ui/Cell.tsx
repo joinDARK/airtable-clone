@@ -2,6 +2,7 @@ import { Table } from "../../../types/Table"
 import IColumn from "../../../interfaces/IColumn"
 import TypeCell from "./TypeCell"
 import { useModalStore } from "../../../store/useModalStore"
+import useTableStore from "../../../store/useTableStore"
 
 interface Props {
   item: Table
@@ -11,6 +12,7 @@ interface Props {
 function Cell({ item, column }: Props) {
   const { setModalData, modalHandler } = useModalStore()
   const key = column.key as keyof Table
+  const tableData = useTableStore(store => store.data)
 
   return (
     <td
@@ -20,9 +22,10 @@ function Cell({ item, column }: Props) {
       onClick={() => {
         modalHandler()
         setModalData(column.label, "", item[key])
+        console.log(item[key], key, item, tableData)
       }}
     >
-      <TypeCell title={column.label} type={column.type} value={item[key]} />
+      <TypeCell title={column.label} type={column.type} value={item[key]} keyCell={key} />
     </td>
   )
 }

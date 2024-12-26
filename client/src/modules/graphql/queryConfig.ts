@@ -71,7 +71,7 @@ export default {
       id
       name
     }
-    subagentsPayers {
+    subagentPayers {
       id
       name
     }

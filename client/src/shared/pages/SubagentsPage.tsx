@@ -6,30 +6,27 @@ import { useEffect } from 'react'
 import useLoaderStore from '../store/useLoaderStore'
 import { ResSubagentSchema } from '../schema/response'
 import { z } from 'zod'
-import IManager from '../interfaces/table/IManager'
-import IGQLData from '../interfaces/IGQLData'
-import manager from '../../test_data/manager'
-
+import { TableKey } from "../types/TableKey"
 
 function SubagentsPage() {
-  const type = 'subagents'
+  const type: TableKey = 'subagents'
   const setTableData = useTableStore(store => store.setData)
   const handlerLoader = useLoaderStore(store => store.setIsLoading)
-  // const { data, isLoading, isSuccess } = useGet(type)
+  const { data, isLoading } = useGet(type)
 
   useEffect(() => {
-    if (false) {
+    if (isLoading) {
       handlerLoader(true)
     } else {
       handlerLoader(false)
       try {
-        const validatedData = z.array(ResSubagentSchema).parse(manager.data)
+        const validatedData = z.array(ResSubagentSchema).parse(data[type])
         setTableData(validatedData)
       } catch (error) {
         console.error('Validation error:', error)
       }
     }
-  }, [handlerLoader, setTableData, type])
+  }, [isLoading, data, handlerLoader, setTableData])
 
   return (
     <>

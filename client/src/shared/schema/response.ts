@@ -3,7 +3,7 @@ import {z, ZodType} from "zod"
 const ResOrderSchema: ZodType = z.lazy(() =>
   z.object({
     id: z.number(),
-    satus: z.string().optional().nullable(),
+    status: z.string().optional().nullable(),
     order_number: z.number().optional().nullable(),
     managers: z.array(RelatedSchema).nullable(),
     reviewers: z.array(RelatedSchema).nullable(),
