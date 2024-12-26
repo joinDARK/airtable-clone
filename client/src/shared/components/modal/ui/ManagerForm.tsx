@@ -87,6 +87,7 @@ function ManagerForm({data}: ManagerFormProps) {
                 value={field.value || []}
                 placeholder="Выберите заявки"
                 options={related}
+                title="Заявка"
                 onChange={field.onChange}
               />
             )}
