@@ -23,7 +23,7 @@ function ManagersPage() {
         const validatedData = z.array(ResManagerSchema).parse(data[type])
         setTableData(validatedData)
       } catch (error) {
-        console.error('Validation error:', error)
+        console.error('Ошибка валидации страницы:', error)
       }
     }
   }, [handlerLoader, setTableData, type, isLoading])

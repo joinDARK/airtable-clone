@@ -51,7 +51,7 @@ const columns = [
   new Column("cycle_deal", "Цикл сделки (дни)", true, "number"),
   new Column("purpose_of_payment", "Назначение платежа", true, "text"),
   new Column("subagents", "Субагент", false, "related"),
-  new Column("subagentPayers", "Плательщик субагента", false, "related"),
+  new Column("subagentsPayers", "Плательщик субагента", false, "related"),
   new Column("serial_num_for_payer", "Порядковый номер заявления для плательщика субагента (при импорте) / получателя (при экспорте)", true, "text"),
   new Column("date_docs_agent_and_subagent", "Подготовлены документы между агентом и субагентом (дата)", true, "date"),
   new Column("date_taking_swift", "Получен SWIFT", true, "date"),

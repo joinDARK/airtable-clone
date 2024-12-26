@@ -4,9 +4,12 @@ import useTableStore from "../store/useTableStore";
 import useLoaderStore from "../store/useLoaderStore";
 import { useGet } from "../../modules/graphql";
 import { useEffect } from "react";
+import { TableKey } from "../types/TableKey";
+import { z } from "zod";
+import { ResOrderSchema } from "../schema/response";
 
 function OrdersPage() {
-  const type = "orders"
+  const type: TableKey = "orders"
   const setTableData = useTableStore((store) => store.setData)
   const handlerLoader = useLoaderStore((store) => store.setIsLoading)
   const { data, isLoading } = useGet(type)
@@ -16,6 +19,12 @@ function OrdersPage() {
       handlerLoader(true);
     } else {
       handlerLoader(false);
+      try {
+        const validatedData = z.array(ResOrderSchema).parse(data[type])
+        setTableData(validatedData)
+      } catch(error) {
+        console.error('Ошибка валидации страницы:', error)
+      }
     }
   }, [isLoading, data, handlerLoader, setTableData]);
   

@@ -6,7 +6,7 @@ interface Props {
   title?: string
 }
 
-function Related({ value }: Props) {
+function Related({ value = [] }: Props) {
   const { setModalData, modalHandler } = useModalStore()
 
   return (

@@ -19,7 +19,7 @@ export default function TypeCell({ type, value, title }: Props) {
     case "boolean": return <Boolean value={value as boolean} />
     case "text": return <div className="px-2"> {value as string} </div>
     case "date": return <div className="px-2"> {transformDate(value as string)} </div>
-    case "number": return <div className="px-2"> {(value as number).toString()} </div>
+    case "number": return <div className="px-2"> {(value as number ?? "–").toString()} </div>
     default: return <div className="px-2"> — </div>
   }
 }

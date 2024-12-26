@@ -26,6 +26,7 @@ function ManagerForm({data}: ManagerFormProps) {
   })
 
   const related = useRelatedData("managers", "orders")
+  
 
   const onSubmit = (newData: Manager) => {
     toast.success("Данные успешно отправлены! Проверьте данные в консоли, как отправились данные в консоли.")
@@ -93,6 +94,24 @@ function ManagerForm({data}: ManagerFormProps) {
             )}
           />
         </div>
+        <div className="col-span-2">
+          <label className="block text-sm font-medium mb-1">
+            Проверяю
+          </label>
+          <Controller
+            name="review_table"
+            control={control}
+            render={({field}) => (
+              <RelationshipSelect
+                value={field.value || []}
+                placeholder="Выберите заявки"
+                options={related}
+                title="Заявка"
+                onChange={field.onChange}
+              />
+            )}
+          />
+        </div>
       </div>
       <div className='flex justify-end gap-2 mt-6'>
         <button
@@ -101,13 +120,6 @@ function ManagerForm({data}: ManagerFormProps) {
           onClick={() => modalHandler()}
         >
           Закрыть
-        </button>
-        <button
-          type='button'
-          className='px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-md transition-all duration-300 hover:bg-green-700'
-          onClick={() => console.log(data.orders, related)}
-        >
-          Получить связанные данные из кэша
         </button>
         <button
           type='submit'

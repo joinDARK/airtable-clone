@@ -109,8 +109,14 @@ const FormManagerSchema: ZodType = z.object({
   name: z.string().min(1),
   tel: z.string().min(1),
   date: z.string().date(),
-  orders: z.array(z.number()),
-  review_table: z.array(z.number()),
+  orders: z
+    .array(z.object({ id: z.number(), name: z.string().optional() }))
+    .transform((data) => data.map((item) => item.id))
+    .optional(),
+  review_table: z
+    .array(z.object({ id: z.number(), name: z.string().optional() }))
+    .transform((data) => data.map((item) => item.id))
+    .optional(),
 })
 
 const FormSubagentSchema: ZodType = z.object({

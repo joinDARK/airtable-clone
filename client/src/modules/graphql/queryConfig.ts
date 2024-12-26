@@ -71,6 +71,10 @@ export default {
       id
       name
     }
+    subagentsPayers {
+      id
+      name
+    }
     serial_num_for_payer
     date_docs_agent_and_subagent
     date_taking_swift
