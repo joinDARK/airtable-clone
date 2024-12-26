@@ -33,7 +33,7 @@ export const Modal: React.FC<ModalProps> = ({
 
   return (
     <div>
-      <Dialog open={open} onClose={() => modalHandler} className="relative z-50">
+      <Dialog open={open} onClose={() => modalHandler()} className="relative z-50">
         <div className="fixed inset-0 bg-black/60" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-14">
           <Dialog.Panel className="mx-auto max-w-xl w-full text-gray-700 bg-white dark:bg-gray-800 dark:text-gray-100  rounded-lg shadow-xl max-h-400">

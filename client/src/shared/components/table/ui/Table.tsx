@@ -1,4 +1,4 @@
-import { IColumn } from "../../../types"
+import IColumn from "../../../interfaces/IColumn"
 import Cell from "./Cell";
 import useTableStore from "../../../store/useTableStore";
 import TableActions from "./TableActions";

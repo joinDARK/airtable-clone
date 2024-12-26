@@ -1,25 +1,28 @@
 import {create} from "zustand"
-import { ITable } from "../types/index";
+import ITable from "../interfaces/ITable";
 
 interface ModalStore {
   open: boolean;
   title: string | number;
   content?: string;
-  data?: string;
+  data?: string | number;
   formData?: ITable;
-  modalHandler: (newTitle?: string | number, newContent?: string, newData?: string, newFormData?: ITable ) => void
+  setModalData: (newTitle?: string | number, newContent?: string, newData?: string | number, newFormData?: ITable ) => void
+  modalHandler: () => void
 }
 
-export const useModalStore = create<ModalStore>((set, get) => ({
+export const useModalStore = create<ModalStore>((set) => ({
   open: false,
   title: "",
   content: "",
   data: "",
   formData: {},
-  modalHandler: (newTitle?: string | number, newContent: string = "", newData: string = "", newFormData: ITable = {}) => set(() => ({
-    open: !get().open,
+  modalHandler: () => set((store) => ({
+    open: !store.open
+  })),
+  setModalData: (newTitle: string | number = "", newContent: string = "", newData: string | number = "", newFormData: ITable = {}) => set(() => ({
     content: newContent,
-    data: newData,
+    data: newData, // Возоможно могут возникунть проблемы
     formData: newFormData,
     title: newTitle ?? "Нету загаловка"
   }))

@@ -1,4 +1,4 @@
-import { IRelatedData } from "../../../../types"
+import IRelatedData from "../../../../interfaces/IRelatedData"
 import { useModalStore } from "../../../../store/useModalStore"
 
 interface Props {
@@ -7,7 +7,7 @@ interface Props {
 }
 
 function Related({ value }: Props) {
-  const modalHandler = useModalStore((store) => store.modalHandler)
+  const { setModalData, modalHandler } = useModalStore()
 
   return (
     <div className="flex flex-wrap gap-2 p-2">
@@ -16,7 +16,8 @@ function Related({ value }: Props) {
           key={i}
           onClick={(e) => {
             e.stopPropagation() // Останавливает всплытие события
-            modalHandler(item.name ?? item.id)
+            setModalData(item.name ?? item.id)
+            modalHandler()
           }}
           className="inline-flex justify-center items-center py-1 px-6 rounded-xl
                      transition-all text-sm font-medium

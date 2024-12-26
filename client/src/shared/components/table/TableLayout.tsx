@@ -1,23 +1,19 @@
 import {RefreshCw, Plus, Search} from "lucide-react"
 import Table from "./ui/Table";
-import config from "../../configs/index.ts"
+import config from "../../configs"
 import { useModalStore } from "../../store/useModalStore.ts";
 import { createContext } from "react";
-import { ITableNames } from "../../types/index.ts";
+import { TableKey } from "../../types/TableKey.ts";
 
 interface Props {
-  type: ITableNames;
+  type: TableKey;
 }
 
-interface ITableContext {
-  type: ITableNames;
-}
+export const TableLayoutContext = createContext<Props | undefined>(undefined)
 
-export const TableLayoutContext = createContext<ITableContext | undefined>(undefined)
-
-function TableLayout({type}:Props) {
+export default function TableLayout({type}: Props) {
   const tableConfig = config[type]
-  const modalHandler = useModalStore((store: { modalHandler: any; }) => store.modalHandler);
+  const { modalHandler, setModalData } = useModalStore();
 
   return (
     <div className='flex flex-col h-full transition-all duration-300'>
@@ -27,7 +23,10 @@ function TableLayout({type}:Props) {
             <div className='flex items-center gap-3'>
             <button
                 className='bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition-all shadow-sm active:scale-90'
-                onClick={() => modalHandler(`Добавить нового ${tableConfig.label}`, type)}
+                onClick={() => {
+                  modalHandler()
+                  setModalData(`Добавить нового ${tableConfig.title}`, type)
+                }}
               >
                 <Plus size={20} />
                 <span>Добавить</span>
@@ -46,7 +45,7 @@ function TableLayout({type}:Props) {
               <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400' size={20} />
             </div>
           </div>
-          <h2 className='text-2xl font-bold text-gray-800 dark:text-gray-200'>{tableConfig.label}</h2>
+          <h2 className='text-2xl font-bold text-gray-800 dark:text-gray-200'>{tableConfig.names}</h2>
         </div>
       </div>
       <div className='flex-1 overflow-x-auto'>
@@ -59,5 +58,3 @@ function TableLayout({type}:Props) {
     </div>
   )
 }
-
-export default TableLayout

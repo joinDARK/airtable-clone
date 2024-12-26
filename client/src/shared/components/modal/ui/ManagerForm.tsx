@@ -1,30 +1,31 @@
-import { useForm } from "react-hook-form"
-import { z }from "zod"
-import { ManagerSchema } from "../../../schema"
-import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "react-toastify";
-import { useModalStore } from "../../../store/useModalStore";
-import useRelatedData from "../../../../modules/relationship/useRelatedData";
+import {Controller, useForm} from "react-hook-form"
+import {z} from "zod"
+import {FormManagerSchema} from "../../../schema/form"
+import {zodResolver} from "@hookform/resolvers/zod"
+import {toast} from "react-toastify"
+import {useModalStore} from "../../../store/useModalStore"
+import useRelatedData from "../../../../modules/relationship/useRelatedData"
+import { RelationshipSelect } from "../../select/RelationshipSelect"
 
-type Manager = z.infer<typeof ManagerSchema>;
+type Manager = z.infer<typeof FormManagerSchema>
 
 interface ManagerFormProps {
   data?: Manager
 }
 
-function ManagerForm({ data }: ManagerFormProps) {
+function ManagerForm({data}: ManagerFormProps) {
   const methods = useForm<Manager>({
-    resolver: zodResolver(ManagerSchema),
+    resolver: zodResolver(FormManagerSchema),
     defaultValues: data ?? {
       name: "",
       tel: "",
       date: "",
       orders: [],
-      review_table: []
-    }
+      review_table: [],
+    },
   })
 
-  const related = useRelatedData("managers", "orders", data.orders)
+  const related = useRelatedData("managers", "orders")
 
   const onSubmit = (newData: Manager) => {
     toast.success("Данные успешно отправлены! Проверьте данные в консоли, как отправились данные в консоли.")
@@ -33,10 +34,10 @@ function ManagerForm({ data }: ManagerFormProps) {
 
   const onError = (errors: any) => {
     toast.error("Ошибки при отправке. Проверьте консоль")
-    console.debug("Ошибки при отправке:", errors);
-  };
+    console.debug("Ошибки при отправке:", errors)
+  }
 
-  const {register, handleSubmit } = methods
+  const {register, handleSubmit, control} = methods
 
   const modalHandler = useModalStore(store => store.modalHandler)
 
@@ -74,6 +75,23 @@ function ManagerForm({ data }: ManagerFormProps) {
           className='mt-1 block w-full dark:bg-gray-700 placeholder:text-gray-700 dark:placeholder:text-gray-100 rounded-md shadow-sm hover:border-gray-400 transition-all focus:ring-blue-500 focus:border-blue-500'
           {...register("date")}
         />
+        <div className="col-span-2">
+          <label className="block text-sm font-medium mb-1">
+            Заявки
+          </label>
+          <Controller
+            name="orders"
+            control={control}
+            render={({field}) => (
+              <RelationshipSelect
+                value={field.value || []}
+                placeholder="Выберите заявки"
+                options={related}
+                onChange={field.onChange}
+              />
+            )}
+          />
+        </div>
       </div>
       <div className='flex justify-end gap-2 mt-6'>
         <button
@@ -83,14 +101,15 @@ function ManagerForm({ data }: ManagerFormProps) {
         >
           Закрыть
         </button>
-        <button type="button"
+        <button
+          type='button'
           className='px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-md transition-all duration-300 hover:bg-green-700'
-          onClick={() => console.log(related)}
+          onClick={() => console.log(data.orders, related)}
         >
           Получить связанные данные из кэша
         </button>
         <button
-          type="submit"
+          type='submit'
           className='px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md transition-all duration-300 hover:bg-blue-700'
         >
           Сохранить

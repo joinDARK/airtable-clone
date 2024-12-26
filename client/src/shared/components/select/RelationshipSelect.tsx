@@ -1,49 +1,43 @@
 import React from "react"
-import Select from "react-select"
+import Select, { MultiValue, SingleValue } from "react-select"
 import {useQuery} from "react-query"
-import {api} from "../../../modules/api"
-import "../../select.css"
-
-interface Option {
-  value: string
-  label: string
-}
+import "../../styles/select.css"
+import { TableKey } from "../../types/TableKey"
+import IRelatedData from "../../interfaces/IRelatedData"
 
 interface RelationshipSelectProps {
-  type: "orders" | "managers" | "agents" | "contractors" | "reviewers" | "clients" | "countries" | "subagents" | "subagentPayers"
-  value: never[] | string[] | string | number[]
-  onChange: (value: string[]) => void
-  isMulti?: boolean
-  placeholder?: string
+  value: IRelatedData[];
+  options: IRelatedData[];
+  onChange: (value: number[]) => void;
+  isMulti?: boolean;
+  placeholder?: string;
 }
 
-export const RelationshipSelect: React.FC<RelationshipSelectProps> = ({type, value, onChange, isMulti = true, placeholder}) => {
-  const {data, isLoading} = useQuery([type], () => api[type].getAll())
+export const RelationshipSelect: React.FC<RelationshipSelectProps> = ({value, isMulti = true, placeholder, options, onChange}) => {
+  const selectedOptions = value.map(selected => ({
+    label: selected.name || `Заявка ${selected.id}`,
+    value: selected.id,
+  }));
 
-  const options: Option[] = React.useMemo(() => {
-    if (!data?.data) return []
-    return data.data.map((item: any) => {
-      const obj = {value: item.id, label: item.name ?? item.id}
-      return obj
-    })
-  }, [data])
-
-  const selectedOptions = options.filter(option => {
-    return value.includes(option.value)
-  })
+  const formattedOptions = options.map(option => ({
+    label: option.name || `Заявка ${option.id}`,
+    value: option.id,
+  }));
 
   return (
     <Select
       isMulti={isMulti}
-      options={options}
+      options={formattedOptions}
       unstyled
       value={selectedOptions}
       onChange={selected => {
-        const values = isMulti ? (selected as Option[]).map(option => option.value) : [(selected as Option).value]
-        onChange(values)
+        const values = isMulti
+          ? (selected as MultiValue<{ label: string; value: number }>).map(option => option.value)
+          : [(selected as SingleValue<{ label: string; value: number }>)!.value];
+          // onChange(values)
+          console.log(values)
       }}
-      isLoading={isLoading}
-      placeholder={placeholder || `Выберите ${type}`}
+      placeholder={placeholder}
       className='react-select-container'
       classNamePrefix='react-select'
     />

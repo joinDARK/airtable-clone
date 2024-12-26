@@ -1,0 +1,1 @@
+export type ColumnType = "text" | "related" | "date" | "option" | "lookup" | "boolean" | "number" | "files"

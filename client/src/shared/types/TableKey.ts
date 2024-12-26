@@ -1,0 +1,1 @@
+export type TableKey = "orders" | "agents" | "clients" | "contragents" | "countries" | "managers" | "subagentPayers" | "subagents"

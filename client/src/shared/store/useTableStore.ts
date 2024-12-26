@@ -1,15 +1,13 @@
 import { create } from "zustand"
-import { IAgent, IClient, IContragent, ICountry, IManager, IOrder, ISubagent, ISubagentPayer } from "../types"
-
-type Data = (IOrder | IClient | IManager | ISubagent | ISubagentPayer | IAgent | IContragent | ICountry | object | never)[]
+import { Table } from "../types/Table";
 
 interface ITableStore {
-  data: Data;
-  setData: (newData: Data) => void;
+  data: Table[];
+  setData: (newData: Table[]) => void;
 }
 const useTableStore = create<ITableStore>((set) => ({
   data: [],
-  setData: (newData: Data) => set({
+  setData: (newData: Table[]) => set({
     data: newData
   })
 }))

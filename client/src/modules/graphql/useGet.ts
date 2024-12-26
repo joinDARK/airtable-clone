@@ -1,9 +1,9 @@
-import { ITableNames } from '../../shared/types';
+import { TableKey } from '../../shared/types/TableKey';
 import { client } from './client'
 import { useQuery } from 'react-query';
 import queryConfig from './queryConfig';
 
-type ReqType = ITableNames
+type ReqType = TableKey
 
 export default function useGet(type: ReqType) {
     return useQuery(

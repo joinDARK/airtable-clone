@@ -9,16 +9,15 @@ function OrdersPage() {
   const type = "orders"
   const setTableData = useTableStore((store) => store.setData)
   const handlerLoader = useLoaderStore((store) => store.setIsLoading)
-  const { data, isLoading, isSuccess } = useGet(type)
+  const { data, isLoading } = useGet(type)
 
   useEffect(() => {
     if (isLoading) {
       handlerLoader(true);
-    } else if (isSuccess) {
+    } else {
       handlerLoader(false);
-      setTableData(data[type]);
     }
-  }, [isLoading, isSuccess, data, handlerLoader, setTableData, type]);
+  }, [isLoading, data, handlerLoader, setTableData]);
   
   return (
     <>

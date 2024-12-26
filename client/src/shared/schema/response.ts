@@ -1,21 +1,21 @@
 import {z, ZodType} from "zod"
 
-const OrderSchema: ZodType = z.lazy(() =>
+const ResOrderSchema: ZodType = z.lazy(() =>
   z.object({
-    id: z.number().optional(),
+    id: z.number(),
     satus: z.string().optional(),
     order_number: z.number().optional(),
-    managers: z.array(ManagerSchema).optional(),
-    reviewers: z.array(ManagerSchema).optional(),
+    managers: z.array(RelatedSchema),
+    reviewers: z.array(RelatedSchema),
     date: z.string().date().optional(),
     date_hired: z.string().date().optional(),
-    contragent: z.array(ContragentSchema).optional(),
-    agents: z.array(AgentSchema).optional(),
-    clients: z.array(ClientSchema).optional(),
+    contragent: z.array(RelatedSchema).optional(),
+    agents: z.array(RelatedSchema).optional(),
+    clients: z.array(RelatedSchema).optional(),
     client_inn: z.string().optional(),
     name_agency: z.string().optional(),
     swift_code: z.string().optional(),
-    countries: z.array(CountrySchema).optional(),
+    countries: z.array(RelatedSchema).optional(),
     calc_condition: z.string().optional(),
     type_transaction: z.string().optional(),
     number_receiving: z.number().optional(),
@@ -50,8 +50,8 @@ const OrderSchema: ZodType = z.lazy(() =>
     date_close_deal: z.string().date().optional(),
     cycle_deal: z.number().optional(),
     purpose_of_payment: z.string().optional(),
-    subagents: z.array(SubagentSchema).optional(),
-    subagentsPayers: z.array(SubagentPayerSchema).optional(),
+    subagents: z.array(RelatedSchema).optional(),
+    subagentsPayers: z.array(RelatedSchema).optional(),
     serial_num_for_payer: z.number().optional(),
     date_docs_agent_and_subagent: z.string().date().optional(),
     date_taking_swift: z.string().date().optional(),
@@ -79,73 +79,73 @@ const OrderSchema: ZodType = z.lazy(() =>
   })
 )
 
-const ClientSchema: ZodType = z.lazy(() =>
-  z.object({
-    id: z.number().optional(),
-    name: z.string().min(1),
-    inn: z.string().min(1),
-    orders: z.array(OrderSchema),
-  })
-)
-
-const ContragentSchema: ZodType = z.lazy(() =>
+const ResClientSchema: ZodType = z.lazy(() =>
   z.object({
     id: z.number(),
-    name: z.string().min(1),
-    orders: z.array(OrderSchema),
+    name: z.string().optional(),
+    inn: z.string().optional(),
+    orders: z.array(RelatedSchema),
   })
 )
 
-const AgentSchema: ZodType = z.lazy(() =>
+const ResContragentSchema: ZodType = z.lazy(() =>
   z.object({
     id: z.number(),
-    name: z.string().min(1),
-    orders: z.array(OrderSchema),
+    name: z.string().optional(),
+    orders: z.array(RelatedSchema),
   })
 )
 
-const CountrySchema: ZodType = z.lazy(() =>
+const ResAgentSchema: ZodType = z.lazy(() =>
   z.object({
     id: z.number(),
-    name: z.string().min(1),
-    code: z.string().min(1),
-    full_name: z.string().min(1),
-    orders: z.array(OrderSchema),
+    name: z.string().optional(),
+    orders: z.array(RelatedSchema),
   })
 )
 
-const ManagerSchema: ZodType = z.lazy(() =>
+const ResCountrySchema: ZodType = z.lazy(() =>
   z.object({
-    id: z.number().optional(),
-    name: z.string().min(1),
-    tel: z.string().min(1),
+    id: z.number(),
+    name: z.string().optional(),
+    code: z.string().optional(),
+    full_name: z.string().optional(),
+    orders: z.array(RelatedSchema),
+  })
+)
+
+const ResManagerSchema: ZodType = z.lazy(() =>
+  z.object({
+    id: z.number(),
+    name: z.string().optional(),
+    tel: z.string().optional(),
     date: z.string().date(),
-    orders: z.array(OrderSchema).optional(),
-    review_table: z.array(OrderSchema).optional(),
+    orders: z.array(RelatedSchema),
+    review_table: z.array(RelatedSchema),
   })
 )
 
-const SubagentSchema: ZodType = z.lazy(() =>
+const ResSubagentSchema: ZodType = z.lazy(() =>
   z.object({
     id: z.number(),
-    name: z.string().min(1),
-    orders: z.array(OrderSchema),
-    payers: z.array(SubagentPayerSchema),
+    name: z.string().optional(),
+    orders: z.array(RelatedSchema),
+    payers: z.array(RelatedSchema),
   })
 )
 
-const SubagentPayerSchema: ZodType = z.lazy(() =>
+const ResSubagentPayerSchema: ZodType = z.lazy(() =>
   z.object({
     id: z.number(),
-    name: z.string().min(1),
-    orders: z.array(OrderSchema),
-    subagents: z.array(SubagentSchema),
+    name: z.string().optional(),
+    orders: z.array(RelatedSchema),
+    subagents: z.array(RelatedSchema),
   })
 )
 
-const UserShema: ZodType = z.object({
-  login: z.string().min(1),
-  password: z.string().min(1)
+const RelatedSchema: ZodType = z.object({
+  id: z.number(),
+  name: z.string().optional()
 })
 
-export {ClientSchema, ContragentSchema, AgentSchema, CountrySchema, OrderSchema, SubagentPayerSchema, SubagentSchema, ManagerSchema, UserShema}
+export { ResSubagentSchema, ResSubagentPayerSchema, ResOrderSchema, ResManagerSchema, ResCountrySchema, ResContragentSchema, ResClientSchema, ResAgentSchema }

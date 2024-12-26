@@ -4,21 +4,29 @@ import { Modal } from "../components/modal/Modal.tsx"
 import useLoaderStore from "../store/useLoaderStore.ts"
 import { useGet } from "../../modules/graphql/index.ts"
 import { useEffect } from "react"
+import { z } from "zod"
+import { ResManagerSchema } from "../schema/response.ts"
+import { TableKey } from "../types/TableKey.ts"
 
 function ManagersPage() {
-  const type = "managers"
+  const type: TableKey = "managers"
   const setTableData = useTableStore((store) => store.setData)
   const handlerLoader = useLoaderStore((store) => store.setIsLoading)
-  const { data, isLoading, isSuccess } = useGet(type)
+  const { data, isLoading } = useGet(type)
 
   useEffect(() => {
     if (isLoading) {
-      handlerLoader(true);
-    } else if (isSuccess) {
-      handlerLoader(false);
-      setTableData(data[type]);
+      handlerLoader(true)
+    } else {
+      handlerLoader(false)
+      try {
+        const validatedData = z.array(ResManagerSchema).parse(data[type])
+        setTableData(validatedData)
+      } catch (error) {
+        console.error('Validation error:', error)
+      }
     }
-  }, [isLoading, isSuccess, data, handlerLoader, setTableData, type]);
+  }, [handlerLoader, setTableData, type, isLoading])
 
   return (
     <>

@@ -69,7 +69,6 @@ function App() {
             draggable
             pauseOnHover
           />
-          { isLoading ? <Loader/> : "" }
         </div>
       </BrowserRouter>
     </QueryClientProvider>
