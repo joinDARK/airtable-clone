@@ -1,18 +1,23 @@
 import TableLayout from '../components/table/TableLayout'
 import { Modal } from '../components/modal/Modal'
 import useLoaderStore from '../store/useLoaderStore'
-import { useGet } from '../../modules/graphql'
 import { useEffect } from 'react'
 import useTableStore from '../store/useTableStore'
 import { z } from "zod"
 import { ResContragentSchema } from "../schema/response.ts"
 import { TableKey } from "../types/TableKey.ts"
+import { useQuery } from 'react-query'
+import { client, queries } from '../../modules/graphql/index'
 
 function ContragentsPage() {
   const type: TableKey = 'contragents'
   const setTableData = useTableStore((store) => store.setData)
   const handlerLoader = useLoaderStore((store) => store.setIsLoading)
-  const { data, isLoading } = useGet(type)
+
+  const { data, isLoading } = useQuery(type, async () => {
+    const { data } = await client.query({ query: queries[type] })
+    return data
+  })
 
   useEffect(() => {
     if (isLoading) {

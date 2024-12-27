@@ -2,17 +2,22 @@ import { Modal } from "../components/modal/Modal"
 import TableLayout from "../components/table/TableLayout"
 import { useEffect } from "react"
 import useLoaderStore from "../store/useLoaderStore"
-import { useGet } from "../../modules/graphql"
 import useTableStore from "../store/useTableStore"
 import { z } from "zod"
 import { ResClientSchema } from "../schema/response"
 import { TableKey } from "../types/TableKey"
+import { useQuery } from 'react-query'
+import { client, queries } from '../../modules/graphql/index'
 
 function ClientsPage() {
   const type: TableKey = "clients"
   const setTableData = useTableStore((store) => store.setData)
   const handlerLoader = useLoaderStore((store) => store.setIsLoading)
-  const { data, isLoading } = useGet(type)
+
+  const { data, isLoading } = useQuery(type, async () => {
+    const { data } = await client.query({ query: queries[type] })
+    return data
+  })
 
   useEffect(() => {
     if (isLoading) {

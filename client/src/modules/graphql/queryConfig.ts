@@ -1,6 +1,8 @@
-export default {
-  managers: `managers { id name tel date orders { id } review_table { id } }`,
-  orders: `orders { 
+import { gql } from '@apollo/client';
+
+export const queries = {
+  managers: gql`query { managers { id name tel date orders { id } review_table { id } } }`,
+  orders: gql`query { orders { 
     id
     status
     order_number
@@ -100,11 +102,11 @@ export default {
     act_link
     money_gone
     files { id fileName fileUrl type}
-  }`,
-  contragents: `contragents { id name orders { id } }`,
-  agents: `agents { id name orders { id } }`,
-  clients: `clients { id name inn orders { id } }`,
-  countries: `countries { id name code full_name orders { id } }`,
-  subagents: `subagents { id name orders { id } payers { id name } }`,
-  subagentPayers: `subagentPayers { id name orders { id } subagents { id name } }`,
+  } }`,
+  contragents: gql`query { contragents { id name orders { id } } }`,
+  agents: gql`query { agents { id name orders { id } } }`,
+  clients: gql`query { clients { id name inn orders { id } } }`,
+  countries: gql`query { countries { id name code full_name orders { id } } }`,
+  subagents: gql`query { subagents { id name orders { id name } payers { id name } } }`,
+  subagentPayers: gql`query { subagentPayers { id name orders { id } subagents { id name } } }`,
 }

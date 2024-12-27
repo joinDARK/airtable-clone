@@ -16,20 +16,14 @@ function TableActions({ value }: TableActionsProps) {
   const context = useContext(TableLayoutContext)
   const name = value.name ?? value.id
 
-  // const { deleteData } = useDelete(context?.type, value.id)
-
-  const handleDelete = async () => {
-    return console.log("Удален")
-  }
-
   return (
     <div className="flex items-center w-fit gap-2">
       <button
         className="p-1 text-gray-500 dark:text-gray-300 hover:text-red-600 transition-all active:scale-90"
         title="Удалить"
         onClick={() => {
+          context?.delete(value.id)
           console.log(context?.type, value.id)
-          handleDelete()
         }}
       >
         <Trash2 size={18} />

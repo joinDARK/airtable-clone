@@ -1,6 +1,6 @@
-import { ITableNames } from "../../shared/types";
+import { TableKey } from "../../shared/types/TableKey";
 
-const relationshipConfig: Record<ITableNames, Record<string, ITableNames>> = {
+const relationshipConfig: Record<TableKey, Record<string, TableKey>> = {
   orders: {
     clients: "clients",
     contragents: "contragents",
