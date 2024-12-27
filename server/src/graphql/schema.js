@@ -41,7 +41,7 @@ const schema = buildSchema(`
     id: Int!
     name: String!
     orders: [Order]
-    payers: [SubagentPayer]
+    subagentPayers: [SubagentPayer]
   }
 
   type SubagentPayer {

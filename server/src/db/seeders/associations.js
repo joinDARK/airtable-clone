@@ -62,7 +62,7 @@ const associateModels = () => {
   // Связь "Субагенты" и "Плательщики субагентов"
   Subagent.belongsToMany(SubagentPayer, {
     through: "SubagentPayerLinks",
-    as: "subagentsPayers",
+    as: "subagentPayers", // Важно: здесь используется subagentsPayers
     onDelete: "CASCADE",
   });
   SubagentPayer.belongsToMany(Subagent, {
@@ -121,14 +121,12 @@ const associateModels = () => {
 
   // Связь один ко многим: один заказ может иметь много файлов
   Order.hasMany(File, {
-    foreignKey: "orderId", // Внешний ключ в таблице File
-    as: "files", // Опционально: псевдоним для связи
+    foreignKey: "orderId", 
+    as: "files", 
   });
-
-  // Связь обратная: каждый файл принадлежит одному заказу
   File.belongsTo(Order, {
-    foreignKey: "orderId", // Внешний ключ в таблице File
-    as: "order", // Опционально: псевдоним для связи
+    foreignKey: "orderId",
+    as: "order",
   });
 };
 

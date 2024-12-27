@@ -1,7 +1,7 @@
 const { subagentPayerService } = require("../../../services/index.js");
 
 module.exports = {
-  subagentsPayers: async () => {
+  subagentPayers: async () => {
     const result = await subagentPayerService.getAll();
     return result || [];
   },

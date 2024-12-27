@@ -1,11 +1,11 @@
-const { contractorService } = require("../../../services/index.js");
+const { contragentService } = require("../../../services/index.js");
 
 module.exports = {
   contragents: async () => {
-    const result = await contractorService.getAll();
+    const result = await contragentService.getAll();
     return result || [];
   },
   contragent: async ({ id }) => {
-    return await contractorService.getById(id);
+    return await contragentService.getById(id);
   },
 };
