@@ -13,4 +13,18 @@ export const mutation = {
       }
     `,
   },
+  create: {
+    managers: gql`
+      mutation CreateManager($input: CreateManagerInput!) {
+        createManager(input: $input) {
+          id
+          name
+          tel
+          date
+          orders {id}
+          review_table {id}
+        }
+      }
+    `
+  }
 }

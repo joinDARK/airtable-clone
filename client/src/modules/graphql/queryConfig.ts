@@ -107,6 +107,6 @@ export const queries = {
   agents: gql`query { agents { id name orders { id } } }`,
   clients: gql`query { clients { id name inn orders { id } } }`,
   countries: gql`query { countries { id name code full_name orders { id } } }`,
-  subagents: gql`query { subagents { id name orders { id name } payers { id name } } }`,
+  subagents: gql`query { subagents { id name orders { id } subagentPayers { id name } } }`,
   subagentPayers: gql`query { subagentPayers { id name orders { id } subagents { id name } } }`,
 }

@@ -6,7 +6,6 @@ export const queryClient = new QueryClient({
     queries: {
       refetchOnWindowFocus: false,
       retry: 1,
-      staleTime: 5 * 60 * 1000,
       onError: (error: any) => {
         toast.error(error?.response?.data?.message || 'При загрузке данных произошла ошибка');
       },

@@ -7,33 +7,16 @@ import { ResSubagentSchema } from '../schema/response'
 import { z } from 'zod'
 import { TableKey } from "../types/TableKey"
 import { useQuery } from 'react-query'
-import { gql, useApolloClient } from '@apollo/client'
-
-const GET_SUBAGENTS = gql`
-  query GetSubagents {
-    subagents {
-      id
-      name
-      orders {
-        id
-        name
-      }
-      payers {
-        id
-        name
-      }
-    }
-  }
-`
+import { client } from '../../modules/graphql'
+import { queries } from '../../modules/graphql'
 
 function SubagentsPage() {
   const type: TableKey = 'subagents'
   const setTableData = useTableStore(store => store.setData)
   const handlerLoader = useLoaderStore(store => store.setIsLoading)
-  const client = useApolloClient()
 
   const { data, isLoading } = useQuery('subagents', async () => {
-    const { data } = await client.query({ query: GET_SUBAGENTS })
+    const { data } = await client.query({ query: queries[type] })
     return data
   })
 
@@ -43,7 +26,8 @@ function SubagentsPage() {
     } else {
       handlerLoader(false)
       try {
-        const validatedData = z.array(ResSubagentSchema).parse(data.subagents)
+        const validatedData = z.array(ResSubagentSchema).parse(data[type])
+        console.log(validatedData)
         setTableData(validatedData)
       } catch (error) {
         console.error('Validation error:', error)

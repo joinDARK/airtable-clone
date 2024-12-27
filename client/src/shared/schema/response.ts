@@ -130,7 +130,7 @@ const ResSubagentSchema: ZodType = z.lazy(() =>
     id: z.number(),
     name: z.string().optional().nullable(),
     orders: z.array(RelatedSchema),
-    payers: z.array(RelatedSchema),
+    subagentPayers: z.array(RelatedSchema),
   })
 )
 

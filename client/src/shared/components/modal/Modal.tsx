@@ -1,30 +1,22 @@
-import React from "react";
 import { Dialog } from "@headlessui/react";
 import { X } from "lucide-react";
-import { Edit } from 'lucide-react';
 import { useModalStore } from "../../store/useModalStore";
 import ManagerForm from "./ui/ManagerForm";
 import CellModal from "./ui/CellModal";
+import IManager from "../../interfaces/table/IManager";
 
-
-interface ModalProps {
-  // value?: any;
-  // setIsEditing?: any;
-  // isEditing?: boolean;
+interface ModalProps<T> {
+  create: (newManager: T) => Promise<void>
 }
 
-export const Modal: React.FC<ModalProps> = ({
-  // value,
-  // setIsEditing,
-  // isEditing,
-}) => {
+export const Modal = <T extends unknown>({ create }: ModalProps<T>) => {
   const { open, title, modalHandler, content, data, formData } = useModalStore()
 
   let renderContent;
 
   switch (content) {
     case "managers":
-      renderContent = <ManagerForm data={formData}/>
+      renderContent = <ManagerForm data={formData as IManager} onSubmit={create}/>
       break
     default:
       renderContent = <CellModal data={data}/>

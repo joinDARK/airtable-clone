@@ -10,6 +10,7 @@ import { useQuery } from 'react-query'
 import { client, queries, mutation } from '../../modules/graphql'
 import { toast } from "react-toastify"
 import { useMutation } from "@apollo/client"
+import IManager from "../interfaces/table/IManager"
 
 function ManagersPage() {
   const type: TableKey = "managers"
@@ -18,7 +19,13 @@ function ManagersPage() {
 
   const [deleteManager] = useMutation(mutation.delete[type], {
     refetchQueries: [{ query: queries[type] }],
+    awaitRefetchQueries: true, // Добавлено для ожидания завершения refetch
   });
+
+  const [createManager] = useMutation(mutation.create[type], {
+    refetchQueries: [{ query: queries[type] }],
+    awaitRefetchQueries: true, // Добавлено для ожидания завершения refetch
+  })
 
   const { data, isLoading, refetch } = useQuery(type, async () => {
     const { data } = await client.query({ query: queries[type] })
@@ -31,15 +38,27 @@ function ManagersPage() {
       const { data } = await deleteManager({variables: {id}})
       if (data?.deleteManager) {
         toast.success("Менеджер успешно удалён");
-        await client.refetchQueries({
-          include: ["managers"], // Имя запроса, используемое в GraphQL
-        });
+        refetch();
       } else {
         alert("Не удалось удалить менеджера");
       }
     } catch (error) {
       toast.error("Произошла ошибка");
       console.debug("Ошибка удаления строки", error);
+    } finally {
+      handlerLoader(false)
+    }
+  }
+
+  const handleCreate = async (newData: IManager) => {
+    handlerLoader(true)
+    try {
+      await createManager({variables: { input: newData }})
+      toast.success("Менеджер создан успешно!");
+      refetch()
+    } catch (error) {
+      toast.error("Произошла ошибка при отправке данных");
+      console.debug("Ошибка при отправке данных:", error);
     } finally {
       handlerLoader(false)
     }
@@ -57,12 +76,12 @@ function ManagersPage() {
         console.error('Ошибка валидации страницы:', error)
       }
     }
-  }, [handlerLoader, setTableData, isLoading, data])
+  }, [handlerLoader, setTableData, isLoading, data, refetch])
 
   return (
     <>
       <TableLayout type={type} delete={handleDelete}/>
-      <Modal/>
+      <Modal create={handleCreate}/>
     </>
   )
 }
