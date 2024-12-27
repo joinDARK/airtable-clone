@@ -27,6 +27,11 @@ function ManagersPage() {
     awaitRefetchQueries: true, // Добавлено для ожидания завершения refetch
   })
 
+  const [updateManager] = useMutation(mutation.update[type], {
+    refetchQueries: [{ query: queries[type] }],
+    awaitRefetchQueries: true, // Добавлено для ожидания завершения refetch
+  })
+
   const { data, isLoading, refetch } = useQuery(type, async () => {
     const { data } = await client.query({ query: queries[type] })
     return data
@@ -53,13 +58,20 @@ function ManagersPage() {
   const handleCreate = async (newData: IManager) => {
     handlerLoader(true)
     try {
-      await createManager({variables: { input: newData }})
-      toast.success("Менеджер создан успешно!");
-      refetch()
+      if (newData.id) {
+        console.log("Update", newData)
+        await updateManager({variables: { input: newData }})
+        toast.success("Менеджер обновлен успешно!");
+      } else {
+        console.log("Create", newData)
+        await createManager({variables: { input: newData }})
+        toast.success("Менеджер создан успешно!");
+      }
     } catch (error) {
       toast.error("Произошла ошибка при отправке данных");
       console.debug("Ошибка при отправке данных:", error);
     } finally {
+      refetch()
       handlerLoader(false)
     }
   }

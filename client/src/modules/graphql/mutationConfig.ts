@@ -26,5 +26,19 @@ export const mutation = {
         }
       }
     `
+  },
+  update: {
+    managers: gql`
+      mutation UpdateManager($input: UpdateManagerInput!) {
+        updateManager(input: $input) {
+          id
+          name
+          tel
+          date
+          orders {id}
+          review_table {id}
+        }
+      }
+    `
   }
 }
