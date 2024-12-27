@@ -1,6 +1,6 @@
 const Agent = require('./Agent');
 const Client = require('./Client');
-const Contractor = require('./Contragent');
+const Contragent = require('./Contragent');
 const Country = require('./Country');
 const File = require('./File');
 const Manager = require('./Manager');
@@ -14,7 +14,7 @@ const User = require('./User');
 module.exports = {
   Agent,
   Client,
-  Contractor,
+  Contragent,
   Country,
   File,
   Manager,

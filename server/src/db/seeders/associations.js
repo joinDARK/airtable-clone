@@ -3,7 +3,7 @@ const {
   Client,
   Order,
   Manager,
-  Contractor,
+  Contragent,
   Subagent,
   SubagentPayer,
   Country,
@@ -36,13 +36,13 @@ const associateModels = () => {
   });
 
   // Связь "Заявка" и "Контрагенты"
-  Order.belongsToMany(Contractor, {
-    through: "OrderContractors",
-    as: "contractors",
+  Order.belongsToMany(Contragent, {
+    through: "OrderContragents",
+    as: "contragents",
     onDelete: "CASCADE",
   });
-  Contractor.belongsToMany(Order, {
-    through: "OrderContractors",
+  Contragent.belongsToMany(Order, {
+    through: "OrderContragents",
     as: "orders",
     onDelete: "CASCADE",
   });
@@ -62,7 +62,7 @@ const associateModels = () => {
   // Связь "Субагенты" и "Плательщики субагентов"
   Subagent.belongsToMany(SubagentPayer, {
     through: "SubagentPayerLinks",
-    as: "subagentPayers",
+    as: "subagentsPayers",
     onDelete: "CASCADE",
   });
   SubagentPayer.belongsToMany(Subagent, {

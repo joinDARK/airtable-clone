@@ -109,7 +109,7 @@ const schema = buildSchema(`
     cycle_deal: Int
     purpose_of_payment: String
     subagents: [Subagent]
-    subagentsPayers: [SubagentPayer]
+    subagentPayers: [SubagentPayer]
     serial_num_for_payer: Int
     date_docs_agent_and_subagent: String
     date_taking_swift: String
@@ -186,7 +186,7 @@ const schema = buildSchema(`
     cycle_deal: Int
     purpose_of_payment: String
     subagents: [Int]
-    subagentsPayers: [Int]
+    subagentPayers: [Int]
     serial_num_for_payer: Int
     date_docs_agent_and_subagent: String
     date_taking_swift: String
@@ -263,7 +263,7 @@ const schema = buildSchema(`
     cycle_deal: Int
     purpose_of_payment: String
     subagents: [Int]
-    subagentsPayers: [Int]
+    subagentPayers: [Int]
     serial_num_for_payer: Int
     date_docs_agent_and_subagent: String
     date_taking_swift: String

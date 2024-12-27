@@ -3,7 +3,7 @@ const {
   Order,
   Manager,
   Reviewer,
-  Contractor,
+  Contragent,
   Agent,
   Client,
   Subagent,
@@ -17,7 +17,7 @@ class OrderService extends BaseService {
     super(Order, [
       { model: Manager, as: 'managers' },
       { model: Manager, as: 'reviewers' },
-      { model: Contractor, as: 'contractors' },
+      { model: Contragent, as: 'contragents' },
       { model: Agent, as: 'agents' },
       { model: Client, as: 'clients' },
       { model: Country, as: 'countries' },

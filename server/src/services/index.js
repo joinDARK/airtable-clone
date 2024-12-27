@@ -1,6 +1,6 @@
 const AgentService = require('./agentService');
 const ClientService = require('./clientService');
-const ContractorService = require('./contractorService');
+const ContragentService = require('./contragentService');
 const ManagerService = require('./managerService');
 const ReviewerService = require('./reviwerService');
 const OrderService = require('./orderService');
@@ -14,7 +14,7 @@ const AuthService = require('./authService');
 module.exports = {
   agentService: AgentService,
   clientService: ClientService,
-  contractorService: ContractorService,
+  contragentService: ContragentService,
   managerService: ManagerService,
   reviewerService: ReviewerService,
   orderService: OrderService,
