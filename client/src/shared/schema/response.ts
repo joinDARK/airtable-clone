@@ -76,8 +76,19 @@ const ResOrderSchema: ZodType = z.lazy(() =>
     swift199_link: z.string().optional().nullable(),
     act_link: z.string().optional().nullable(),
     money_gone: z.boolean().optional().nullable(),
+    files: z.array(ResFileSchema).optional().nullable(),
   })
 )
+
+const ResFileSchema: ZodType = z.lazy(() =>
+  z.object({
+    id: z.number(),
+    fileName: z.string(),
+    fileUrl: z.string().url(),
+    type: z.string().optional().nullable(),
+    __typename: z.string().optional().nullable(),
+  })
+);
 
 const ResClientSchema: ZodType = z.lazy(() =>
   z.object({

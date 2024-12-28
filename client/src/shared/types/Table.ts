@@ -1,3 +1,4 @@
+import IFile from "../interfaces/IFile";
 import IAgent from "../interfaces/table/IAgent";
 import IClient from "../interfaces/table/IClient";
 import IContragent from "../interfaces/table/IContragent";
@@ -7,4 +8,4 @@ import IOrder from "../interfaces/table/IOrder";
 import ISubagent from "../interfaces/table/ISubagent";
 import ISubagentPayer from "../interfaces/table/ISubagentPayer";
 
-export type Table = IOrder | IAgent | ISubagent | ISubagentPayer | IManager | ICountry | IContragent | IClient;
+export type Table = IOrder | IAgent | ISubagent | ISubagentPayer | IManager | ICountry | IContragent | IClient | IFile;
