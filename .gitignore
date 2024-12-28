@@ -14,6 +14,7 @@ lerna-debug.log*
 client/node_modules
 server/node_modules
 
+server/.env
 server/.env.development.local
 server/.env.test.local
 server/.env.production.local
