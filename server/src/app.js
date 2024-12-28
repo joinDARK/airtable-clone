@@ -26,7 +26,9 @@ app.use(errorHandler);
 
 app.use("/api", routes);
 
-app.get("/komrad", () => "Что ты предпочетаешь? C#, JS, TS, C, C++, PYTHON, RUST, GO");
+app.get('/komrad', (req, res) => {
+    res.send("what do u prefer? C#, Rust, Go, C++, C, Python, html wjith css")
+})
 
 associateModels();
 
