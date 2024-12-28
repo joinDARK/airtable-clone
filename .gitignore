@@ -1,8 +1,4 @@
-# client
-./client
-
-# Logs
-logs
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -10,32 +6,18 @@ yarn-error.log*
 lerna-debug.log*
 .pnpm-debug.log*
 
-# node_modules
-client/node_modules
-server/node_modules
+client/node_modules/
+server/node_modules/
 
-server/.env
-server/.env.development.local
-server/.env.test.local
-server/.env.production.local
-server/.env.local
 
+.env
+.env.*
 client/.env
-client/.env.development.local
-client/.env.test.local
-client/.env.production.local
-client/.env.local
+client/.env.*
+server/.env
+server/.env.*
 
-# other
-test_data
-modules(old)
+test_data/
+modules(old)/
 shared(old)/
 .DS_Store
-
-# dotenv
-.env
-.env.development.local
-.env.test.local
-.env.production.local
-.env.local
-
