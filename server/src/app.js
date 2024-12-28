@@ -26,7 +26,7 @@ app.use(errorHandler);
 
 app.use("/api", routes);
 
-app.use("/komrad", () => "Что ты предпочетаешь? C#, JS, TS, C, C++, PYTHON, RUST, GO");
+app.get("/komrad", () => "Что ты предпочетаешь? C#, JS, TS, C, C++, PYTHON, RUST, GO");
 
 associateModels();
 
