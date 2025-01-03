@@ -9,7 +9,7 @@ interface Props {
   column: IColumn;
 }
 
-function Cell({ item, column }: Props) {
+export default function Cell({ item, column }: Props) {
   const { setModalData, modalHandler } = useModalStore()
   const key = column.key as keyof Table
 
