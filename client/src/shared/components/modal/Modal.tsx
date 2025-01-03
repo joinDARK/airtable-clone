@@ -4,19 +4,20 @@ import { useModalStore } from "../../store/useModalStore";
 import ManagerForm from "./ui/ManagerForm";
 import CellModal from "./ui/CellModal";
 import IManager from "../../interfaces/table/IManager";
+import View from "./ui/View";
 
 interface ModalProps<T> {
   create: (newManager: T) => Promise<void>
 }
 
 export const Modal = <T extends unknown>({ create }: ModalProps<T>) => {
-  const { open, title, modalHandler, content, data, formData } = useModalStore()
+  const { open, title, modalHandler, content, data, formData, isEdit } = useModalStore()
 
   let renderContent;
 
   switch (content) {
     case "managers":
-      renderContent = <ManagerForm data={formData as IManager} onSubmit={create}/>
+      renderContent = isEdit ? <ManagerForm data={formData as IManager} onSubmit={create}/> : <View/>
       break
     default:
       renderContent = <CellModal data={data}/>

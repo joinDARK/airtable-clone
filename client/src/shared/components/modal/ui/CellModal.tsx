@@ -14,7 +14,7 @@ function CellModal({data}: Props) {
     render = data.toString()
   } else if (Array.isArray(data)) {
     render = <div className='flex flex-wrap gap-2'>
-      {data.map((tag: IRelatedData, i) => (
+      { data.length == 0 ? "—" : data.map((tag: IRelatedData, i) => (
         <span key={i} className='inline-flex items-center px-8 py-1 rounded-xl text-sm font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'>
           {tag.name ?? tag.id}
         </span>
@@ -24,7 +24,7 @@ function CellModal({data}: Props) {
 
   return (
     <div className="text-red-400">
-      <div className="text-gray-900 dark:text-gray-100 p-[10px] bg-gray-300 rounded-md dark:bg-gray-600">
+      <div className="text-gray-900 dark:text-gray-100 p-[10px] bg-gray-300 rounded-md dark:bg-gray-600 border dark:border-gray-500">
         {render}
       </div>
     </div>
