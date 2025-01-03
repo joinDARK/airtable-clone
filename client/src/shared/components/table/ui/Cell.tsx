@@ -3,9 +3,10 @@ import IColumn from "../../../interfaces/IColumn"
 import TypeCell from "./TypeCell"
 import { useModalStore } from "../../../store/useModalStore"
 
+
 interface Props {
-  item: Table
-  column: IColumn
+  item: Table;
+  column: IColumn;
 }
 
 function Cell({ item, column }: Props) {
@@ -21,10 +22,15 @@ function Cell({ item, column }: Props) {
         modalHandler()
         setModalData(column.label, "", item[key])
       }}
-    >
-      <TypeCell title={column.label} type={column.type} value={item[key]} keyCell={key} />
-    </td>
-  )
-}
 
-export default Cell
+    >
+      <TypeCell
+        title={column.label}
+        type={column.type}
+        value={item[column.key as keyof Table]}
+        columnKey={column.key}
+        item={item}
+      />
+    </td>
+  );
+}
