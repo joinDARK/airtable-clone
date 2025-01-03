@@ -86,7 +86,7 @@ const updateOrderSchema = createOrderSchema.keys({
   id: Joi.number().integer().required()
 });
 
-// Аналогично для других вводов
+// Схемы для Agent
 const createAgentSchema = Joi.object({
   name: Joi.string().required(),
   orders: optionalIntArray
@@ -97,6 +97,7 @@ const updateAgentSchema = createAgentSchema.keys({
   name: Joi.string().optional()
 });
 
+// Схемы для Client
 const createClientSchema = Joi.object({
   name: Joi.string().required(),
   inn: Joi.string().required(),
@@ -107,6 +108,7 @@ const updateClientSchema = createClientSchema.keys({
   id: Joi.number().integer().required()
 });
 
+// Схемы для Contragent
 const createContragentSchema = Joi.object({
   name: Joi.string().required(),
   orders: optionalIntArray
@@ -116,6 +118,7 @@ const updateContragentSchema = createContragentSchema.keys({
   id: Joi.number().integer().required()
 });
 
+// Схемы для Manager
 const createManagerSchema = Joi.object({
   name: Joi.string().required(),
   tel: Joi.string().required(),
@@ -128,6 +131,7 @@ const updateManagerSchema = createManagerSchema.keys({
   id: Joi.number().integer().required()
 });
 
+// Схемы для Country
 const createCountrySchema = Joi.object({
   name: Joi.string().required(),
   code: Joi.string().required(),
@@ -139,8 +143,10 @@ const updateCountrySchema = createCountrySchema.keys({
   id: Joi.number().integer().required()
 });
 
+// Схемы для Subagent
 const createSubagentSchema = Joi.object({
   name: Joi.string().required(),
+  subagentPayers: optionalIntArray,  // <-- Обязательно добавьте это поле
   orders: optionalIntArray
 });
 
@@ -148,15 +154,21 @@ const updateSubagentSchema = createSubagentSchema.keys({
   id: Joi.number().integer().required()
 });
 
+// Схемы для SubagentPayer
 const createSubagentPayerSchema = Joi.object({
   name: Joi.string().required(),
+  subagents: optionalIntArray,
   orders: optionalIntArray
 });
 
 const updateSubagentPayerSchema = createSubagentPayerSchema.keys({
-  id: Joi.number().integer().required()
+  id: Joi.number().integer().required(),
+  name: Joi.string().optional(),
+  subagents: optionalIntArray,
+  orders: optionalIntArray
 });
 
+// Схемы для File
 const createFileSchema = Joi.object({
   fileName: Joi.string().required(),
   fileUrl: Joi.string().required(),
@@ -176,7 +188,7 @@ const updateFileSchema = createFileSchema.keys({
 function validateInput(input, schema) {
   const { error, value } = schema.validate(input, { abortEarly: false });
   if (error) {
-    const message = error.details.map(d => d.message).join(', ');
+    const message = error.details.map((d) => d.message).join(', ');
     throw new Error(`Validation Error: ${message}`);
   }
   return value;

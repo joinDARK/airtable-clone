@@ -3,8 +3,8 @@ const { buildSchema } = require("graphql");
 const schema = buildSchema(`
   type Manager {
     id: Int!
-    name: String!
-    tel: String!
+    name: String
+    tel: String
     date: String!
     orders: [Order]
     review_table: [Order]
@@ -12,49 +12,49 @@ const schema = buildSchema(`
 
   type Contragent {
     id: Int!
-    name: String!
+    name: String
     orders: [Order]
   }
 
   type Agent {
     id: Int!
-    name: String!
+    name: String
     orders: [Order]
   }
 
   type Client {
     id: Int!
-    name: String!
-    inn: String!
+    name: String
+    inn: String
     orders: [Order]
   }
 
   type Country {
     id: Int!
-    name: String!
-    code: String!
-    full_name: String!
+    name: String
+    code: String
+    full_name: String
     orders: [Order]
   }
 
   type Subagent {
     id: Int!
-    name: String!
+    name: String
     orders: [Order]
     subagentPayers: [SubagentPayer]
   }
 
   type SubagentPayer {
     id: Int!
-    name: String!
+    name: String
     orders: [Order]
     subagents: [Subagent]
   }
 
   type File {
     id: Int!
-    fileName: String!
-    fileUrl: String!
+    fileName: String
+    fileUrl: String
     type: String
     orderId: Int
   }
@@ -140,7 +140,7 @@ const schema = buildSchema(`
   input CreateOrderInput {
     status: String!
     order_number: Int!
-    managers: [Int]         
+    managers: [Int]
     reviewers: [Int]
     date: String!
     date_hired: String
@@ -367,23 +367,27 @@ const schema = buildSchema(`
 
   input CreateSubagentInput {
     name: String!
+    subagentPayers: [Int]
     orders: [Int]
   }
 
   input UpdateSubagentInput {
     id: Int!
     name: String
+    subagentPayers: [Int]
     orders: [Int]
   }
 
   input CreateSubagentPayerInput {
     name: String!
+    subagents: [Int]
     orders: [Int]
   }
 
   input UpdateSubagentPayerInput {
     id: Int!
     name: String
+    subagents: [Int]
     orders: [Int]
   }
 
