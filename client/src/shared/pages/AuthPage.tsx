@@ -92,7 +92,7 @@ function AuthPage({onLogin}: AuthPageProps) {
             onLogin(true) // Устанавливаем авторизацию
             navigate("/orders")
           }}
-          className='bg-green-600 transition-all rounded-md py-2.5 text-lg hover:bg-green-700 active:scale-95'
+          className='bg-green-600 transition-all rounded-md py-2.5 text-lg hover:bg-green-700 active:scale-95 mt-2'
         >
           Пропустить авторизацию
         </button>

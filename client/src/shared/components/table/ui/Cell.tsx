@@ -22,7 +22,6 @@ function Cell({ item, column }: Props) {
       onClick={() => {
         modalHandler()
         setModalData(column.label, "", item[key])
-        console.log(item[key], key, item, tableData)
       }}
     >
       <TypeCell title={column.label} type={column.type} value={item[key]} keyCell={key} />
