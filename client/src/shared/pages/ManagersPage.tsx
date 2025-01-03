@@ -15,6 +15,7 @@ import IManager from "../interfaces/table/IManager"
 function ManagersPage() {
   const type: TableKey = "managers"
   const setTableData = useTableStore((store) => store.setData)
+  const setRefetch = useTableStore((store) => store.setRefetchTable)
   const handlerLoader = useLoaderStore((store) => store.setIsLoading)
 
   const [deleteManager] = useMutation(mutation.delete[type], {
@@ -59,11 +60,9 @@ function ManagersPage() {
     handlerLoader(true)
     try {
       if (newData.id) {
-        console.log("Update", newData)
         await updateManager({variables: { input: newData }})
         toast.success("Менеджер обновлен успешно!");
       } else {
-        console.log("Create", newData)
         await createManager({variables: { input: newData }})
         toast.success("Менеджер создан успешно!");
       }
@@ -75,6 +74,8 @@ function ManagersPage() {
       handlerLoader(false)
     }
   }
+
+  setRefetch(refetch)
 
   useEffect(() => {
     if (isLoading) {

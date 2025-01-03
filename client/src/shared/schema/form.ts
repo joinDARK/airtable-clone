@@ -122,8 +122,14 @@ const FormManagerSchema: ZodType = z.object({
 const FormSubagentSchema: ZodType = z.object({
   id: z.number().optional(),
   name: z.string().min(1),
-  orders: z.array(z.number()),
-  subagentPayers: z.array(z.number()),
+  orders: z
+    .array(z.object({ id: z.number(), name: z.string().optional() }))
+    .transform((data) => data.map((item) => item.id))
+    .default([]),
+  subagentPayers: z
+    .array(z.object({ id: z.number(), name: z.string().optional() }))
+    .transform((data) => data.map((item) => item.id))
+    .default([]),
 })
 
 const FormSubagentPayerSchema: ZodType = z.object({

@@ -5,6 +5,8 @@ import ManagerForm from "./ui/ManagerForm";
 import CellModal from "./ui/CellModal";
 import IManager from "../../interfaces/table/IManager";
 import View from "./ui/View";
+import SubagentForm from "./ui/SubagentForm";
+import ISubagent from "../../interfaces/table/ISubagent";
 
 interface ModalProps<T> {
   create: (newManager: T) => Promise<void>
@@ -18,6 +20,9 @@ export const Modal = <T extends unknown>({ create }: ModalProps<T>) => {
   switch (content) {
     case "managers":
       renderContent = isEdit ? <ManagerForm data={formData as IManager} onSubmit={create}/> : <View/>
+      break
+    case "subagents":
+      renderContent = isEdit ? <SubagentForm data={formData as ISubagent} onSubmit={create}/> : <View/>
       break
     default:
       renderContent = <CellModal data={data}/>

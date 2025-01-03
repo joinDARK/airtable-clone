@@ -12,6 +12,11 @@ export const mutation = {
         deleteManager(id: $id)
       }
     `,
+    subagents: gql`
+      mutation DeleteSubagent($id: Int!) {
+        deleteSubagent(id: $id)
+      }
+    `,
   },
   create: {
     managers: gql`
@@ -25,7 +30,17 @@ export const mutation = {
           review_table {id}
         }
       }
-    `
+    `,
+    subagents: gql`
+      mutation CreateSubagent($input: CreateSubagentInput!) {
+        createSubagent(input: $input) {
+          id
+          name
+          orders {id}
+          subagentPayers {id name}
+        }
+      }
+    `,
   },
   update: {
     managers: gql`
@@ -39,6 +54,16 @@ export const mutation = {
           review_table {id}
         }
       }
-    `
+    `,
+    subagents: gql`
+      mutation UpdateSubagent($input: UpdateSubagentInput!) {
+        updateSubagent(input: $input) {
+          id
+          name
+          orders {id}
+          subagentPayers {id name}
+        }
+      }
+    `,
   }
 }
