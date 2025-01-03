@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default function Cell({ item, column }: Props) {
-  const { setModalData, modalHandler } = useModalStore()
+  const { setModalData, modalHandler, setIsEdit } = useModalStore()
   const key = column.key as keyof Table
 
   return (
@@ -21,6 +21,7 @@ export default function Cell({ item, column }: Props) {
       onClick={() => {
         modalHandler()
         setModalData(column.label, "", item[key])
+        setIsEdit(false)
       }}
 
     >

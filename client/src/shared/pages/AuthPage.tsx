@@ -71,7 +71,12 @@ function AuthPage({onLogin}: AuthPageProps) {
         <h1 className='text-3xl font-black mb-3 text-center'>Вход</h1>
         <div className='mb-2'>
           <span className={`${errors.login ? "text-red-500" : "text-transparent"} select-none`}>Логин не может быть пустым</span>
-          <input {...register("login")} autoComplete='login' placeholder='Введите логин' className='w-full bg-transparent rounded-md py-2.5' />
+          <input 
+            {...register("login")} 
+            autoComplete='login' 
+            placeholder='Введите логин' 
+            className='w-full bg-transparent rounded-md p-2.5 border border-gray-300 dark:border-gray-600 dark:bg-gray-800' 
+          />
         </div>
         <div className='mb-6'>
           <span className={`${errors.password ? "text-red-500" : "text-transparent"} select-none`}>Пароль не может быть пустым</span>
@@ -80,7 +85,7 @@ function AuthPage({onLogin}: AuthPageProps) {
             placeholder='Введите пароль'
             type='password'
             autoComplete='current-password'
-            className='w-full bg-transparent rounded-md py-2.5'
+            className='w-full bg-transparent rounded-md p-2.5 border border-gray-300 dark:border-gray-600 dark:bg-gray-800'
           />
         </div>
         <button type='submit' className='bg-blue-600 transition-all rounded-md py-2.5 text-lg hover:bg-blue-700 active:scale-95'>

@@ -1,5 +1,5 @@
 import { Dialog } from "@headlessui/react";
-import { X } from "lucide-react";
+import { X, Edit, SquareGantt } from "lucide-react";
 import { useModalStore } from "../../store/useModalStore";
 import ManagerForm from "./ui/ManagerForm";
 import CellModal from "./ui/CellModal";
@@ -7,13 +7,14 @@ import IManager from "../../interfaces/table/IManager";
 import View from "./ui/View";
 import SubagentForm from "./ui/SubagentForm";
 import ISubagent from "../../interfaces/table/ISubagent";
+import clsx from "clsx";
 
 interface ModalProps<T> {
   create: (newManager: T) => Promise<void>
 }
 
 export const Modal = <T extends unknown>({ create }: ModalProps<T>) => {
-  const { open, title, modalHandler, content, data, formData, isEdit } = useModalStore()
+  const { open, title, modalHandler, content, data, formData, isEdit, setIsEdit } = useModalStore()
 
   let renderContent;
 
@@ -40,13 +41,18 @@ export const Modal = <T extends unknown>({ create }: ModalProps<T>) => {
                 {title}
               </Dialog.Title>
               <div>
-                {/* {(!isEditing && isEditing != null && <button
-                  onClick={() => setIsEditing(true)}
-                  className="p-1 text-gray-500 hover:text-yellow-600 transition-colors"
-                  title="Edit"
+                <button
+                  className={clsx(
+                    "p-1 text-gray-500 transition-all",
+                    !isEdit ? "hover:text-yellow-600" : "hover:text-blue-600"
+                  )}
+                  title={!isEdit ? "Редактировать" : "Просмотреть"}
+                  onClick={() => {
+                    setIsEdit(!isEdit)
+                  }}
                 >
-                  <Edit size={18} />
-                </button>)} */}
+                  {!isEdit ? <Edit size={18} /> : <SquareGantt size={18} />}
+                </button>
                 <button
                   title="Закрыть"
                   type="button"
