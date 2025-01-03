@@ -1,40 +1,40 @@
-import TableLayout from '../components/table/TableLayout'
-import { Modal } from '../components/modal/Modal'
-import useTableStore from '../store/useTableStore'
-import { useEffect } from 'react'
-import useLoaderStore from '../store/useLoaderStore'
-import { ResSubagentSchema } from '../schema/response'
-import { z } from 'zod'
-import { TableKey } from "../types/TableKey"
-import { useQuery } from 'react-query'
-import { client, queries, mutation } from '../../modules/graphql'
-import { toast } from "react-toastify"
-import { useMutation } from "@apollo/client"
-import ISubagent from '../interfaces/table/ISubagent'
+import TableLayout from "../components/table/TableLayout"
+import {Modal} from "../components/modal/Modal"
+import useTableStore from "../store/useTableStore"
+import {useEffect} from "react"
+import useLoaderStore from "../store/useLoaderStore"
+import {ResSubagentSchema} from "../schema/response"
+import {z} from "zod"
+import {TableKey} from "../types/TableKey"
+import {useQuery} from "react-query"
+import {client, queries, mutation} from "../../modules/graphql"
+import {toast} from "react-toastify"
+import {useMutation} from "@apollo/client"
+import ISubagent from "../interfaces/table/ISubagent"
 
 function SubagentsPage() {
-  const type: TableKey = 'subagents'
+  const type: TableKey = "subagents"
   const setTableData = useTableStore(store => store.setData)
-  const setRefetch = useTableStore((store) => store.setRefetchTable)
+  const setRefetch = useTableStore(store => store.setRefetchTable)
   const handlerLoader = useLoaderStore(store => store.setIsLoading)
 
   const [deleteSubagent] = useMutation(mutation.delete[type], {
-    refetchQueries: [{ query: queries[type] }],
+    refetchQueries: [{query: queries[type]}],
     awaitRefetchQueries: true,
   })
 
   const [createSubagent] = useMutation(mutation.create[type], {
-    refetchQueries: [{ query: queries[type] }],
+    refetchQueries: [{query: queries[type]}],
     awaitRefetchQueries: true,
   })
 
   const [updateSubagent] = useMutation(mutation.update[type], {
-    refetchQueries: [{ query: queries[type] }],
+    refetchQueries: [{query: queries[type]}],
     awaitRefetchQueries: true,
   })
 
-  const { data, isLoading, refetch } = useQuery('subagents', async () => {
-    const { data } = await client.query({ query: queries[type] })
+  const {data, isLoading, refetch} = useQuery("subagents", async () => {
+    const {data} = await client.query({query: queries[type]})
     return data
   })
 
@@ -43,7 +43,7 @@ function SubagentsPage() {
   const handleDelete = async (id: number) => {
     handlerLoader(true)
     try {
-      const { data } = await deleteSubagent({ variables: { id } })
+      const {data} = await deleteSubagent({variables: {id}})
       if (data?.deleteSubagent) {
         toast.success("Субагент успешно удалён")
       } else {
@@ -62,11 +62,11 @@ function SubagentsPage() {
     console.log(newData)
     try {
       if (newData.id) {
-        await updateSubagent({variables: { input: newData }})
-        toast.success("Менеджер обновлен успешно!");
+        await updateSubagent({variables: {input: newData}})
+        toast.success("Менеджер обновлен успешно!")
       } else {
-        await createSubagent({variables: { input: newData }})
-        toast.success("Менеджер создан успешно!");
+        await createSubagent({variables: {input: newData}})
+        toast.success("Менеджер создан успешно!")
       }
     } catch (error) {
       toast.error("Произошла ошибка")
@@ -86,7 +86,7 @@ function SubagentsPage() {
         const validatedData = z.array(ResSubagentSchema).parse(data[type])
         setTableData(validatedData)
       } catch (error) {
-        console.error('Validation error:', error)
+        console.error("Validation error:", error)
       }
     }
   }, [isLoading, data, handlerLoader, setTableData, refetch])
@@ -94,7 +94,7 @@ function SubagentsPage() {
   return (
     <>
       <TableLayout type={type} delete={handleDelete} />
-      <Modal create={handleCreate}/>
+      <Modal create={handleCreate} />
     </>
   )
 }
