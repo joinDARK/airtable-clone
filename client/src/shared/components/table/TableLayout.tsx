@@ -4,6 +4,9 @@ import config from "../../configs";
 import { useModalStore } from "../../store/useModalStore";
 import { createContext } from "react";
 import { TableKey } from "../../types/TableKey";
+import { useTableSort } from "../../hooks/useTableSort";
+import useTableStore from "../../store/useTableStore";
+import { useTableFilter } from "../../hooks/useTableFilter";
 
 interface Props {
   type: TableKey;
@@ -14,7 +17,10 @@ export const TableLayoutContext = createContext<Props | undefined>(undefined);
 
 export default function TableLayout({ type, delete: handleDelete }: Props) {
   const tableConfig = config[type];
-  const { modalHandler, setModalData } = useModalStore();
+  const { data, refetchTable } = useTableStore();
+  const { modalHandler, setModalData, setIsEdit } = useModalStore();
+  const { sortedData, sortConfig ,handleSort } = useTableSort(data);
+  const { filteredData, setSearchTerm } = useTableFilter(sortedData);
 
   return (
     <div className="flex flex-col h-full transition-all duration-300">
@@ -27,6 +33,7 @@ export default function TableLayout({ type, delete: handleDelete }: Props) {
                 onClick={() => {
                   modalHandler();
                   setModalData(`Добавить нового ${tableConfig.title}`, type);
+                  setIsEdit(true);
                 }}
               >
                 <Plus size={20} />
@@ -35,6 +42,7 @@ export default function TableLayout({ type, delete: handleDelete }: Props) {
               <button
                 className="p-2 hover:bg-gray-100 rounded-lg transition-all shadow-sm active:scale-90 dark:hover:bg-gray-600"
                 title="Refresh"
+                onClick={refetchTable}
               >
                 <RefreshCw size={20} className="text-gray-600 dark:text-gray-400" />
               </button>
@@ -44,6 +52,7 @@ export default function TableLayout({ type, delete: handleDelete }: Props) {
                 type="text"
                 placeholder="Поиск..."
                 id="search"
+                onChange={e => setSearchTerm(e.target.value)}
                 className="w-full sm:w-64 pl-10 pr-4 py-2 rounded-lg dark:text-white border border-gray-300 dark:border-gray-500 dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
@@ -55,7 +64,7 @@ export default function TableLayout({ type, delete: handleDelete }: Props) {
       <div className="flex-1 overflow-x-auto">
         <div className="inline-block min-w-full align-middle">
           <TableLayoutContext.Provider value={{ type, delete: handleDelete }}>
-            <Table columns={tableConfig.columns} />
+            <Table columns={tableConfig.columns} data={filteredData} onSort={handleSort} sortConfig={sortConfig} />
           </TableLayoutContext.Provider>
         </div>
       </div>

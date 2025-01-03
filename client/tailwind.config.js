@@ -4,8 +4,5 @@ export default {
   darkMode: 'selector',
   theme: {
     extend: {},
-  },
-  plugins: [
-    require('@tailwindcss/forms'),
-  ],
+  }
 };

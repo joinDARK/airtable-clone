@@ -47,9 +47,9 @@ export const Sidebar = ({ exitApp }: Props) => {
   const setTheme = useThemeStore((store) => store.setAltTheme);
   const navigate = useNavigate();
 
-  const jwt = localStorage.getItem("jwt");
-  const decode = decodeToken(jwt);
-  const login = decode.login;
+  // const jwt = localStorage.getItem("jwt");
+  // const decode = decodeToken(jwt);
+  const login = "Skipped";
 
   const animationDuration = 80;
 
