@@ -8,10 +8,10 @@ interface Props {
   //   style: string
   // }
   value: string;
-  keyCell?: string;
+  columnKey?: string;
 }
 
-function Option({value, keyCell}: Props) {
+function Option({value, columnKey: keyCell}: Props) {
   return (
     <span
       className={clsx(
