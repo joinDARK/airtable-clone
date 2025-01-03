@@ -53,7 +53,7 @@ function ManagerForm({data, onSubmit}: ManagerFormProps) {
         <input
           type='text'
           placeholder='Введите имя менеджера'
-          className='mt-1 px-3 py-2 block w-full dark:bg-gray-700 placeholder:text-gray-700 dark:placeholder:text-gray-100 rounded-md shadow-sm hover:border-gray-400 transition-all focus:ring-blue-500 focus:border-blue-500'
+          className='mt-1 px-3 py-2 block w-full border-gray-300 border dark:border-transparent dark:bg-gray-700 placeholder:text-gray-700 dark:placeholder:text-gray-100 rounded-md shadow-sm hover:border-gray-400 transition-all focus:ring-blue-500 focus:border-blue-500'
           {...register("name")}
         />
       </div>
@@ -64,7 +64,7 @@ function ManagerForm({data, onSubmit}: ManagerFormProps) {
         <input
           type='tel'
           placeholder='Введите номер телефона менеджера'
-          className='mt-1 px-3 py-2 block w-full dark:bg-gray-700 placeholder:text-gray-700 dark:placeholder:text-gray-100 rounded-md shadow-sm hover:border-gray-400 transition-all focus:ring-blue-500 focus:border-blue-500'
+          className='mt-1 px-3 py-2 block w-full border-gray-300 border dark:border-transparent dark:bg-gray-700 placeholder:text-gray-700 dark:placeholder:text-gray-100 rounded-md shadow-sm hover:border-gray-400 transition-all focus:ring-blue-500 focus:border-blue-500'
           {...register("tel")}
         />
       </div>
@@ -75,7 +75,7 @@ function ManagerForm({data, onSubmit}: ManagerFormProps) {
         <input
           placeholder='Выберите день рождения'
           type='date'
-          className='mt-1 px-3 py-2 block w-full dark:bg-gray-700 placeholder:text-gray-700 dark:placeholder:text-gray-100 rounded-md shadow-sm hover:border-gray-400 transition-all focus:ring-blue-500 focus:border-blue-500'
+          className='mt-1 px-3 py-2 block w-full border-gray-300 border dark:border-transparent dark:bg-gray-700 placeholder:text-gray-700 dark:placeholder:text-gray-100 rounded-md shadow-sm hover:border-gray-400 transition-all focus:ring-blue-500 focus:border-blue-500'
           {...register("date")}
         />
       </div>

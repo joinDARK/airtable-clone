@@ -38,8 +38,6 @@ function SubagentsPage() {
     return data
   })
 
-  setRefetch(refetch)
-
   const handleDelete = async (id: number) => {
     handlerLoader(true)
     try {
@@ -59,7 +57,7 @@ function SubagentsPage() {
 
   const handleCreate = async (newData: ISubagent) => {
     handlerLoader(true)
-    console.log(newData)
+    setRefetch(refetch)
     try {
       if (newData.id) {
         await updateSubagent({variables: {input: newData}})

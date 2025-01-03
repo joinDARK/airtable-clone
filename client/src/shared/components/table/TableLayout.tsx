@@ -40,7 +40,7 @@ export default function TableLayout({ type, delete: handleDelete }: Props) {
                 <span>Добавить</span>
               </button>
               <button
-                className="p-2 hover:bg-gray-100 rounded-lg transition-all shadow-sm active:scale-90 dark:hover:bg-gray-600"
+                className="p-2 border border-gray-300 dark:border-gray-500 hover:bg-gray-100 rounded-lg transition-all shadow-sm active:scale-90 dark:hover:bg-gray-600"
                 title="Refresh"
                 onClick={refetchTable}
               >

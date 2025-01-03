@@ -75,9 +75,8 @@ function ManagersPage() {
     }
   }
 
-  setRefetch(refetch)
-
   useEffect(() => {
+    setRefetch(refetch)
     if (isLoading) {
       handlerLoader(true)
     } else {

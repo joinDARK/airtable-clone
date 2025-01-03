@@ -23,7 +23,7 @@ const renderData = (data: any, config: IColumn[]) => {
       </div>
     );
   }
-  return <div className="dark:bg-gray-700 border rounded-md dark:border-gray-600 p-2 text-xs">{transformDate(String(data))}</div>;
+  return <div className="bg-gray-50 dark:bg-gray-700 border rounded-md dark:border-gray-600 p-2 text-xs">{transformDate(String(data))}</div>;
 };
 
 export default function View() {
