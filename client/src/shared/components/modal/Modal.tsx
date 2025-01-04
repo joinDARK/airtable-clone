@@ -9,13 +9,18 @@ import SubagentForm from "./ui/SubagentForm";
 import ISubagent from "../../interfaces/table/ISubagent";
 import clsx from "clsx";
 import ITable from "../../interfaces/ITable";
+import IColumn from "../../interfaces/IColumn";
 
 interface ModalProps {
   create: (newObject: ITable) => Promise<void>
+  cols: IColumn[]
 }
 
-export const Modal = ({ create }: ModalProps) => {
+export const Modal = ({ create, cols }: ModalProps) => {
   const { open, title, modalHandler, content, data, formData, isEdit, setIsEdit } = useModalStore()
+  const config = Array.isArray(cols)
+  ? cols.find(item => item.key === content)
+  : undefined;
 
   let renderContent;
 
@@ -27,7 +32,7 @@ export const Modal = ({ create }: ModalProps) => {
       renderContent = isEdit ? <SubagentForm data={formData as ISubagent} onSubmit={create}/> : <View/>
       break
     default:
-      renderContent = <CellModal data={data} submit={create}/>
+      renderContent = <CellModal data={data} submit={create} type={config?.type} />
       break
   }
 
@@ -36,7 +41,7 @@ export const Modal = ({ create }: ModalProps) => {
       <Dialog open={open} onClose={() => modalHandler()} className="relative z-50">
         <div className="fixed inset-0 bg-black/60" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-14">
-          <Dialog.Panel className="mx-auto max-w-xl w-full text-gray-700 bg-white dark:bg-gray-800 dark:text-gray-100  rounded-lg shadow-xl max-h-400">
+          <Dialog.Panel className="mx-auto max-w-xl w-full text-gray-700 bg-white dark:bg-gray-800 dark:text-gray-100  rounded-lg shadow-xl max-h-[40rem]">
             <div className="flex justify-between items-center p-4 border-b">
               <Dialog.Title className="text-lg font-semibold">
                 {title}
@@ -52,7 +57,7 @@ export const Modal = ({ create }: ModalProps) => {
                     setIsEdit(!isEdit)
                   }}
                 >
-                  {!isEdit ? <Edit size={18} /> : <SquareGantt size={18} />}
+                  { config?.readonly ? "" : !isEdit ? <Edit size={18} /> : <SquareGantt size={18} />}
                 </button>
                 <button
                   title="Закрыть"

@@ -36,7 +36,7 @@ function OrdersPage() {
   return (
     <>
       <TableLayout type={type}/>
-      <Modal/>
+      <Modal />
     </>
   )
 }

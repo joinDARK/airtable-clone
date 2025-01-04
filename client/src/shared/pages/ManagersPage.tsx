@@ -11,6 +11,7 @@ import { client, queries, mutation } from '../../modules/graphql'
 import { toast } from "react-toastify"
 import { useMutation } from "@apollo/client"
 import IManager from "../interfaces/table/IManager"
+import configs from "../configs"
 
 function ManagersPage() {
   const type: TableKey = "managers"
@@ -75,7 +76,7 @@ function ManagersPage() {
     }
   }
 
-  useEffect(() => {
+  useEffect(() => {// Добавлено для отладки
     setRefetch(refetch)
     if (isLoading) {
       handlerLoader(true)
@@ -90,10 +91,12 @@ function ManagersPage() {
     }
   }, [handlerLoader, setTableData, isLoading, data, refetch])
 
+  const { columns } = configs[type]
+
   return (
     <>
       <TableLayout type={type} delete={handleDelete} create={handleCreate}/>
-      <Modal create={handleCreate}/>
+      <Modal cols={columns} create={handleCreate}/>
     </>
   )
 }
