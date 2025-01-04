@@ -8,12 +8,13 @@ import View from "./ui/View";
 import SubagentForm from "./ui/SubagentForm";
 import ISubagent from "../../interfaces/table/ISubagent";
 import clsx from "clsx";
+import ITable from "../../interfaces/ITable";
 
-interface ModalProps<T> {
-  create: (newManager: T) => Promise<void>
+interface ModalProps {
+  create: (newObject: ITable) => Promise<void>
 }
 
-export const Modal = <T extends unknown>({ create }: ModalProps<T>) => {
+export const Modal = ({ create }: ModalProps) => {
   const { open, title, modalHandler, content, data, formData, isEdit, setIsEdit } = useModalStore()
 
   let renderContent;
@@ -26,7 +27,7 @@ export const Modal = <T extends unknown>({ create }: ModalProps<T>) => {
       renderContent = isEdit ? <SubagentForm data={formData as ISubagent} onSubmit={create}/> : <View/>
       break
     default:
-      renderContent = <CellModal data={data}/>
+      renderContent = <CellModal data={data} submit={create}/>
       break
   }
 

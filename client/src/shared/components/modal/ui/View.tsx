@@ -28,8 +28,8 @@ const renderData = (data: any, config: IColumn[]) => {
 
 export default function View() {
   const view = useModalStore(store => store.formData)
-  const configKey = useModalStore(store => store.content)
-  const config = configs[configKey].columns || {};
+  const configKey = useModalStore(store => store.content) as keyof typeof configs;
+  const config = configs[configKey]?.columns || [];
 
   return (
     <>

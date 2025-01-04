@@ -92,7 +92,7 @@ function ManagersPage() {
 
   return (
     <>
-      <TableLayout type={type} delete={handleDelete}/>
+      <TableLayout type={type} delete={handleDelete} create={handleCreate}/>
       <Modal create={handleCreate}/>
     </>
   )

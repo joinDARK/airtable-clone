@@ -20,7 +20,7 @@ export default function Cell({ item, column }: Props) {
                  px-4 py-1"
       onClick={() => {
         modalHandler()
-        setModalData(column.label, "", item[key])
+        setModalData(column.label, "", item[key], item)
         setIsEdit(false)
       }}
 

@@ -1,20 +1,28 @@
+import clsx from "clsx";
 import IRelatedData from "../../../interfaces/IRelatedData";
-import { transformDate } from "../../../../modules/date_formateer/dateFormateer";
+import ITable from "../../../interfaces/ITable";
 import { useModalStore } from "../../../store/useModalStore";
+import EditCellModal from "./EditCellModal";
 import ViewCellModal from "./ViewCellModal";
 
 interface Props {
-  data?: string | IRelatedData[] | number
+  data?: string | IRelatedData[] | number;
+  submit: (data: ITable) => void;
 }
 
-function CellModal({data}: Props) {
-
+function CellModal({data, submit}: Props) {
   const isEdit = useModalStore(store => store.isEdit)
 
   return (
     <div className="text-red-400">
-      <div className="text-gray-900 dark:text-gray-100 p-[10px] bg-gray-300 rounded-md dark:bg-gray-600 border dark:border-gray-500">
-        {isEdit ? "Окно редактирование" : <ViewCellModal value={data}/>}
+      <div 
+        className={clsx(
+          "text-gray-900 dark:text-gray-100 rounded-md",
+          !isEdit 
+            ? "p-2 bg-gray-100 dark:bg-gray-600 border dark:border-gray-500"
+            : "p-0 bg-transparent"
+        )}>
+        {isEdit ? <EditCellModal value={data} submit={submit} /> : <ViewCellModal value={data}/>}
       </div>
     </div>
   )

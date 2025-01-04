@@ -1,4 +1,4 @@
-import { Edit, Trash2, SquareGantt } from "lucide-react";
+import { Edit, Trash2, SquareGantt, CopyPlus } from "lucide-react";
 import { useModalStore } from "../../../store/useModalStore";
 import { useContext } from "react";
 import { TableLayoutContext } from "../TableLayout";
@@ -49,6 +49,16 @@ function TableActions({ value }: TableActionsProps) {
         }}
       >
         <SquareGantt size={18} />
+      </button>
+      <button
+        className="p-1 text-gray-500 dark:text-gray-300 hover:text-lime-600 transition-all active:scale-90"
+        title="Дублировать строку"
+        onClick={() => {
+          const {id, ...duplicateRow} = value
+          context?.create(duplicateRow)
+        }}
+      >
+        <CopyPlus size={18} />
       </button>
     </div>
   )

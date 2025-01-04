@@ -11,12 +11,13 @@ import { useTableFilter } from "../../hooks/useTableFilter";
 interface Props {
   type: TableKey;
   delete: (id: number) => Promise<void>;
+  create: (data: any) => Promise<void>;
 }
 
 export const TableLayoutContext = createContext<Props | undefined>(undefined);
 
-export default function TableLayout({ type, delete: handleDelete }: Props) {
-  const tableConfig = config[type];
+export default function TableLayout({ type, delete: handleDelete, create: handleCreate}: Props) {
+  const tableConfig = config[type as keyof typeof config];
   const { data, refetchTable } = useTableStore();
   const { modalHandler, setModalData, setIsEdit } = useModalStore();
   const { sortedData, sortConfig ,handleSort } = useTableSort(data);
@@ -63,7 +64,7 @@ export default function TableLayout({ type, delete: handleDelete }: Props) {
       </div>
       <div className="flex-1 overflow-x-auto">
         <div className="inline-block min-w-full align-middle">
-          <TableLayoutContext.Provider value={{ type, delete: handleDelete }}>
+          <TableLayoutContext.Provider value={{ type, delete: handleDelete, create: handleCreate }}>
             <Table columns={tableConfig.columns} data={filteredData} onSort={handleSort} sortConfig={sortConfig} />
           </TableLayoutContext.Provider>
         </div>
