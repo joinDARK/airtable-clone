@@ -18,7 +18,22 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    /*Алиасы*/
+    "paths": {
+      "@services/*": ["./src/services/*"],
+      "@classes/*": ["./src/shared/classes/*"],
+      "@components/*": ["./src/shared/components/*"],
+      "@configs/*": ["./src/shared/configs/*"],
+      "@hooks/*": ["./src/shared/hooks/*"],
+      "@interfaces/*": ["./src/shared/interfaces/*"],
+      "@pages/*": ["./src/shared/pages/*"],
+      "@schema/*": ["./src/shared/schema/*"],
+      "@store/*": ["./src/shared/store/*"],
+      "@styles/*": ["./src/shared/styles/*"],
+      "@shared_types/*": ["./src/shared/types/*"]
+    },
   },
   "include": ["src"]
 }

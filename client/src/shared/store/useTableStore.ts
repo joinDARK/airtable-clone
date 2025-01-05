@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import { Table } from "../types/Table";
+import { Table } from "@shared_types/Table";
 
 interface ITableStore {
   data: Table[];

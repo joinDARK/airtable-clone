@@ -1,8 +1,10 @@
 import { useQuery } from 'react-query';
-import { client, queries } from "../graphql";
-import relationshipConfig from "./config";
-import { TableKey } from "../../shared/types/TableKey";
+import { client, queries } from "@services/graphql";
+import { TableKey } from "@shared_types/TableKey";
+
+// Локальный импорт
 import filteredData from "./filteredData";
+import relationshipConfig from "./config";
 
 export default function useRelatedData(table: TableKey, relationship: TableKey) {
   const queryKey = relationshipConfig[table][relationship];

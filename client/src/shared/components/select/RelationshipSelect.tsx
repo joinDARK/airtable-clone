@@ -1,7 +1,7 @@
 import React from "react"
 import Select, { MultiValue, SingleValue } from "react-select"
-import "../../styles/select.css"
-import IRelatedData from "../../interfaces/IRelatedData"
+import "@styles/select.css"
+import IRelatedData from "@interfaces/IRelatedData"
 
 interface RelationshipSelectProps {
   value: IRelatedData[];

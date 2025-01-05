@@ -1,12 +1,13 @@
 import { RefreshCw, Plus, Search } from "lucide-react";
-import Table from "./ui/Table";
-import config from "../../configs";
-import { useModalStore } from "../../store/useModalStore";
 import { createContext } from "react";
-import { TableKey } from "../../types/TableKey";
-import { useTableSort } from "../../hooks/useTableSort";
-import useTableStore from "../../store/useTableStore";
-import { useTableFilter } from "../../hooks/useTableFilter";
+
+import Table from "./ui/Table";
+import config from "@configs/index";
+import { useModalStore } from "@store/useModalStore";
+import { TableKey } from "@shared_types/TableKey";
+import { useTableSort } from "@hooks/useTableSort";
+import useTableStore from "@store/useTableStore";
+import { useTableFilter } from "@hooks/useTableFilter";
 
 interface Props {
   type: TableKey;

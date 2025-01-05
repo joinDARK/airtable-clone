@@ -1,12 +1,13 @@
 import {Controller, useForm} from "react-hook-form"
-import {FormManagerSchema} from "../../../schema/form"
 import {zodResolver} from "@hookform/resolvers/zod"
 import {toast} from "react-toastify"
-import {useModalStore} from "../../../store/useModalStore"
-import useRelatedData from "../../../../modules/relationship/useRelatedData"
-import { RelationshipSelect } from "../../select/RelationshipSelect"
-import IManager from "../../../interfaces/table/IManager"
 import { useState } from "react";
+
+import {useModalStore} from "@store/useModalStore"
+import useRelatedData from "@services/relationship/useRelatedData"
+import { RelationshipSelect } from "@components/select/RelationshipSelect"
+import IManager from "@interfaces/table/IManager"
+import {FormManagerSchema} from "@schema/form"
 
 interface ManagerFormProps {
   data?: IManager;

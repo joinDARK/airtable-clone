@@ -15,9 +15,9 @@ import {
   CreditCard,
 } from "lucide-react";
 import { clsx } from "clsx";
-import useThemeStore from "../../modules/theme/useThemeStore";
+import useThemeStore from "@services/theme/useThemeStore";
 import { toast } from "react-toastify";
-import { decodeToken } from "../../modules/jwt";
+import { decodeToken } from "@services/jwt";
 
 const navItems = [
   { path: "/orders", label: "Заявки", icon: FileText },

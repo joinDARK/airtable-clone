@@ -1,7 +1,7 @@
-import { useModalStore } from "../../../store/useModalStore"
-import configs from "../../../configs"
-import IColumn from "../../../interfaces/IColumn";
-import { transformDate } from "../../../../modules/date_formateer/dateFormateer"
+import { useModalStore } from "@store/useModalStore"
+import configs from "@configs/index"
+import IColumn from "@interfaces/IColumn";
+import { transformDate } from "@services/date_formateer/dateFormateer"
 
 const renderData = (data: any, config: IColumn[]) => {
   if (Array.isArray(data) && data.length === 0) {

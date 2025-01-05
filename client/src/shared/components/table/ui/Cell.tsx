@@ -1,7 +1,7 @@
-import { Table } from "../../../types/Table"
-import IColumn from "../../../interfaces/IColumn"
+import { Table } from "@shared_types/Table"
+import IColumn from "@interfaces/IColumn"
 import TypeCell from "./TypeCell"
-import { useModalStore } from "../../../store/useModalStore"
+import { useModalStore } from "@store/useModalStore"
 
 
 interface Props {

@@ -1,12 +1,13 @@
-import ISubagent from "../../../interfaces/table/ISubagent";
 import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormSubagentSchema } from "../../../schema/form";
-import useRelatedData from "../../../../modules/relationship/useRelatedData";
 import { toast } from "react-toastify";
-import { useModalStore } from "../../../store/useModalStore";
-import { RelationshipSelect } from "../../select/RelationshipSelect";
+
+import { FormSubagentSchema } from "@schema/form";
+import useRelatedData from "@services/relationship/useRelatedData";
+import { useModalStore } from "@store/useModalStore";
+import { RelationshipSelect } from "@components/select/RelationshipSelect";
+import ISubagent from "@interfaces/table/ISubagent";
 
 interface Props {
   data?: ISubagent;

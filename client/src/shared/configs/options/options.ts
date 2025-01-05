@@ -1,4 +1,4 @@
-import IOption from "../../interfaces/IOption"
+import IOption from "@interfaces/IOption"
 
 export const status_swift: IOption[] = [
   {value: "Заявка закрыта", label: "Заявка закрыта"},

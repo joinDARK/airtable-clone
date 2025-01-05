@@ -1,5 +1,5 @@
-import IRelatedData from "../../../interfaces/IRelatedData";
-import { transformDate } from "../../../../modules/date_formateer/dateFormateer";
+import IRelatedData from "@interfaces/IRelatedData";
+import { transformDate } from "@services/date_formateer/dateFormateer";
 
 interface Props {
     value?: string | IRelatedData[] | number

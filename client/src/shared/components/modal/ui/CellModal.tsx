@@ -1,10 +1,11 @@
 import clsx from "clsx";
-import IRelatedData from "../../../interfaces/IRelatedData";
-import ITable from "../../../interfaces/ITable";
-import { useModalStore } from "../../../store/useModalStore";
+import IRelatedData from "@interfaces/IRelatedData";
+import ITable from "@interfaces/ITable";
+import { useModalStore } from "@store/useModalStore";
+import { ColumnType } from "@shared_types/ColumnType";
+
 import EditCellModal from "./EditCellModal";
 import ViewCellModal from "./ViewCellModal";
-import { ColumnType } from "../../../types/ColumnType";
 
 interface Props {
   data?: string | IRelatedData[] | number;

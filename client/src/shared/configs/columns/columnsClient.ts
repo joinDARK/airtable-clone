@@ -1,4 +1,4 @@
-import Column from "../../classes/Column";
+import Column from "@classes/Column";
 
 const columns = [
   new Column("id", "ID", true, "number", true),

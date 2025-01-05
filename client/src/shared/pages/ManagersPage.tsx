@@ -1,17 +1,18 @@
-import TableLayout from "../components/table/TableLayout"
-import useTableStore from "../store/useTableStore"
-import { Modal } from "../components/modal/Modal"
-import useLoaderStore from "../store/useLoaderStore"
 import { useEffect } from "react"
 import { z } from "zod"
-import { ResManagerSchema } from "../schema/response"
-import { TableKey } from "../types/TableKey"
-import { useQuery } from 'react-query'
-import { client, queries, mutation } from '../../modules/graphql'
+import { useQuery } from "react-query"
 import { toast } from "react-toastify"
 import { useMutation } from "@apollo/client"
-import IManager from "../interfaces/table/IManager"
-import configs from "../configs"
+
+import { client, queries, mutation } from "@services/graphql"
+import { ResManagerSchema } from "@schema/response"
+import { TableKey } from "@shared_types/TableKey"
+import IManager from "@interfaces/table/IManager"
+import configs from "@configs/index"
+import TableLayout from "@components/table/TableLayout"
+import useTableStore from "@store/useTableStore"
+import { Modal } from "@components/modal/Modal"
+import useLoaderStore from "@store/useLoaderStore"
 
 function ManagersPage() {
   const type: TableKey = "managers"
@@ -86,7 +87,7 @@ function ManagersPage() {
         const validatedData = z.array(ResManagerSchema).parse(data[type])
         setTableData(validatedData)
       } catch (error) {
-        console.error('Ошибка валидации страницы:', error)
+        console.error("Ошибка валидации страницы:", error)
       }
     }
   }, [handlerLoader, setTableData, isLoading, data, refetch])

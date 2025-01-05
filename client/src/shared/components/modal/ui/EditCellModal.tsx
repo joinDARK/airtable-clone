@@ -1,9 +1,11 @@
-import ITable from "../../../interfaces/ITable";
-import { useModalStore } from "../../../store/useModalStore";
-import IRelatedData from "../../../interfaces/IRelatedData";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { ColumnType } from "../../../types/ColumnType";
+
+import { ColumnType } from "@shared_types/ColumnType";
+import ITable from "@interfaces/ITable";
+import { useModalStore } from "@store/useModalStore";
+import IRelatedData from "@interfaces/IRelatedData";
+
 import EditInput from "./EditInput";
 
 interface Props {

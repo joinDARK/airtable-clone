@@ -1,16 +1,17 @@
-import { Modal } from "../components/modal/Modal"
-import TableLayout from "../components/table/TableLayout"
-import useLoaderStore from "../store/useLoaderStore"
 import { useEffect } from "react"
-import useTableStore from "../store/useTableStore"
-import { TableKey } from "../types/TableKey"
 import { z } from "zod"
-import { ResCountrySchema } from "../schema/response"
-import { useQuery } from 'react-query'
-import { client, queries } from '../../modules/graphql/index'
+import { useQuery } from "react-query"
+
+import useTableStore from "@store/useTableStore"
+import { TableKey } from "@shared_types/TableKey"
+import { ResCountrySchema } from "@schema/response"
+import { client, queries } from "@services/graphql"
+import { Modal } from "@components/modal/Modal"
+import TableLayout from "@components/table/TableLayout"
+import useLoaderStore from "@store/useLoaderStore"
 
 function CountriesPage() {
-  const type: TableKey = 'countries'
+  const type: TableKey = "countries"
   const setTableData = useTableStore((store) => store.setData)
   const handlerLoader = useLoaderStore((store) => store.setIsLoading)
 
@@ -28,7 +29,7 @@ function CountriesPage() {
         const validatedData = z.array(ResCountrySchema).parse(data[type])
         setTableData(validatedData)
       } catch (error) {
-        console.error('Ошибка валидации страницы:', error)
+        console.error("Ошибка валидации страницы:", error)
       }
     }
   }, [isLoading, data, handlerLoader, setTableData]);

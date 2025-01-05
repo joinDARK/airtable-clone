@@ -1,9 +1,10 @@
 import { Edit, Trash2, SquareGantt, CopyPlus } from "lucide-react";
-import { useModalStore } from "../../../store/useModalStore";
 import { useContext } from "react";
+
+import { useModalStore } from "@store/useModalStore";
 import { TableLayoutContext } from "../TableLayout";
-import ITable from "../../../interfaces/ITable";
-import IName from "../../../interfaces/IName";
+import ITable from "@interfaces/ITable";
+import IName from "@interfaces/IName";
 
 interface TableActionsProps {
   value: ITable & IName;

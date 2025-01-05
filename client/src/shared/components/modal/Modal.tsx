@@ -1,15 +1,17 @@
 import { Dialog } from "@headlessui/react";
+import clsx from "clsx";
 import { X, Edit, SquareGantt } from "lucide-react";
-import { useModalStore } from "../../store/useModalStore";
+
+import { useModalStore } from "@store/useModalStore";
+import ISubagent from "@interfaces/table/ISubagent";
+import ITable from "@interfaces/ITable";
+import IColumn from "@interfaces/IColumn";
+import IManager from "@interfaces/table/IManager";
+
 import ManagerForm from "./ui/ManagerForm";
 import CellModal from "./ui/CellModal";
-import IManager from "../../interfaces/table/IManager";
 import View from "./ui/View";
 import SubagentForm from "./ui/SubagentForm";
-import ISubagent from "../../interfaces/table/ISubagent";
-import clsx from "clsx";
-import ITable from "../../interfaces/ITable";
-import IColumn from "../../interfaces/IColumn";
 
 interface ModalProps {
   create: (newObject: ITable) => Promise<void>

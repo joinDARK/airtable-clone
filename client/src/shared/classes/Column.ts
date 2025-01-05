@@ -1,5 +1,5 @@
-import IColumn from "../interfaces/IColumn";
-import { ColumnType } from "../types/ColumnType";
+import IColumn from "@interfaces/IColumn";
+import { ColumnType } from "@shared_types/ColumnType";
 
 export default class Column implements IColumn {
   key: string;

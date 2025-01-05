@@ -1,4 +1,5 @@
-import { TableKey } from '../types/TableKey';
+import { TableKey } from '@shared_types/TableKey';
+
 import IColumn from './IColumn';
 
 export default interface ITableConfig {

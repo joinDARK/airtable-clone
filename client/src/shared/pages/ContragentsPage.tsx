@@ -1,16 +1,17 @@
-import TableLayout from '../components/table/TableLayout'
-import { Modal } from '../components/modal/Modal'
-import useLoaderStore from '../store/useLoaderStore'
-import { useEffect } from 'react'
-import useTableStore from '../store/useTableStore'
+import { useEffect } from "react"
 import { z } from "zod"
-import { ResContragentSchema } from "../schema/response.ts"
-import { TableKey } from "../types/TableKey.ts"
-import { useQuery } from 'react-query'
-import { client, queries } from '../../modules/graphql/index'
+import { useQuery } from "react-query"
+
+import { client, queries } from "@services/graphql"
+import { TableKey } from "@shared_types/TableKey.ts"
+import { ResContragentSchema } from "@schema/response.ts"
+import useTableStore from "@store/useTableStore"
+import TableLayout from "@components/table/TableLayout"
+import { Modal } from "@components/modal/Modal"
+import useLoaderStore from "@store/useLoaderStore"
 
 function ContragentsPage() {
-  const type: TableKey = 'contragents'
+  const type: TableKey = "contragents"
   const setTableData = useTableStore((store) => store.setData)
   const handlerLoader = useLoaderStore((store) => store.setIsLoading)
 
@@ -28,7 +29,7 @@ function ContragentsPage() {
         const validatedData = z.array(ResContragentSchema).parse(data[type])
         setTableData(validatedData)
       } catch (error) {
-        console.error('Ошибка валидации страницы:', error)
+        console.error("Ошибка валидации страницы:", error)
       }
     }
   }, [isLoading, data, handlerLoader, setTableData]);

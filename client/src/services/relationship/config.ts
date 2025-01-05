@@ -1,4 +1,4 @@
-import { TableKey } from "../../shared/types/TableKey";
+import { TableKey } from "@shared_types/TableKey";
 
 const relationshipConfig: Record<TableKey, Record<string, TableKey>> = {
   orders: {

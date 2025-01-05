@@ -1,6 +1,6 @@
-import { ColumnType } from "../../../types/ColumnType"
-import DateInput from "../../input/DateInput";
-import TextInput from "../../input/TextInput";
+import { ColumnType } from "@shared_types/ColumnType";
+import DateInput from "@components/input/DateInput";
+import TextInput from "@components/input/TextInput";
 
 interface Props {
   type?: ColumnType

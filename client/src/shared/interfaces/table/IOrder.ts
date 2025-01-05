@@ -1,5 +1,5 @@
-import IRelatedData from '../IRelatedData';
-import ITable from '../ITable';
+import IRelatedData from '@interfaces/IRelatedData';
+import ITable from '@interfaces/ITable';
 
 export default interface IOrder extends ITable {
   autonumber?: number;

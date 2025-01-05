@@ -1,14 +1,15 @@
 import {useForm} from "react-hook-form"
 import {useNavigate} from "react-router-dom"
 import {z} from "zod"
-import {UserShema} from "../schema/form"
 import {zodResolver} from "@hookform/resolvers/zod"
 import {toast} from "react-toastify"
-import auth from "../../modules/api/auth"
 import axios from "axios"
-import useLoaderStore from "../store/useLoaderStore"
 import {useLayoutEffect} from "react"
-import {validateToken} from "../../modules/jwt"
+
+import auth from "@services/api/auth"
+import {validateToken} from "@services/jwt"
+import useLoaderStore from "@store/useLoaderStore"
+import {UserShema} from "@schema/form"
 
 interface AuthPageProps {
   onLogin: (state: boolean) => void
@@ -66,38 +67,38 @@ function AuthPage({onLogin}: AuthPageProps) {
   })
 
   return (
-    <div className='dark:text-white flex h-full justify-center items-center'>
-      <form className='w-[500px] h-fit border p-5 rounded-md dark:border-gray-600 flex flex-col' onSubmit={handleSubmit(onSubmit)}>
-        <h1 className='text-3xl font-black mb-3 text-center'>Вход</h1>
-        <div className='mb-2'>
+    <div className="dark:text-white flex h-full justify-center items-center">
+      <form className="w-[500px] h-fit border p-5 rounded-md dark:border-gray-600 flex flex-col" onSubmit={handleSubmit(onSubmit)}>
+        <h1 className="text-3xl font-black mb-3 text-center">Вход</h1>
+        <div className="mb-2">
           <span className={`${errors.login ? "text-red-500" : "text-transparent"} select-none`}>Логин не может быть пустым</span>
           <input 
             {...register("login")} 
-            autoComplete='login' 
-            placeholder='Введите логин' 
-            className='w-full bg-transparent rounded-md p-2.5 border border-gray-300 dark:border-gray-600 dark:bg-gray-800' 
+            autoComplete="login" 
+            placeholder="Введите логин" 
+            className="w-full bg-transparent rounded-md p-2.5 border border-gray-300 dark:border-gray-600 dark:bg-gray-800" 
           />
         </div>
-        <div className='mb-6'>
+        <div className="mb-6">
           <span className={`${errors.password ? "text-red-500" : "text-transparent"} select-none`}>Пароль не может быть пустым</span>
           <input
             {...register("password")}
-            placeholder='Введите пароль'
-            type='password'
-            autoComplete='current-password'
-            className='w-full bg-transparent rounded-md p-2.5 border border-gray-300 dark:border-gray-600 dark:bg-gray-800'
+            placeholder="Введите пароль"
+            type="password"
+            autoComplete="current-password"
+            className="w-full bg-transparent rounded-md p-2.5 border border-gray-300 dark:border-gray-600 dark:bg-gray-800"
           />
         </div>
-        <button type='submit' className='bg-blue-600 transition-all rounded-md py-2.5 text-lg hover:bg-blue-700 active:scale-95'>
+        <button type="submit" className="bg-blue-600 transition-all rounded-md py-2.5 text-lg hover:bg-blue-700 active:scale-95">
           Войти
         </button>
         <button
-          type='button'
+          type="button"
           onClick={() => {
             onLogin(true) // Устанавливаем авторизацию
             navigate("/orders")
           }}
-          className='bg-green-600 transition-all rounded-md py-2.5 text-lg hover:bg-green-700 active:scale-95 mt-2'
+          className="bg-green-600 transition-all rounded-md py-2.5 text-lg hover:bg-green-700 active:scale-95 mt-2"
         >
           Пропустить авторизацию
         </button>
