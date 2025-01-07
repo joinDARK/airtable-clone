@@ -27,7 +27,6 @@ function CellModal({data, submit, type = "text"}: Props) {
         )}>
         {isEdit ? <EditCellModal value={data} submit={submit} type={type} /> : <ViewCellModal value={data}/>}
       </div>
-      <p>{type}</p>
     </div>
   )
 }

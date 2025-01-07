@@ -4,10 +4,6 @@ import IColumn from "@interfaces/IColumn";
 import { transformDate } from "@services/date_formateer/dateFormateer"
 import IRelatedData from "@interfaces/IRelatedData";
 
-const renderData = (data: any, config: IColumn[]) => {
-  
-};
-
 export default function View() {
   const view = useModalStore(store => store.formData)
   const configKey = useModalStore(store => store.content) as keyof typeof configs;
