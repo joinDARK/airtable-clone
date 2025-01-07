@@ -17,7 +17,7 @@ function CellModal({data, submit, type = "text"}: Props) {
   const isEdit = useModalStore(store => store.isEdit)
 
   return (
-    <div className="text-red-400">
+    <div>
       <div 
         className={clsx(
           "text-gray-900 dark:text-gray-100 rounded-md",

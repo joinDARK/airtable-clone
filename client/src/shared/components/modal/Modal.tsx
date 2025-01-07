@@ -1,6 +1,6 @@
 import { Dialog } from "@headlessui/react";
 import clsx from "clsx";
-import { X, Edit, SquareGantt } from "lucide-react";
+import { X, Edit, SquareGantt, Eye } from "lucide-react";
 
 import { useModalStore } from "@store/useModalStore";
 import ISubagent from "@interfaces/table/ISubagent";
@@ -49,6 +49,13 @@ export const Modal = ({ create, cols }: ModalProps) => {
                 {title}
               </Dialog.Title>
               <div>
+                <button
+                  onClick={() => {
+                    console.log(config, cols, config?.type)
+                  }}
+                >
+                  <Eye size={20}/>
+                </button>
                 <button
                   className={clsx(
                     "p-1 text-gray-500 transition-all",
