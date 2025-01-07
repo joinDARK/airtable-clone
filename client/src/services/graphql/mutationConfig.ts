@@ -37,7 +37,7 @@ export const mutation = {
           id
           name
           orders {id}
-          subagentPayers {id name}
+          subagentPayers {id}
         }
       }
     `,
@@ -61,7 +61,7 @@ export const mutation = {
           id
           name
           orders {id}
-          subagentPayers {id name}
+          subagentPayers {id}
         }
       }
     `,

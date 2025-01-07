@@ -1,16 +1,17 @@
-import { Modal } from "../components/modal/Modal"
-import TableLayout from "../components/table/TableLayout"
 import { useEffect } from "react"
-import useLoaderStore from "../store/useLoaderStore"
-import useTableStore from "../store/useTableStore"
-import { TableKey } from "../types/TableKey"
-import { ResAgentSchema } from "../schema/response"
 import { z } from "zod"
-import { useQuery } from 'react-query'
-import { client, queries } from '../../modules/graphql/index'
+import { useQuery } from "react-query"
+import { client, queries } from "@services/graphql"
+
+import useLoaderStore from "@store/useLoaderStore"
+import useTableStore from "@store/useTableStore"
+import { TableKey } from "@shared_types/TableKey"
+import { ResAgentSchema } from "@schema/response"
+import { Modal } from "@components/modal/Modal"
+import TableLayout from "@components/table/TableLayout"
 
 function AgentsPage() {
-  const type: TableKey = 'agents'
+  const type: TableKey = "agents"
   const setTableData = useTableStore((store) => store.setData)
   const handlerLoader = useLoaderStore((store) => store.setIsLoading)
 
@@ -28,7 +29,7 @@ function AgentsPage() {
         const validatedData = z.array(ResAgentSchema).parse(data.agents)
         setTableData(validatedData)
       } catch (error) {
-        console.error('Ошибка валидации страницы:', error)
+        console.error("Ошибка валидации страницы:", error)
       }
     }
   }, [isLoading, data, handlerLoader, setTableData]);

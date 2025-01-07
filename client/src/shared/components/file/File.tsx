@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { FileDragAndDropArea } from "./FileDragAndDropArea";
 import { LocalFileList } from "./LocalFileList";
 import { ServerFileList } from "./ServerFileList";
-import api from "../../../modules/api/file";
+import api from "@services/api/file";
 
 interface Props {
   editingHandler: (state: boolean) => void;

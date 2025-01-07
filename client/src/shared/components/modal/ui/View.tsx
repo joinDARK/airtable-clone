@@ -1,7 +1,7 @@
-import { useModalStore } from "../../../store/useModalStore"
-import configs from "../../../configs"
-import IColumn from "../../../interfaces/IColumn";
-import { transformDate } from "../../../../modules/date_formateer/dateFormateer"
+import { useModalStore } from "@store/useModalStore"
+import configs from "@configs/index"
+import IColumn from "@interfaces/IColumn";
+import { transformDate } from "@services/date_formateer/dateFormateer"
 
 const renderData = (data: any, config: IColumn[]) => {
   if (Array.isArray(data) && data.length === 0) {
@@ -23,13 +23,13 @@ const renderData = (data: any, config: IColumn[]) => {
       </div>
     );
   }
-  return <div className="dark:bg-gray-700 border rounded-md dark:border-gray-600 p-2 text-xs">{transformDate(String(data))}</div>;
+  return <div className="bg-gray-50 dark:bg-gray-700 border rounded-md dark:border-gray-600 p-2 text-xs">{transformDate(String(data))}</div>;
 };
 
 export default function View() {
   const view = useModalStore(store => store.formData)
-  const configKey = useModalStore(store => store.content)
-  const config = configs[configKey].columns || {};
+  const configKey = useModalStore(store => store.content) as keyof typeof configs;
+  const config = configs[configKey]?.columns || [];
 
   return (
     <>

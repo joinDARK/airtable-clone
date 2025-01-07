@@ -1,12 +1,13 @@
 import {Controller, useForm} from "react-hook-form"
-import {FormManagerSchema} from "../../../schema/form"
 import {zodResolver} from "@hookform/resolvers/zod"
 import {toast} from "react-toastify"
-import {useModalStore} from "../../../store/useModalStore"
-import useRelatedData from "../../../../modules/relationship/useRelatedData"
-import { RelationshipSelect } from "../../select/RelationshipSelect"
-import IManager from "../../../interfaces/table/IManager"
 import { useState } from "react";
+
+import {useModalStore} from "@store/useModalStore"
+import useRelatedData from "@services/relationship/useRelatedData"
+import { RelationshipSelect } from "@components/select/RelationshipSelect"
+import IManager from "@interfaces/table/IManager"
+import {FormManagerSchema} from "@schema/form"
 
 interface ManagerFormProps {
   data?: IManager;
@@ -53,7 +54,7 @@ function ManagerForm({data, onSubmit}: ManagerFormProps) {
         <input
           type='text'
           placeholder='Введите имя менеджера'
-          className='mt-1 px-3 py-2 block w-full dark:bg-gray-700 placeholder:text-gray-700 dark:placeholder:text-gray-100 rounded-md shadow-sm hover:border-gray-400 transition-all focus:ring-blue-500 focus:border-blue-500'
+          className='mt-1 px-3 py-2 block w-full border-gray-300 border dark:border-transparent dark:bg-gray-700 placeholder:text-gray-700 dark:placeholder:text-gray-100 rounded-md shadow-sm hover:border-gray-400 transition-all focus:ring-blue-500 focus:border-blue-500'
           {...register("name")}
         />
       </div>
@@ -64,7 +65,7 @@ function ManagerForm({data, onSubmit}: ManagerFormProps) {
         <input
           type='tel'
           placeholder='Введите номер телефона менеджера'
-          className='mt-1 px-3 py-2 block w-full dark:bg-gray-700 placeholder:text-gray-700 dark:placeholder:text-gray-100 rounded-md shadow-sm hover:border-gray-400 transition-all focus:ring-blue-500 focus:border-blue-500'
+          className='mt-1 px-3 py-2 block w-full border-gray-300 border dark:border-transparent dark:bg-gray-700 placeholder:text-gray-700 dark:placeholder:text-gray-100 rounded-md shadow-sm hover:border-gray-400 transition-all focus:ring-blue-500 focus:border-blue-500'
           {...register("tel")}
         />
       </div>
@@ -75,7 +76,7 @@ function ManagerForm({data, onSubmit}: ManagerFormProps) {
         <input
           placeholder='Выберите день рождения'
           type='date'
-          className='mt-1 px-3 py-2 block w-full dark:bg-gray-700 placeholder:text-gray-700 dark:placeholder:text-gray-100 rounded-md shadow-sm hover:border-gray-400 transition-all focus:ring-blue-500 focus:border-blue-500'
+          className='mt-1 px-3 py-2 block w-full border-gray-300 border dark:border-transparent dark:bg-gray-700 placeholder:text-gray-700 dark:placeholder:text-gray-100 rounded-md shadow-sm hover:border-gray-400 transition-all focus:ring-blue-500 focus:border-blue-500'
           {...register("date")}
         />
       </div>

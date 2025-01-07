@@ -1,7 +1,8 @@
-import IColumn from "../../../interfaces/IColumn"
-import Cell from "./Cell";
-import TableActions from "./TableActions";
 import { ChevronDown, ChevronUp } from "lucide-react";
+
+import IColumn from "@interfaces/IColumn"
+import Cell from "./Cell"
+import TableActions from "./TableActions";
 
 interface Props {
   columns: IColumn[];

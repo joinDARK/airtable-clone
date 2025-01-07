@@ -1,10 +1,11 @@
-import { transformDate } from "../../../../modules/date_formateer/dateFormateer";
+import { FiFileText as FileText } from "react-icons/fi";
+
+import { transformDate } from "@services/date_formateer/dateFormateer";
 import Option from "./type-cell/Option";
 import Related from "./type-cell/Related";
 import Boolean from "./type-cell/Boolean";
-import { ColumnType } from "../../../types/ColumnType";
-import IRelatedData from "../../../interfaces/IRelatedData";
-import { FiFileText as FileText } from "react-icons/fi";
+import { ColumnType } from "@shared_types/ColumnType";
+import IRelatedData from "@interfaces/IRelatedData";
 
 interface IFile {
   id: number;

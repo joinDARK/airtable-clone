@@ -1,5 +1,5 @@
-import IRelatedData from "../../shared/interfaces/IRelatedData";
-import { Table } from "../../shared/types/Table";
+import IRelatedData from "@interfaces/IRelatedData";
+import { Table } from "@shared_types/Table";
 
 export default function filteredData(data: Table[]): IRelatedData[] {
   const filteredData: IRelatedData[] = data

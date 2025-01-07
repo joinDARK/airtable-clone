@@ -1,13 +1,14 @@
-import { Modal } from "../components/modal/Modal";
-import TableLayout from "../components/table/TableLayout";
-import useTableStore from "../store/useTableStore";
-import useLoaderStore from "../store/useLoaderStore";
 import { useEffect } from "react";
-import { TableKey } from "../types/TableKey";
 import { z } from "zod";
-import { ResOrderSchema } from "../schema/response";
-import { useQuery } from 'react-query'
-import { client, queries } from '../../modules/graphql/index'
+import { useQuery } from "react-query"
+
+import { Modal } from "@components/modal/Modal";
+import TableLayout from "@components/table/TableLayout";
+import useTableStore from "@store/useTableStore";
+import useLoaderStore from "@store/useLoaderStore";
+import { TableKey } from "@shared_types/TableKey";
+import { ResOrderSchema } from "@schema/response";
+import { client, queries } from "@services/graphql"
 
 function OrdersPage() {
   const type: TableKey = "orders"
@@ -28,7 +29,7 @@ function OrdersPage() {
         const validatedData = z.array(ResOrderSchema).parse(data[type])
         setTableData(validatedData)
       } catch(error) {
-        console.error('Ошибка валидации страницы:', error)
+        console.error("Ошибка валидации страницы:", error)
       }
     }
   }, [isLoading, data, handlerLoader, setTableData]);
@@ -36,7 +37,7 @@ function OrdersPage() {
   return (
     <>
       <TableLayout type={type}/>
-      <Modal/>
+      <Modal />
     </>
   )
 }

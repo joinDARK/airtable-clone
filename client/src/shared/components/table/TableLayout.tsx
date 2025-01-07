@@ -1,22 +1,24 @@
 import { RefreshCw, Plus, Search } from "lucide-react";
-import Table from "./ui/Table";
-import config from "../../configs";
-import { useModalStore } from "../../store/useModalStore";
 import { createContext } from "react";
-import { TableKey } from "../../types/TableKey";
-import { useTableSort } from "../../hooks/useTableSort";
-import useTableStore from "../../store/useTableStore";
-import { useTableFilter } from "../../hooks/useTableFilter";
+
+import Table from "./ui/Table";
+import config from "@configs/index";
+import { useModalStore } from "@store/useModalStore";
+import { TableKey } from "@shared_types/TableKey";
+import { useTableSort } from "@hooks/useTableSort";
+import useTableStore from "@store/useTableStore";
+import { useTableFilter } from "@hooks/useTableFilter";
 
 interface Props {
   type: TableKey;
   delete: (id: number) => Promise<void>;
+  create: (data: any) => Promise<void>;
 }
 
 export const TableLayoutContext = createContext<Props | undefined>(undefined);
 
-export default function TableLayout({ type, delete: handleDelete }: Props) {
-  const tableConfig = config[type];
+export default function TableLayout({ type, delete: handleDelete, create: handleCreate}: Props) {
+  const tableConfig = config[type as keyof typeof config];
   const { data, refetchTable } = useTableStore();
   const { modalHandler, setModalData, setIsEdit } = useModalStore();
   const { sortedData, sortConfig ,handleSort } = useTableSort(data);
@@ -40,7 +42,7 @@ export default function TableLayout({ type, delete: handleDelete }: Props) {
                 <span>Добавить</span>
               </button>
               <button
-                className="p-2 hover:bg-gray-100 rounded-lg transition-all shadow-sm active:scale-90 dark:hover:bg-gray-600"
+                className="p-2 border border-gray-300 dark:border-gray-500 hover:bg-gray-100 rounded-lg transition-all shadow-sm active:scale-90 dark:hover:bg-gray-600"
                 title="Refresh"
                 onClick={refetchTable}
               >
@@ -63,7 +65,7 @@ export default function TableLayout({ type, delete: handleDelete }: Props) {
       </div>
       <div className="flex-1 overflow-x-auto">
         <div className="inline-block min-w-full align-middle">
-          <TableLayoutContext.Provider value={{ type, delete: handleDelete }}>
+          <TableLayoutContext.Provider value={{ type, delete: handleDelete, create: handleCreate }}>
             <Table columns={tableConfig.columns} data={filteredData} onSort={handleSort} sortConfig={sortConfig} />
           </TableLayoutContext.Provider>
         </div>

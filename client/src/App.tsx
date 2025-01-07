@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClientProvider } from "react-query";
 import { ToastContainer } from "react-toastify";
-import { queryClient } from "./modules/api/queryClient";
+import { queryClient } from "./services/api/queryClient";
 import { Sidebar } from "./shared/components/Sidebar";
 import AuthPage from "./shared/pages/AuthPage";
 import OrdersPage from "./shared/pages/OrdersPage";
@@ -18,7 +18,7 @@ import CountriesPage from "./shared/pages/CountriesPage";
 import SubagentsPage from "./shared/pages/SubagentsPage";
 import SubagentPayersPage from "./shared/pages/SubagentPayersPage";
 import { ApolloProvider } from "@apollo/client";
-import { client } from "./modules/graphql";
+import { client } from "./services/graphql";
 
 function App() {
   const [isLogin, setIsLogin] = useState(false);

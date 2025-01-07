@@ -1,6 +1,6 @@
-import IColumn from '../interfaces/IColumn';
-import ITableConfig from '../interfaces/ITableConfig';
-import { TableKey } from '../types/TableKey';
+import IColumn from '@interfaces/IColumn';
+import ITableConfig from '@interfaces/ITableConfig';
+import { TableKey } from '@shared_types/TableKey';
 
 export default class TableConfig implements ITableConfig {
   names: string;

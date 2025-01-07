@@ -1,7 +1,7 @@
-import { Table } from "../../../types/Table"
-import IColumn from "../../../interfaces/IColumn"
+import { Table } from "@shared_types/Table"
+import IColumn from "@interfaces/IColumn"
 import TypeCell from "./TypeCell"
-import { useModalStore } from "../../../store/useModalStore"
+import { useModalStore } from "@store/useModalStore"
 
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default function Cell({ item, column }: Props) {
-  const { setModalData, modalHandler } = useModalStore()
+  const { setModalData, modalHandler, setIsEdit } = useModalStore()
   const key = column.key as keyof Table
 
   return (
@@ -20,7 +20,8 @@ export default function Cell({ item, column }: Props) {
                  px-4 py-1"
       onClick={() => {
         modalHandler()
-        setModalData(column.label, "", item[key])
+        setModalData(column.label, key, item[key], item)
+        setIsEdit(false)
       }}
 
     >

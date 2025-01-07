@@ -1,13 +1,14 @@
-import TableLayout from "../components/table/TableLayout"
-import { Modal } from "../components/modal/Modal"
-import useTableStore from "../store/useTableStore"
-import useLoaderStore from "../store/useLoaderStore"
 import { useEffect } from "react"
-import { TableKey } from "../types/TableKey"
 import { z } from "zod"
-import { ResSubagentPayerSchema } from "../schema/response"
-import { useQuery } from 'react-query'
-import { client, queries } from '../../modules/graphql/index'
+import { useQuery } from "react-query"
+
+import TableLayout from "@components/table/TableLayout"
+import { Modal } from "@components/modal/Modal"
+import useTableStore from "@store/useTableStore"
+import useLoaderStore from "@store/useLoaderStore"
+import { ResSubagentPayerSchema } from "@schema/response"
+import { client, queries } from "@services/graphql"
+import { TableKey } from "@shared_types/TableKey"
 
 function SubagentPayersPage() {
   const type: TableKey = "subagentPayers"
@@ -28,7 +29,7 @@ function SubagentPayersPage() {
         const validatedData = z.array(ResSubagentPayerSchema).parse(data[type])
         setTableData(validatedData)
       } catch (error) {
-        console.error('Ошибка валидации страницы:', error)
+        console.error("Ошибка валидации страницы:", error)
       }
     }
   }, [isLoading, data, handlerLoader, setTableData]);

@@ -1,4 +1,4 @@
-import IOptions from "../../interfaces/IOptions"
+import IOptions from "@interfaces/IOptions"
 import * as options from "./options"
 
 export const optionsConfig: IOptions = {

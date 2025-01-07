@@ -1,4 +1,4 @@
-import { ColumnType } from "../types/ColumnType";
+import { ColumnType } from "@shared_types/ColumnType";
 
 export default interface IColumn {
   key: string;

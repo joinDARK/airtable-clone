@@ -1,4 +1,4 @@
-import TableConfig from "../../classes/TableConfig";
+import TableConfig from "@classes/TableConfig";
 import columns from "../columns/columnsSubagentPayer";
 
 const subagentPayers = new TableConfig("Плательщики Субагентов", "subagentPayers", columns, "Плательщики Субагентов");
