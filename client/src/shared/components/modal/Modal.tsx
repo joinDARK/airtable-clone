@@ -64,7 +64,10 @@ export const Modal = ({ create, cols }: ModalProps) => {
                 <button
                   title="Закрыть"
                   type="button"
-                  onClick={() => modalHandler()}
+                  onClick={() => {
+                    setIsEdit(false)
+                    modalHandler()
+                  }}
                   className="p-1 hover:bg-gray-100 hover:dark:bg-gray-600 transition-all duration-200 rounded-full"
                 >
                   <X size={20} />

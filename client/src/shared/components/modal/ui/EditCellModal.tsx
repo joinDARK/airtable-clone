@@ -21,7 +21,6 @@ export default function EditCellModal({submit, value, type}: Props) {
   
   return (
     <div className="flex justify-between gap-4">
-      {/* <input type="text" value={newValue as string} onChange={e => setNewValue(e.target.value)} className="p-2 bg-gray-100 dark:bg-gray-600 border dark:border-gray-500 rounded-md flex-1"/> */}
       <EditInput type={type} value={newValue as string} change={e => setNewValue(e.target.value)}/>
       <button 
         className="p-2 bg-green-600 border border-green-500 text-white rounded-md"

@@ -14,6 +14,8 @@ export default function EditInput({type, value, change}: Props) {
       return <TextInput defaultValue={value} onChange={change}/>
     case "date":
       return <DateInput defaultValue={value} onChange={change}/>
+    case "related":
+      return "Related"
     default:
       return type
   }

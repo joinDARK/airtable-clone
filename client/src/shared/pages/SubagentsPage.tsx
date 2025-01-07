@@ -12,6 +12,7 @@ import {ResSubagentSchema} from "@schema/response"
 import {TableKey} from "@shared_types/TableKey"
 import {client, queries, mutation} from "@services/graphql"
 import ISubagent from "@interfaces/table/ISubagent"
+import configs from "@configs/index"
 
 function SubagentsPage() {
   const type: TableKey = "subagents"
@@ -90,10 +91,12 @@ function SubagentsPage() {
     }
   }, [isLoading, data, handlerLoader, setTableData, refetch])
 
+  const { columns } = configs[type]
+
   return (
     <>
-      <TableLayout type={type} delete={handleDelete} />
-      <Modal create={handleCreate} />
+      <TableLayout type={type} delete={handleDelete} create={handleCreate} />
+      <Modal cols={columns} create={handleCreate} />
     </>
   )
 }
