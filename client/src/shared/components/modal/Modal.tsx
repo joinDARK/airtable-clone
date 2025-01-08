@@ -12,19 +12,27 @@ import ManagerForm from "./ui/ManagerForm";
 import CellModal from "./ui/CellModal";
 import View from "./ui/View";
 import SubagentForm from "./ui/SubagentForm";
+import { TableKey } from "@shared_types/TableKey";
+import { useEffect } from "react";
+import Line from "@components/Line";
 
 interface ModalProps {
-  create: (newObject: ITable) => Promise<void>
-  cols: IColumn[]
+  create: (newObject: ITable) => Promise<void>;
+  cols: IColumn[];
+  type: TableKey;
 }
 
-export const Modal = ({ create, cols }: ModalProps) => {
-  const { open, title, modalHandler, content, data, formData, isEdit, setIsEdit } = useModalStore()
+export const Modal = ({ create, cols, type }: ModalProps) => {
+  const { open, title, modalHandler, table, content, data, formData, isEdit, setIsEdit, setTable } = useModalStore()
   const config = Array.isArray(cols)
   ? cols.find(item => item.key === content)
   : undefined;
 
   let renderContent;
+
+  useEffect(() => {
+    setTable(type)
+  }, [setTable, type])
 
   switch (content) {
     case "managers":
@@ -34,7 +42,7 @@ export const Modal = ({ create, cols }: ModalProps) => {
       renderContent = isEdit ? <SubagentForm data={formData as ISubagent} onSubmit={create}/> : <View/>
       break
     default:
-      renderContent = <CellModal data={data} submit={create} type={config?.type} />
+      renderContent = <CellModal data={data} submit={create} type={config?.type} table={type} />
       break
   }
 
@@ -48,17 +56,18 @@ export const Modal = ({ create, cols }: ModalProps) => {
               <Dialog.Title className="text-lg font-semibold">
                 {title}
               </Dialog.Title>
-              <div>
+              <div className="flex">
                 <button
+                  title="debug"
                   onClick={() => {
-                    console.log(config, cols, config?.type)
+                    console.log(config, cols, config?.type, table)
                   }}
                 >
                   <Eye size={20}/>
                 </button>
                 <button
                   className={clsx(
-                    "p-1 text-gray-500 transition-all",
+                    "p-1 text-gray-500 transition-all mr-0.5",
                     !isEdit ? "hover:text-yellow-600" : "hover:text-blue-600"
                   )}
                   title={!isEdit ? "Редактировать" : "Просмотреть"}
@@ -68,6 +77,7 @@ export const Modal = ({ create, cols }: ModalProps) => {
                 >
                   { config?.readonly ? "" : !isEdit ? <Edit size={18} /> : <SquareGantt size={18} />}
                 </button>
+                <Line horizontal/>
                 <button
                   title="Закрыть"
                   type="button"
@@ -75,7 +85,7 @@ export const Modal = ({ create, cols }: ModalProps) => {
                     setIsEdit(false)
                     modalHandler()
                   }}
-                  className="p-1 hover:bg-gray-100 hover:dark:bg-gray-600 transition-all duration-200 rounded-full"
+                  className="p-1 hover:bg-gray-100 hover:dark:bg-gray-600 transition-all duration-200 rounded-full ml-0.5"
                 >
                   <X size={20} />
                 </button>
