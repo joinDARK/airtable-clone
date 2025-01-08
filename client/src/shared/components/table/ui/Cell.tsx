@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default function Cell({ item, column }: Props) {
-  const { setModalData, modalHandler, setIsEdit } = useModalStore()
+  const { openModal } = useModalStore()
   const key = column.key as keyof Table
 
   return (
@@ -19,9 +19,7 @@ export default function Cell({ item, column }: Props) {
                  cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-400
                  px-4 py-1"
       onClick={() => {
-        modalHandler()
-        setModalData(column.label, key, item[key], item)
-        setIsEdit(false)
+        openModal({screenType: column.type, screenData: null, title: column.label, isEdit: false})
       }}
 
     >

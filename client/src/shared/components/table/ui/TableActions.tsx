@@ -13,7 +13,9 @@ interface TableActionsProps {
 }
 
 function TableActions({ value }: TableActionsProps) {
-  const { setModalData, modalHandler, setIsEdit } = useModalStore()
+  const { 
+    openModal
+  } = useModalStore()
   const context = useContext(TableLayoutContext)
   const name = value.name ?? value.id
 
@@ -33,9 +35,7 @@ function TableActions({ value }: TableActionsProps) {
         className="p-1 text-gray-500 dark:text-gray-300 hover:text-yellow-600 transition-all active:scale-90"
         title="Редактировать"
         onClick={() => {
-          modalHandler()
-          setModalData(`Изменить ${name}`, context?.type, "", value)
-          setIsEdit(true)
+          openModal({screenType: context ? context.type : "text", screenData: null, isEdit: true, title: String(name)})
         }}
       >
         <Edit size={18} />
@@ -44,9 +44,7 @@ function TableActions({ value }: TableActionsProps) {
         className="p-1 text-gray-500 dark:text-gray-300 hover:text-blue-600 transition-all active:scale-90"
         title="Посмотреть в модальном окне"
         onClick={() => {
-          modalHandler()
-          setModalData(`Подробнее о ${name}`, context?.type, "", value)
-          setIsEdit(false)
+          openModal({screenType: context ? context.type : "text", screenData: null, isEdit: false, title: String(name)})
         }}
       >
         <SquareGantt size={18} />
