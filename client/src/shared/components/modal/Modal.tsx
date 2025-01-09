@@ -3,6 +3,7 @@ import { Dialog } from "@headlessui/react";
 import { useModalStore } from "@store/useModalStore";
 import clsx from "clsx";
 import { X, Edit, Eye, ChevronLeft, ChevronRight, SquareGantt } from "lucide-react";
+import ModalContent from "./ui/ModalContent";
 
 export const Modal = () => {
   const {
@@ -19,18 +20,9 @@ export const Modal = () => {
   const canGoBack = currentIndex > 0; // Можем ли переключить экран вперед
   const canGoForward = currentIndex < screensStack.length - 1; // Можем ли переключить экран назад
 
-
   if (!isOpen || !currentScreen) return null;
 
-  const { screenType } = currentScreen;
-
-  let content: React.ReactNode = null;
-
-  switch (screenType) {
-    default:
-      content = <div>Неизвестный экран</div>;
-      break
-  }
+  const { isEdit } = currentScreen;
 
   return (
     <div>
@@ -40,13 +32,13 @@ export const Modal = () => {
           <Dialog.Panel className="mx-auto max-w-xl w-full text-gray-700 bg-white dark:bg-gray-800 dark:text-gray-100  rounded-lg shadow-xl max-h-[40rem]">
             <div className="flex justify-between items-center p-4 border-b">
               <Dialog.Title className="text-lg font-semibold">
-                {currentScreen.isEdit ? `Изменить ${currentScreen.title}` : `Подробнее ${currentScreen.title}`}
+                {isEdit ? `Изменить ${currentScreen.title}` : `Подробнее ${currentScreen.title}`}
               </Dialog.Title>
               <div className="flex">
                 <button
                   title="debug"
                   onClick={() => {
-                    console.log(isOpen, screensStack, currentScreen, canGoBack, canGoForward)
+                    console.log(currentScreen)
                   }}
                 >
                   <Eye size={20}/>
@@ -60,6 +52,7 @@ export const Modal = () => {
                     pushScreen({...currentScreen, isEdit: !currentScreen.isEdit})
                     goForward()
                   }}
+                  disabled={currentScreen.readonly}
                 >
                   {currentScreen.isEdit ? <Edit size={18} /> : <SquareGantt size={18}/>}
                 </button>
@@ -102,7 +95,7 @@ export const Modal = () => {
               </div>
             </div>
             <div className="max-h-[80vh] overflow-scroll p-4 resize-y">
-              "Контент модального окна"
+              <ModalContent screen={currentScreen}/>
             </div>
           </Dialog.Panel>
         </div>

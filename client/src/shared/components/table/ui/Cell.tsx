@@ -19,14 +19,14 @@ export default function Cell({ item, column }: Props) {
                  cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-400
                  px-4 py-1"
       onClick={() => {
-        openModal({screenType: column.type, screenData: null, title: column.label, isEdit: false})
+        openModal({screenType: column.type, screenData: item[key], title: column.label, isEdit: false, readonly: column.readonly})
       }}
 
     >
       <TypeCell
         title={column.label}
         type={column.type}
-        value={item[column.key as keyof Table]}
+        value={item[key]}
         columnKey={column.key}
         item={item}
       />

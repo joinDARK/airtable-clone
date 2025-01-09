@@ -59,7 +59,6 @@ export default function TypeCell({ type, value, title, columnKey, item }: Props)
       </div>
     );
   }
-
   if (value == null || (Array.isArray(value) && value.length === 0)) {
     return <div className={baseClass}>—</div>;
   }
@@ -75,7 +74,7 @@ export default function TypeCell({ type, value, title, columnKey, item }: Props)
     case "related":
       return (
         <div className={baseClass}>
-          <Related title={title} value={value as IRelatedData[]} />
+          <Related title={title} value={value as IRelatedData[]} columnKey={columnKey} />
         </div>
       );
 
