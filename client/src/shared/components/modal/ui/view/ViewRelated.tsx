@@ -19,7 +19,7 @@ export default function ViewRelated({view, colKey, table}: Props) {
           ? view.map((item, i) => (
             <div 
               key={i} 
-              className="px-6 py-1 rounded-xl bg-gray-200 dark:bg-gray-800 cursor-pointer"
+              className="px-6 py-1 rounded-xl transition-all bg-gray-200 dark:bg-gray-800 cursor-pointer hover:bg-gray-300 hover:text-gray-600"
               onClick={async () => {
                 if (colKey && table) {
                   const res = await getRelatedData(table, colKey, item)
