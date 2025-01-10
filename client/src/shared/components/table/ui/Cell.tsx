@@ -13,6 +13,7 @@ export default function Cell({ item, column }: Props) {
   const { setModalData, modalHandler, setIsEdit } = useModalStore()
   const key = column.key as keyof Table
 
+
   return (
     <td
       className="text-sm text-gray-900 dark:text-gray-100

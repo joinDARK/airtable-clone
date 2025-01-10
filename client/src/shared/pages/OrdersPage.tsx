@@ -9,6 +9,7 @@ import useLoaderStore from "@store/useLoaderStore";
 import { TableKey } from "@shared_types/TableKey";
 import { ResOrderSchema } from "@schema/response";
 import { client, queries } from "@services/graphql"
+import configs from "@configs/index";
 
 function OrdersPage() {
   const type: TableKey = "orders"
@@ -33,11 +34,13 @@ function OrdersPage() {
       }
     }
   }, [isLoading, data, handlerLoader, setTableData]);
+
+    const { columns } = configs[type]
   
   return (
     <>
       <TableLayout type={type}/>
-      <Modal />
+      <Modal cols={columns}/>
     </>
   )
 }

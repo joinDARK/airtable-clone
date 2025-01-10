@@ -7,7 +7,7 @@ interface ModalStore {
   content?: string;
   data?: string | number;
   isEdit?: boolean;
-  formData?: ITable;
+  formData?: any;
   setModalData: (newTitle?: string | number, newContent?: string, newData?: string | number, newFormData?: ITable ) => void;
   modalHandler: () => void;
   setIsEdit: (state: boolean) => void;
@@ -23,7 +23,7 @@ export const useModalStore = create<ModalStore>((set) => ({
   modalHandler: () => set((store) => ({
     open: !store.open
   })),
-  setModalData: (newTitle: string | number = "", newContent: string = "", newData: string | number = "", newFormData: ITable = {}) => set(() => ({
+  setModalData: (newTitle: string | number = "", newContent: string = "", newData: string | number = "", newFormData: any = {}) => set(() => ({
     content: newContent,
     data: newData, // Возоможно могут возникунть проблемы
     formData: newFormData,
