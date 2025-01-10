@@ -1,5 +1,10 @@
+import React, { useState } from "react";
 import { Trash2 } from "lucide-react";
-import React from "react";
+import { FiFileText as FileText } from "react-icons/fi";
+import { toast } from "react-toastify";
+
+import fileService from "@services/api/file"; 
+import useLoaderStore from "@store/useLoaderStore";
 
 interface FileData {
   id: string;
@@ -7,29 +12,54 @@ interface FileData {
   fileName: string;
   type: string;
   orderId: string;
+  fileUrl: string;
 }
 
 interface Props {
   serverFiles: FileData[] | undefined;
+  invalidateTable?: () => void;
 }
 
 export const ServerFileList: React.FC<Props> = ({
   serverFiles,
+  invalidateTable,
 }) => {
-  const filesArray = Array.isArray(serverFiles) ? serverFiles : [];
+  const [files, setFiles] = useState<FileData[]>(serverFiles || []);
+  const setIsLoading = useLoaderStore(store => store.setIsLoading)
+
+  const handleDelete = async (fileId: string) => {
+    try {
+      setIsLoading(true);
+      await fileService.files.deleteById(fileId);
+      setFiles((prevFiles) => prevFiles.filter((f) => f.id !== fileId));
+      if (invalidateTable) {
+        invalidateTable();
+      }
+      setIsLoading(false);
+      toast.success('Файл успешно удален!')
+    } catch (error) {
+      setIsLoading(false);
+      toast.error('Ошибка при удалении файла!')
+      console.error("Ошибка при удалении файла:", error);
+    }
+  };
 
   return (
     <div className="space-y-4">
       <ul className="space-y-2">
-        {filesArray.map((file, index) => (
+        {files.map((file) => (
           <li
             key={file.id}
             className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-gray-200 dark:bg-gray-800 p-2 rounded"
           >
-            <span className="truncate flex-1">{index + 1}. {file.fileName}</span>
+            <a href={file.fileUrl}>
+              <span className="truncate flex-1 flex gap-1 items-center text-blue-600 hover:text-blue-800 transition-colors">
+                <FileText size={18} /> {file.fileName}
+              </span>
+            </a>
             <button
               type="button"
-              onClick={(e) => alert(`Файл с id: ${file.id}`)}
+              onClick={() => handleDelete(file.id)}
               className="p-1 text-gray-500 dark:text-gray-300 hover:text-red-600 transition-colors"
               title="Удалить"
             >

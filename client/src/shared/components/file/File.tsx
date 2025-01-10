@@ -9,7 +9,7 @@ import IFile from "@interfaces/IFile";
 interface Props {
   editingHandler: (state: boolean) => void;
   data: FileData;
-  typeCell?: string;
+  typeCell: string;
   orderId: number;
 }
 
@@ -51,14 +51,15 @@ const UploadFiles: React.FC<Props> = ({
       return;
     }
     const formData = new FormData();
-    files.forEach((file) => formData.append("files", file.fileName));
+    files.forEach((file) => formData.append("files", file));
+    console.log(files)
     formData.append("orderId", orderId.toString());
     formData.append("type", typeCell);
 
     try {
       const res = await api.files.uploadMultiple(formData);
       if (res.status === 200) {
-        toast.success("пока нет функционала");
+        toast.success("Файлы загружены!");
         setFiles([]);
       } else {
         console.log("Ошибка", res);
@@ -91,7 +92,7 @@ const UploadFiles: React.FC<Props> = ({
           >
             Закрыть
           </button>
-          <button type="submit" className="px-4 py-2 text-sm font-medium border border-transparent rounded-md bg-blue-600 hover:bg-red-700 transition-all duration-300 text-white">Сохранить</button>
+          <button type="submit" className="px-4 py-2 text-sm font-medium border border-transparent rounded-md bg-green-600 hover:bg-green-700 transition-all duration-300 text-white">Сохранить</button>
         </div>
       </form>
     </div>

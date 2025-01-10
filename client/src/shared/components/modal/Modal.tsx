@@ -14,28 +14,53 @@ import View from "./ui/View";
 import SubagentForm from "./ui/SubagentForm";
 
 interface ModalProps {
-  create: (newObject: ITable) => Promise<void>
-  cols: IColumn[]
+  create?: (newObject: ITable) => Promise<void>;
+  cols: IColumn[];
+  invalidateTable?: () => void;
 }
 
-export const Modal = ({ create, cols }: ModalProps) => {
-  const { open, title, modalHandler, content, data, formData, isEdit, setIsEdit } = useModalStore()
+export const Modal = ({ create, cols, invalidateTable }: ModalProps) => {
+  const {
+    open,
+    title,
+    modalHandler,
+    content,
+    data,
+    formData,
+    isEdit,
+    setIsEdit,
+  } = useModalStore();
+
   const config = Array.isArray(cols)
-  ? cols.find(item => item.key === content)
-  : undefined;
+    ? cols.find((item) => item.key === content)
+    : undefined;
 
   let renderContent;
-
   switch (content) {
     case "managers":
-      renderContent = isEdit ? <ManagerForm data={formData as IManager} onSubmit={create}/> : <View/>
-      break
+      renderContent = isEdit ? (
+        <ManagerForm data={formData as IManager} onSubmit={create} />
+      ) : (
+        <View />
+      );
+      break;
     case "subagents":
-      renderContent = isEdit ? <SubagentForm data={formData as ISubagent} onSubmit={create}/> : <View/>
-      break
+      renderContent = isEdit ? (
+        <SubagentForm data={formData as ISubagent} onSubmit={create} />
+      ) : (
+        <View />
+      );
+      break;
     default:
-      renderContent = <CellModal data={data} submit={create} type={config?.type} />
-      break
+      renderContent = (
+        <CellModal
+          data={data}
+          submit={create}
+          type={config?.type}
+          invalidateTable={invalidateTable} 
+        />
+      );
+      break;
   }
 
   return (
@@ -45,16 +70,14 @@ export const Modal = ({ create, cols }: ModalProps) => {
         <div className="fixed inset-0 flex items-center justify-center p-14">
           <Dialog.Panel className="mx-auto max-w-xl w-full text-gray-700 bg-white dark:bg-gray-800 dark:text-gray-100  rounded-lg shadow-xl max-h-[40rem]">
             <div className="flex justify-between items-center p-4 border-b">
-              <Dialog.Title className="text-lg font-semibold">
-                {title}
-              </Dialog.Title>
+              <Dialog.Title className="text-lg font-semibold">{title}</Dialog.Title>
               <div>
                 <button
                   onClick={() => {
-                    console.log(config, cols, config?.type)
+                    console.log(config, cols, config?.type);
                   }}
                 >
-                  <Eye size={20}/>
+                  <Eye size={20} />
                 </button>
                 <button
                   className={clsx(
@@ -63,17 +86,21 @@ export const Modal = ({ create, cols }: ModalProps) => {
                   )}
                   title={!isEdit ? "Редактировать" : "Просмотреть"}
                   onClick={() => {
-                    setIsEdit(!isEdit)
+                    setIsEdit(!isEdit);
                   }}
                 >
-                  { config?.readonly ? "" : !isEdit ? <Edit size={18} /> : <SquareGantt size={18} />}
+                  {config?.readonly
+                    ? ""
+                    : !isEdit
+                    ? <Edit size={18} />
+                    : <SquareGantt size={18} />}
                 </button>
                 <button
                   title="Закрыть"
                   type="button"
                   onClick={() => {
-                    setIsEdit(false)
-                    modalHandler()
+                    setIsEdit(false);
+                    modalHandler();
                   }}
                   className="p-1 hover:bg-gray-100 hover:dark:bg-gray-600 transition-all duration-200 rounded-full"
                 >
