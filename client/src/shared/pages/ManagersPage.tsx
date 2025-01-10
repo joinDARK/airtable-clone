@@ -8,7 +8,6 @@ import { client, queries, mutation } from "@services/graphql"
 import { ResManagerSchema } from "@schema/response"
 import { TableKey } from "@shared_types/TableKey"
 import IManager from "@interfaces/table/IManager"
-import configs from "@configs/index"
 import TableLayout from "@components/table/TableLayout"
 import useTableStore from "@store/useTableStore"
 import { Modal } from "@components/modal/Modal"
@@ -91,8 +90,6 @@ function ManagersPage() {
       }
     }
   }, [handlerLoader, setTableData, isLoading, data, refetch])
-
-  const { columns } = configs[type]
 
   return (
     <>

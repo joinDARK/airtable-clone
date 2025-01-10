@@ -31,13 +31,13 @@ export default function ViewManager({view}: Props) {
       <div className="flex items-center gap-2">
         <p>Заявки</p>
         <div className="text-xs">
-          <ViewRelated view={view?.orders}/>
+          <ViewRelated view={view?.orders} table="managers" colKey="orders"/>
         </div>
       </div>
       <div className="flex items-center gap-2">
         <p>Проверяю</p>
         <div className="text-xs">
-          <ViewRelated view={view?.review_table}/>
+          <ViewRelated view={view?.review_table} table="managers" colKey="orders"/>
         </div>
       </div>
     </div>

@@ -1,22 +1,31 @@
 import {create} from "zustand"
 import IModalScreen from "@interfaces/IModalScreen";
+import { TableKey } from "@shared_types/TableKey";
+
+interface IRelatedSettings {
+  table: TableKey;
+  relatedKey: string;
+}
 
 interface ModalStore {
   isOpen: boolean; // Состояние модального окна
   screensStack: IModalScreen[]; // Стек экранов модального окна
   currentIndex: number; // Индекс текущего открытого модального окна
+  relatedSettings: IRelatedSettings | object;
   
   openModal: (initScreen: IModalScreen) => void; // Открытие модального окна. Принимает первоначальное окно
   pushScreen: (screen: IModalScreen) => void; // Добавление окна в стек
   goBack: () => void; // Возвращает на предыдущее окно
   goForward: () => void; // Возвращает на следующее окно
   closeModal: () => void; // Закрывает модальное окно
+  setRelatedSettings: (newSettings: IRelatedSettings) => void;
 }
 
 export const useModalStore = create<ModalStore>((set, get) => ({
   isOpen: false,
   screensStack: [],
   currentIndex: -1,
+  relatedSettings: {},
 
   openModal: (initialScreen) => set({ // 
     screensStack: [initialScreen],
@@ -62,4 +71,10 @@ export const useModalStore = create<ModalStore>((set, get) => ({
     currentIndex: -1,
     isOpen: false,
   }),
+
+  setRelatedSettings(newSettings) {
+    set({
+      relatedSettings: newSettings
+    })
+  },
 }))

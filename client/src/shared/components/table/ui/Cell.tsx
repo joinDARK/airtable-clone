@@ -2,6 +2,9 @@ import { Table } from "@shared_types/Table"
 import IColumn from "@interfaces/IColumn"
 import TypeCell from "./TypeCell"
 import { useModalStore } from "@store/useModalStore"
+import { useContext } from "react";
+import { TableLayoutContext } from "../TableLayout";
+import transformColumnKey from "@services/relationship/transformColumnKey";
 
 
 interface Props {
@@ -10,8 +13,9 @@ interface Props {
 }
 
 export default function Cell({ item, column }: Props) {
-  const { openModal } = useModalStore()
+  const { openModal, setRelatedSettings } = useModalStore()
   const key = column.key as keyof Table
+  const context = useContext(TableLayoutContext)
 
   return (
     <td
@@ -20,6 +24,9 @@ export default function Cell({ item, column }: Props) {
                  px-4 py-1"
       onClick={() => {
         openModal({screenType: column.type, screenData: item[key], title: column.label, isEdit: false, readonly: column.readonly})
+        if (context?.type) {
+          setRelatedSettings({table: context.type, relatedKey: transformColumnKey(column.key)})
+        }
       }}
 
     >

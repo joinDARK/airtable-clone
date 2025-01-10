@@ -70,6 +70,7 @@ export const Modal = () => {
                   >
                     <ChevronLeft size={20}/>
                   </button>
+                  {currentIndex + 1}
                   <button
                     title="Следующее окно"
                     type="button"
