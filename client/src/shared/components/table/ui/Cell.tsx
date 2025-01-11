@@ -17,6 +17,7 @@ export default function Cell({ item, column }: Props) {
   const key = column.key as keyof Table
   const context = useContext(TableLayoutContext)
 
+
   return (
     <td
       className="text-sm text-gray-900 dark:text-gray-100

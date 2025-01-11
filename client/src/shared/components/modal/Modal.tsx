@@ -41,7 +41,7 @@ export const Modal = () => {
                     console.log(currentScreen)
                   }}
                 >
-                  <Eye size={20}/>
+                  <Eye size={20} />
                 </button>
                 <button
                   className={clsx(
