@@ -29,14 +29,14 @@ function ManagerForm({data, onSubmit}: ManagerFormProps) {
 
   const related = useRelatedData("managers", "orders")
 
-  const onError = (errors: any) => {
+  const onError = (errors: unknown) => {
     toast.error("Ошибки при отправке. Проверьте консоль")
     console.debug("Ошибки при отправке:", errors)
   }
 
   const {register, handleSubmit, control} = methods
 
-  const modalHandler = useModalStore(store => store.modalHandler)
+  const { modalHandler, setIsEdit } = useModalStore()
 
   const handleFormSubmit = async (newData: IManager) => {
     setIsSubmitting(true);
@@ -120,7 +120,7 @@ function ManagerForm({data, onSubmit}: ManagerFormProps) {
         <button
           type='button'
           className='px-4 py-2 text-sm font-medium border border-transparent rounded-md bg-red-600 hover:bg-red-700 transition-all duration-300 text-white'
-          onClick={() => modalHandler()}
+          onClick={() => setIsEdit(false)}
           disabled={isSubmitting}
         >
           Закрыть

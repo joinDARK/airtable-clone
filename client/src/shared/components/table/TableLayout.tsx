@@ -20,7 +20,6 @@ export const TableLayoutContext = createContext<Props | undefined>(undefined);
 export default function TableLayout({ type, delete: handleDelete, create: handleCreate}: Props) {
   const tableConfig = config[type as keyof typeof config];
   const { data, refetchTable } = useTableStore();
-  const { modalHandler, setModalData, setIsEdit } = useModalStore();
   const { sortedData, sortConfig ,handleSort } = useTableSort(data);
   const { filteredData, setSearchTerm } = useTableFilter(sortedData);
 
@@ -33,9 +32,7 @@ export default function TableLayout({ type, delete: handleDelete, create: handle
               <button
                 className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition-all shadow-sm active:scale-90"
                 onClick={() => {
-                  modalHandler();
-                  setModalData(`Добавить нового ${tableConfig.title}`, type);
-                  setIsEdit(true);
+
                 }}
               >
                 <Plus size={20} />
