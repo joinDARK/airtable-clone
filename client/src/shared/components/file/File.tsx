@@ -5,9 +5,9 @@ import { FileDragAndDropArea } from "./FileDragAndDropArea";
 import { LocalFileList } from "./LocalFileList";
 import api from "@services/api/file";
 import IFile from "@interfaces/IFile";
+import { useModalStore } from "@store/useModalStore";
 
 interface Props {
-  editingHandler: (state: boolean) => void;
   data: FileData;
   typeCell: string;
   orderId: number;
@@ -22,12 +22,12 @@ interface FileData {
 }
 
 const UploadFiles: React.FC<Props> = ({
-  editingHandler,
   typeCell,
   orderId,
 }) => {
   const [files, setFiles] = useState<IFile[]>([]);
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const closeModal = useModalStore(store => store.closeModal);
   
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -52,7 +52,6 @@ const UploadFiles: React.FC<Props> = ({
     }
     const formData = new FormData();
     files.forEach((file) => formData.append("files", file));
-    console.log(files)
     formData.append("orderId", orderId.toString());
     formData.append("type", typeCell);
 
@@ -69,7 +68,7 @@ const UploadFiles: React.FC<Props> = ({
       console.error("Ошибка при отправке файлов:", error);
       toast.error("Ошибка при отправке файлов.");
     } finally {
-      editingHandler(false);
+      closeModal();
     }
   };
 
@@ -85,13 +84,7 @@ const UploadFiles: React.FC<Props> = ({
             <LocalFileList files={files} handleRemoveLocalFile={handleRemoveLocalFile} />
           </>
         )}
-        <div className="flex justify-end gap-2">
-          <button
-            className="px-4 py-2 text-sm font-medium border border-transparent rounded-md bg-red-600 hover:bg-red-700 transition-all duration-300 text-white"
-            onClick={() => editingHandler(false)}
-          >
-            Закрыть
-          </button>
+        <div className="flex justify-end my-2">
           <button type="submit" className="px-4 py-2 text-sm font-medium border border-transparent rounded-md bg-green-600 hover:bg-green-700 transition-all duration-300 text-white">Сохранить</button>
         </div>
       </form>

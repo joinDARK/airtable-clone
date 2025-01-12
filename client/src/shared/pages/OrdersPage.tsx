@@ -8,7 +8,7 @@ import useLoaderStore from "@store/useLoaderStore";
 import { TableKey } from "@shared_types/TableKey";
 import { ResOrderSchema } from "@schema/response";
 import { client, queries } from "@services/graphql";
-import configs from "@configs/index";
+// import configs from "@configs/index";
 
 function OrdersPage() {
   const type: TableKey = "orders";
@@ -21,17 +21,6 @@ function OrdersPage() {
     const { data } = await client.query({ query: queries[type] });
     return data;
   });
-
-  const invalidateTable = async () => {
-    if (isLoading) {
-      handlerLoader(true);
-    } else {
-      const { data: refetchedData } = await refetch();
-      const validatedData = z.array(ResOrderSchema).parse(refetchedData?.[type]);
-      setTableData(validatedData);
-      handlerLoader(false);
-    }
-  };
 
 
   useEffect(() => {
@@ -49,15 +38,12 @@ function OrdersPage() {
     }
   }, [isLoading, data, handlerLoader, setTableData, refetch]);
 
-  const { columns } = configs[type];
+  // const { columns } = configs[type];
 
   return (
     <>
-      <TableLayout type={type} />
-      <Modal
-        cols={columns}
-        invalidateTable={invalidateTable}
-      />
+      <TableLayout type={type} delete={async () => console.log("Delete")} create={async () => console.log("Create")}/>
+      <Modal />
     </>
   );
 }

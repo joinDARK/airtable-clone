@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClientProvider } from "react-query";
 import { ToastContainer } from "react-toastify";
-import { queryClient } from "./services/api/queryClient";
+import { queryClient } from "@api/queryClient";
 import { Sidebar } from "./shared/components/Sidebar";
 import AuthPage from "./shared/pages/AuthPage";
 import OrdersPage from "./shared/pages/OrdersPage";

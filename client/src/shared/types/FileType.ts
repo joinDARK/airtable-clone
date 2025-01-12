@@ -1,0 +1,1 @@
+export type FileType = "invoice_file" | "swift_file" | "act_file" | "swift199_file";

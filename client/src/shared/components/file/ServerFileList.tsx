@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Trash2 } from "lucide-react";
 import { FiFileText as FileText } from "react-icons/fi";
 import { toast } from "react-toastify";
-
+import useDownloadFile from "@services/file/useDownloadFile";
 import fileService from "@services/api/file"; 
 import useLoaderStore from "@store/useLoaderStore";
 
@@ -22,27 +22,31 @@ interface Props {
 
 export const ServerFileList: React.FC<Props> = ({
   serverFiles,
-  invalidateTable,
 }) => {
   const [files, setFiles] = useState<FileData[]>(serverFiles || []);
-  const setIsLoading = useLoaderStore(store => store.setIsLoading)
+  const downloadFile = useDownloadFile();
+  const setIsLoading = useLoaderStore(store => store.setIsLoading);
 
   const handleDelete = async (fileId: string) => {
     try {
       setIsLoading(true);
       await fileService.files.deleteById(fileId);
       setFiles((prevFiles) => prevFiles.filter((f) => f.id !== fileId));
-      if (invalidateTable) {
-        invalidateTable();
-      }
-      setIsLoading(false);
-      toast.success('Файл успешно удален!')
+      // if (invalidateTable) {
+      //   invalidateTable();
+      // }
+      toast.success("Файл успешно удален!");
     } catch (error) {
-      setIsLoading(false);
-      toast.error('Ошибка при удалении файла!')
       console.error("Ошибка при удалении файла:", error);
+      toast.error("Ошибка при удалении файла!");
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  if (!files.length) {
+    return <div>Файлы отсутствуют</div>;
+  }
 
   return (
     <div className="space-y-4">
@@ -52,11 +56,13 @@ export const ServerFileList: React.FC<Props> = ({
             key={file.id}
             className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-gray-200 dark:bg-gray-800 p-2 rounded"
           >
-            <a href={file.fileUrl}>
-              <span className="truncate flex-1 flex gap-1 items-center text-blue-600 hover:text-blue-800 transition-colors">
-                <FileText size={18} /> {file.fileName}
-              </span>
-            </a>
+            <button
+              className="truncate flex-1 flex gap-1 items-center text-blue-600 hover:text-blue-800 transition-colors"
+              onClick={() => downloadFile(file.fileUrl, file.fileName)}
+            >
+              <FileText size={18} /> {file.fileName}
+            </button>
+
             <button
               type="button"
               onClick={() => handleDelete(file.id)}

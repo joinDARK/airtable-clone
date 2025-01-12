@@ -24,7 +24,10 @@ export default function Cell({ item, column }: Props) {
                  cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-400
                  px-4 py-1"
       onClick={() => {
-        openModal({screenType: column.type, screenData: item[key], title: column.label, isEdit: false, readonly: column.readonly})
+        if(column.type == "files")
+          openModal({screenType: column.type, screenData: (item as any)[column.type], title: column.label, isEdit: false, readonly: column.readonly, screenFileType: column.key})
+        else
+          openModal({screenType: column.type, screenData: item[key], title: column.label, isEdit: false, readonly: column.readonly})
         if (context?.type) {
           setRelatedSettings({table: context.type, relatedKey: transformColumnKey(column.key)})
         }
