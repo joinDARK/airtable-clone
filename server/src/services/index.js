@@ -9,6 +9,7 @@ const SubagentPayerService = require('./subagentPayerService');
 const CountryService = require('./countryService');
 const FileService = require('./fileService');
 const AuthService = require('./authService');
+const AuditLogsService = require('./auditLogsService');
 
 
 module.exports = {
@@ -23,4 +24,5 @@ module.exports = {
   countryService: CountryService,
   fileService: FileService,
   authService: AuthService,
+  auditLogsService: AuditLogsService,
 };
