@@ -12,6 +12,7 @@ import TableLayout from "@components/table/TableLayout"
 import useTableStore from "@store/useTableStore"
 import { Modal } from "@components/modal/Modal"
 import useLoaderStore from "@store/useLoaderStore"
+import { queryClient } from "@services/api/queryClient"
 
 function ManagersPage() {
   const type: TableKey = "managers"
@@ -35,7 +36,7 @@ function ManagersPage() {
   })
 
   const { data, isLoading, refetch } = useQuery(type, async () => {
-    const { data } = await client.query({ query: queries[type] })
+    const { data } = await client.query({ query: queries[type], fetchPolicy: 'cache-first' })
     return data
   })
 
@@ -76,8 +77,24 @@ function ManagersPage() {
     }
   }
 
+  const handleRefetch = async () => {
+    handlerLoader(true)
+    try {
+      const { data } = await client.query({
+        query: queries[type], fetchPolicy: 'network-only'
+      });
+
+      queryClient.setQueryData(type, data)
+    } catch(e) {
+      toast.error("Произошла ошибка при refetch данных");
+      console.debug("Ошибка при refetch данных:", e);
+    } finally {
+      handlerLoader(false)
+    }
+  }
+
   useEffect(() => {// Добавлено для отладки
-    setRefetch(refetch)
+    setRefetch(handleRefetch)
     if (isLoading) {
       handlerLoader(true)
     } else {
@@ -94,7 +111,7 @@ function ManagersPage() {
   return (
     <>
       <TableLayout type={type} delete={handleDelete} create={handleCreate}/>
-      <Modal/>
+      <Modal submit={handleCreate}/>
     </>
   )
 }

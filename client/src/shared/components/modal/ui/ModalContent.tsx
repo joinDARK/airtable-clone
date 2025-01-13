@@ -10,12 +10,15 @@ import {
 import { useModalStore } from "@store/useModalStore";
 import { ServerFileList } from "@components/file/ServerFileList";
 import UploadFiles from "@components/file/File";
+import ManagerForm from "./ManagerForm";
+import { useEffect } from "react";
 
 interface Props {
   screen: IModalScreen;
+  submit: (newData: any) => Promise<void>
 }
 
-export default function ModalContent({ screen }: Props) {
+export default function ModalContent({ screen, submit }: Props) {
   const { screenType, screenData, isEdit, screenFileType } = screen;
   const { relatedSettings } = useModalStore();
 
@@ -49,7 +52,7 @@ export default function ModalContent({ screen }: Props) {
         />
       );
     case "managers":
-      return isEdit ? "Пока ничего" : <ViewManager view={screenData} />;
+      return isEdit ? <ManagerForm data={screenData} onSubmit={submit}/> : <ViewManager view={screenData} />;
     case "orders":
       return isEdit ? "Пока ничего" : <ViewOrder view={screenData} />;
     default:

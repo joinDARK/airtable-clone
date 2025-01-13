@@ -5,7 +5,11 @@ import clsx from "clsx";
 import { X, Edit, Eye, ChevronLeft, ChevronRight, SquareGantt } from "lucide-react";
 import ModalContent from "./ui/ModalContent";
 
-export const Modal = () => {
+interface Props {
+  submit: (newData: any) => Promise<void>
+}
+
+export const Modal = ({ submit }: Props) => {
   const {
     isOpen,
     screensStack,
@@ -43,19 +47,22 @@ export const Modal = () => {
                 >
                   <Eye size={20} />
                 </button>
-                <button
-                  className={clsx(
-                    "p-1 text-gray-500 transition-all mr-0.5",
-                    currentScreen.isEdit ? "hover:text-orange-500" : "hover:text-blue-500"
-                  )}
-                  onClick={() => {
-                    pushScreen({...currentScreen, isEdit: !currentScreen.isEdit})
-                    goForward()
-                  }}
-                  disabled={currentScreen.readonly}
-                >
-                  {currentScreen.isEdit ? <Edit size={18} /> : <SquareGantt size={18}/>}
-                </button>
+                {
+                  currentScreen.readonly ? "" : <button
+                    className={clsx(
+                      "p-1 text-gray-500 transition-all mr-0.5",
+                      currentScreen.isEdit ? "hover:text-orange-500" : "hover:text-blue-500"
+                    )}
+                    onClick={() => {
+                      pushScreen({...currentScreen, isEdit: !currentScreen.isEdit})
+                      goForward()
+                    }}
+                    disabled={currentScreen.readonly}
+                    type="button"
+                  >
+                    {currentScreen.isEdit ? <Edit size={18} /> : <SquareGantt size={18}/>}
+                  </button>
+                }
                 <Line horizontal/>
                 <div className="flex gap-1 mx-1">
                   <button
@@ -96,7 +103,7 @@ export const Modal = () => {
               </div>
             </div>
             <div className="max-h-[80vh] overflow-scroll p-4 resize-y">
-              <ModalContent screen={currentScreen}/>
+              <ModalContent screen={currentScreen} submit={submit}/>
             </div>
           </Dialog.Panel>
         </div>

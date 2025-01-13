@@ -36,13 +36,13 @@ function ManagerForm({data, onSubmit}: ManagerFormProps) {
 
   const {register, handleSubmit, control} = methods
 
-  const { modalHandler, setIsEdit } = useModalStore()
+  const { closeModal } = useModalStore()
 
   const handleFormSubmit = async (newData: IManager) => {
     setIsSubmitting(true);
     await onSubmit(newData);
     setIsSubmitting(false);
-    modalHandler()
+    closeModal()
   }
 
   return (
@@ -120,7 +120,7 @@ function ManagerForm({data, onSubmit}: ManagerFormProps) {
         <button
           type='button'
           className='px-4 py-2 text-sm font-medium border border-transparent rounded-md bg-red-600 hover:bg-red-700 transition-all duration-300 text-white'
-          onClick={() => setIsEdit(false)}
+          onClick={() => closeModal()}
           disabled={isSubmitting}
         >
           Закрыть
