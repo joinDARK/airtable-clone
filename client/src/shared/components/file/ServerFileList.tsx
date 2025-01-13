@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import useDownloadFile from "@services/file/useDownloadFile";
 import fileService from "@services/api/file"; 
 import useLoaderStore from "@store/useLoaderStore";
+import useTableStore from "@store/useTableStore";
 
 interface FileData {
   id: string;
@@ -26,16 +27,15 @@ export const ServerFileList: React.FC<Props> = ({
   const [files, setFiles] = useState<FileData[]>(serverFiles || []);
   const downloadFile = useDownloadFile();
   const setIsLoading = useLoaderStore(store => store.setIsLoading);
+  const refetch = useTableStore(store => store.refetchTable)
 
   const handleDelete = async (fileId: string) => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
       await fileService.files.deleteById(fileId);
       setFiles((prevFiles) => prevFiles.filter((f) => f.id !== fileId));
-      // if (invalidateTable) {
-      //   invalidateTable();
-      // }
       toast.success("Файл успешно удален!");
+      refetch()
     } catch (error) {
       console.error("Ошибка при удалении файла:", error);
       toast.error("Ошибка при удалении файла!");

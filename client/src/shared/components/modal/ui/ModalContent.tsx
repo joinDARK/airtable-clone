@@ -6,12 +6,16 @@ import {
   ViewRelated,
   ViewManager,
   ViewOrder,
+  ViewSubagentPayer,
+  ViewSubagent
 } from "./view";
 import { useModalStore } from "@store/useModalStore";
 import { ServerFileList } from "@components/file/ServerFileList";
-import UploadFiles from "@components/file/File";
-import ManagerForm from "./ManagerForm";
-import { useEffect } from "react";
+import { 
+  EditManager, 
+  EditSubagentPayer, 
+  EditSubagent 
+} from "./edit";
 
 interface Props {
   screen: IModalScreen;
@@ -52,9 +56,13 @@ export default function ModalContent({ screen, submit }: Props) {
         />
       );
     case "managers":
-      return isEdit ? <ManagerForm data={screenData} onSubmit={submit}/> : <ViewManager view={screenData} />;
+      return isEdit ? <EditManager data={screenData} onSubmit={submit}/> : <ViewManager view={screenData} />;
     case "orders":
       return isEdit ? "Пока ничего" : <ViewOrder view={screenData} />;
+    case "subagents":
+      return isEdit ? <EditSubagent data={screenData} onSubmit={submit}/> : <ViewSubagent view={screenData} />;
+    case "subagentPayers":
+      return isEdit ? <EditSubagentPayer data={screenData} onSubmit={submit}/> : <ViewSubagentPayer view={screenData} />
     default:
       return <div className="text-red-500">Новый или неизвестный тип</div>;
   }

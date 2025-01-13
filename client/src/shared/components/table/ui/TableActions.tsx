@@ -26,7 +26,6 @@ function TableActions({ value }: TableActionsProps) {
         title="Удалить"
         onClick={() => {
           context?.delete(value.id)
-          console.log(context?.type, value.id)
         }}
       >
         <Trash2 size={18} />

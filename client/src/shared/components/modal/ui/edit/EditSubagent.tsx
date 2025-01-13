@@ -1,33 +1,32 @@
-import {Controller, useForm} from "react-hook-form"
-import {zodResolver} from "@hookform/resolvers/zod"
-import {toast} from "react-toastify"
 import { useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "react-toastify";
 
-import {useModalStore} from "@store/useModalStore"
-import useRelatedData from "@services/relationship/useRelatedData"
-import { RelationshipSelect } from "@components/select/RelationshipSelect"
-import IManager from "@interfaces/table/IManager"
-import {FormManagerSchema} from "@schema/form"
+import { FormSubagentSchema } from "@schema/form";
+import useRelatedData from "@services/relationship/useRelatedData";
+import { useModalStore } from "@store/useModalStore";
+import { RelationshipSelect } from "@components/select/RelationshipSelect";
+import ISubagent from "@interfaces/table/ISubagent";
 
-interface ManagerFormProps {
-  data?: IManager;
-  onSubmit: (newManager: IManager) => Promise<void>
+interface Props {
+  data?: ISubagent;
+  onSubmit: (newSubagent: ISubagent) => Promise<void>
 }
 
-function ManagerForm({data, onSubmit}: ManagerFormProps) {
+export default function EditSubagent({data, onSubmit}: Props) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const methods = useForm<IManager>({
-    resolver: zodResolver(FormManagerSchema),
+  const methods = useForm<ISubagent>({
+    resolver: zodResolver(FormSubagentSchema),
     defaultValues: data ?? {
       name: "",
-      tel: "",
-      date: "",
+      subagentPayers: [],
       orders: [],
-      review_table: [],
     },
   })
 
-  const related = useRelatedData("managers", "orders")
+  const relatedPayers = useRelatedData("subagents", "subagentPayers")
+  const relatedOrders = useRelatedData("subagents", "orders")
 
   const onError = (errors: unknown) => {
     toast.error("Ошибки при отправке. Проверьте консоль")
@@ -38,7 +37,7 @@ function ManagerForm({data, onSubmit}: ManagerFormProps) {
 
   const { closeModal } = useModalStore()
 
-  const handleFormSubmit = async (newData: IManager) => {
+  const handleFormSubmit = async (newData: ISubagent) => {
     setIsSubmitting(true);
     await onSubmit(newData);
     setIsSubmitting(false);
@@ -49,35 +48,13 @@ function ManagerForm({data, onSubmit}: ManagerFormProps) {
     <form className='space-y-4' onSubmit={handleSubmit(handleFormSubmit, onError)}>
       <div>
         <label className='block text-sm font-medium text-gray-700 dark:text-gray-300'>
-          Имя<sup className='text-red-600'> обязательное</sup>
+          Наименование<sup className='text-red-600'> обязательное</sup>
         </label>
         <input
           type='text'
-          placeholder='Введите имя менеджера'
+          placeholder='Введите наименование'
           className='mt-1 px-3 py-2 block w-full border-gray-300 border dark:border-transparent dark:bg-gray-700 placeholder:text-gray-700 dark:placeholder:text-gray-100 rounded-md shadow-sm hover:border-gray-400 transition-all focus:ring-blue-500 focus:border-blue-500'
           {...register("name")}
-        />
-      </div>
-      <div>
-        <label className='block text-sm font-medium text-gray-700 dark:text-gray-300'>
-          Номер телефона<sup className='text-red-600'> обязательное</sup>
-        </label>
-        <input
-          type='tel'
-          placeholder='Введите номер телефона менеджера'
-          className='mt-1 px-3 py-2 block w-full border-gray-300 border dark:border-transparent dark:bg-gray-700 placeholder:text-gray-700 dark:placeholder:text-gray-100 rounded-md shadow-sm hover:border-gray-400 transition-all focus:ring-blue-500 focus:border-blue-500'
-          {...register("tel")}
-        />
-      </div>
-      <div>
-        <label className='block text-sm font-medium text-gray-700 dark:text-gray-300'>
-          День рождения<sup className='text-red-600'> обязательное</sup>
-        </label>
-        <input
-          placeholder='Выберите день рождения'
-          type='date'
-          className='mt-1 px-3 py-2 block w-full border-gray-300 border dark:border-transparent dark:bg-gray-700 placeholder:text-gray-700 dark:placeholder:text-gray-100 rounded-md shadow-sm hover:border-gray-400 transition-all focus:ring-blue-500 focus:border-blue-500'
-          {...register("date")}
         />
       </div>
       <div className="col-span-2">
@@ -91,7 +68,7 @@ function ManagerForm({data, onSubmit}: ManagerFormProps) {
             <RelationshipSelect
               value={field.value || []}
               placeholder="Выберите заявки"
-              options={related}
+              options={relatedOrders}
               title="Заявка"
               onChange={field.onChange}
             />
@@ -100,17 +77,16 @@ function ManagerForm({data, onSubmit}: ManagerFormProps) {
       </div>
       <div className="col-span-2">
         <label className="block text-sm font-medium mb-1">
-          Проверяю
+          Плательщики субагента
         </label>
         <Controller
-          name="review_table"
+          name="subagentPayers"
           control={control}
           render={({field}) => (
             <RelationshipSelect
               value={field.value || []}
-              placeholder="Выберите заявки"
-              options={related}
-              title="Заявка"
+              placeholder="Выберите плательщика"
+              options={relatedPayers}
               onChange={field.onChange}
             />
           )}
@@ -136,5 +112,3 @@ function ManagerForm({data, onSubmit}: ManagerFormProps) {
     </form>
   )
 }
-
-export default ManagerForm

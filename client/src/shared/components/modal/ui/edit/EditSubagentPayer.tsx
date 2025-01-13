@@ -3,44 +3,45 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
 
-import { FormSubagentSchema } from "@schema/form";
+import { FormSubagentPayerSchema } from "@schema/form";
 import useRelatedData from "@services/relationship/useRelatedData";
 import { useModalStore } from "@store/useModalStore";
 import { RelationshipSelect } from "@components/select/RelationshipSelect";
-import ISubagent from "@interfaces/table/ISubagent";
+import ISubagentPayer from "@interfaces/table/ISubagentPayer";
 
 interface Props {
-  data?: ISubagent;
-  onSubmit: (newSubagent: ISubagent) => Promise<void>
+  data?: ISubagentPayer;
+  onSubmit: (newSubagent: ISubagentPayer) => Promise<void>
 }
 
-export default function SubagentForm({data, onSubmit}: Props) {
+export default function EditSubagentPayer({data, onSubmit}: Props) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const methods = useForm<ISubagent>({
-    resolver: zodResolver(FormSubagentSchema),
+  const methods = useForm<ISubagentPayer>({
+    resolver: zodResolver(FormSubagentPayerSchema),
     defaultValues: data ?? {
       name: "",
-      subagentPayers: [],
+      subagents: [],
       orders: [],
     },
   })
 
-  const relatedPayers = useRelatedData("subagents", "subagentPayers")
+  const relatedPayers = useRelatedData("subagentPayers", "subagents")
+  const relatedOrders = useRelatedData("subagentPayers", "orders")
 
-  const onError = (errors: any) => {
+  const onError = (errors: unknown) => {
     toast.error("Ошибки при отправке. Проверьте консоль")
     console.debug("Ошибки при отправке:", errors)
   }
 
   const {register, handleSubmit, control} = methods
 
-  const modalHandler = useModalStore(store => store.modalHandler)
+  const { closeModal } = useModalStore()
 
-  const handleFormSubmit = async (newData: ISubagent) => {
+  const handleFormSubmit = async (newData: ISubagentPayer) => {
     setIsSubmitting(true);
     await onSubmit(newData);
     setIsSubmitting(false);
-    modalHandler()
+    closeModal()
   }
 
   return (
@@ -50,7 +51,7 @@ export default function SubagentForm({data, onSubmit}: Props) {
           Наименование<sup className='text-red-600'> обязательное</sup>
         </label>
         <input
-          type='tel'
+          type='text'
           placeholder='Введите наименование'
           className='mt-1 px-3 py-2 block w-full border-gray-300 border dark:border-transparent dark:bg-gray-700 placeholder:text-gray-700 dark:placeholder:text-gray-100 rounded-md shadow-sm hover:border-gray-400 transition-all focus:ring-blue-500 focus:border-blue-500'
           {...register("name")}
@@ -58,10 +59,28 @@ export default function SubagentForm({data, onSubmit}: Props) {
       </div>
       <div className="col-span-2">
         <label className="block text-sm font-medium mb-1">
-          Плательщики субагента
+          Заявки
         </label>
         <Controller
-          name="subagentPayers"
+          name="orders"
+          control={control}
+          render={({field}) => (
+            <RelationshipSelect
+              value={field.value || []}
+              placeholder="Выберите заявки"
+              options={relatedOrders}
+              title="Заявка"
+              onChange={field.onChange}
+            />
+          )}
+        />
+      </div>
+      <div className="col-span-2">
+        <label className="block text-sm font-medium mb-1">
+          Cубагенты
+        </label>
+        <Controller
+          name="subagents"
           control={control}
           render={({field}) => (
             <RelationshipSelect
@@ -77,7 +96,7 @@ export default function SubagentForm({data, onSubmit}: Props) {
         <button
           type='button'
           className='px-4 py-2 text-sm font-medium border border-transparent rounded-md bg-red-600 hover:bg-red-700 transition-all duration-300 text-white'
-          onClick={() => modalHandler()}
+          onClick={() => closeModal()}
           disabled={isSubmitting}
         >
           Закрыть

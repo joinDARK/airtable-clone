@@ -19,7 +19,7 @@ export const TableLayoutContext = createContext<Props | undefined>(undefined);
 
 export default function TableLayout({ type, delete: handleDelete, create: handleCreate}: Props) {
   const tableConfig = config[type as keyof typeof config];
-  const { data, refetchTable } = useTableStore();
+  const { data, forceRefetchTable } = useTableStore();
   const { sortedData, sortConfig ,handleSort } = useTableSort(data);
   const { filteredData, setSearchTerm } = useTableFilter(sortedData);
   const { openModal } = useModalStore()
@@ -42,7 +42,7 @@ export default function TableLayout({ type, delete: handleDelete, create: handle
               <button
                 className="p-2 border border-gray-300 dark:border-gray-500 hover:bg-gray-100 rounded-lg transition-all shadow-sm active:scale-90 dark:hover:bg-gray-600"
                 title="Refresh"
-                onClick={refetchTable}
+                onClick={forceRefetchTable}
               >
                 <RefreshCw size={20} className="text-gray-600 dark:text-gray-400" />
               </button>
