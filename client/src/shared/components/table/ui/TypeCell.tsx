@@ -1,6 +1,7 @@
 import { FiFileText as FileText } from "react-icons/fi";
 
 import { transformDate } from "@services/date_formateer/dateFormateer";
+import useDownloadFile from "@services/file/useDownloadFile";
 import Option from "./type-cell/Option";
 import Related from "./type-cell/Related";
 import Boolean from "./type-cell/Boolean";
@@ -24,6 +25,8 @@ interface Props {
 
 export default function TypeCell({ type, value, title, columnKey, item }: Props) {
   const baseClass = "px-2 text-gray-900 dark:text-white";
+  const downloadFile = useDownloadFile();
+  
 
   if (type === "files") {
     const filesArray = (item && item.files) as IFile[] | undefined;
@@ -41,28 +44,32 @@ export default function TypeCell({ type, value, title, columnKey, item }: Props)
     return (
       <div className={`flex flex-wrap gap-2 ${baseClass}`}>
         {filteredFiles.map((file) => (
-          <a
+          <button
             key={file.id}
-            href={file.fileUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+            onClick={(e) => {
+              e.stopPropagation();
+              downloadFile(file.fileUrl, file.fileName);
+            }}
             className="
               flex items-center gap-1 text-blue-600 hover:text-blue-800
               dark:text-blue-400 dark:hover:text-blue-300
+              underline
             "
-            onClick={(e) => e.stopPropagation()} 
           >
             <FileText size={16} />
-            <span className="underline">{file.fileName}</span>
-          </a>
+            {file.fileName}
+          </button>
         ))}
       </div>
     );
   }
+
+  // Если значение пустое
   if (value == null || (Array.isArray(value) && value.length === 0)) {
     return <div className={baseClass}>—</div>;
   }
 
+  // Остальные типы
   switch (type) {
     case "option":
       return (

@@ -23,6 +23,7 @@
     /*Алиасы*/
     "paths": {
       "@services/*": ["./src/services/*"],
+      "@api/*": ["./src/services/api/*"],
       "@classes/*": ["./src/shared/classes/*"],
       "@components/*": ["./src/shared/components/*"],
       "@configs/*": ["./src/shared/configs/*"],
