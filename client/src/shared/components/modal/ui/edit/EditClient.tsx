@@ -3,30 +3,29 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
 
-import { FormSubagentSchema } from "@schema/form";
+import { FormClientSchema } from "@schema/form";
 import useRelatedData from "@services/relationship/useRelatedData";
 import { useModalStore } from "@store/useModalStore";
 import { RelationshipSelect } from "@components/select/RelationshipSelect";
-import ISubagent from "@interfaces/table/ISubagent";
+import IClient from "@interfaces/table/IClient";
 
 interface Props {
-  data?: ISubagent;
-  onSubmit: (newSubagent: ISubagent) => Promise<void>
+  data?: IClient;
+  onSubmit: (newClient: IClient) => Promise<void>
 }
 
-function EditSubagent({data, onSubmit}: Props) {
+export default function EditClient({data, onSubmit}: Props) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const methods = useForm<ISubagent>({
-    resolver: zodResolver(FormSubagentSchema),
+  const methods = useForm<IClient>({
+    resolver: zodResolver(FormClientSchema),
     defaultValues: data ?? {
       name: "",
-      subagentPayers: [],
+      inn: "",
       orders: [],
     },
   })
 
-  const relatedPayers = useRelatedData("subagents", "subagentPayers")
-  const relatedOrders = useRelatedData("subagents", "orders")
+  const relatedOrders = useRelatedData("clients", "orders")
 
   const onError = (errors: unknown) => {
     toast.error("Ошибки при отправке. Проверьте консоль")
@@ -37,7 +36,7 @@ function EditSubagent({data, onSubmit}: Props) {
 
   const { closeModal } = useModalStore()
 
-  const handleFormSubmit = async (newData: ISubagent) => {
+  const handleFormSubmit = async (newData: IClient) => {
     setIsSubmitting(true);
     await onSubmit(newData);
     setIsSubmitting(false);
@@ -57,6 +56,17 @@ function EditSubagent({data, onSubmit}: Props) {
           {...register("name")}
         />
       </div>
+      <div>
+        <label className='block text-sm font-medium text-gray-700 dark:text-gray-300'>
+          ИНН<sup className='text-red-600'> обязательное</sup>
+        </label>
+        <input
+          type='text'
+          placeholder='Введите наименование'
+          className='mt-1 px-3 py-2 block w-full border-gray-300 border dark:border-transparent dark:bg-gray-700 placeholder:text-gray-700 dark:placeholder:text-gray-100 rounded-md shadow-sm hover:border-gray-400 transition-all focus:ring-blue-500 focus:border-blue-500'
+          {...register("inn")}
+        />
+      </div>
       <div className="col-span-2">
         <label className="block text-sm font-medium mb-1">
           Заявки
@@ -70,23 +80,6 @@ function EditSubagent({data, onSubmit}: Props) {
               placeholder="Выберите заявки"
               options={relatedOrders}
               title="Заявка"
-              onChange={field.onChange}
-            />
-          )}
-        />
-      </div>
-      <div className="col-span-2">
-        <label className="block text-sm font-medium mb-1">
-          Плательщики субагента
-        </label>
-        <Controller
-          name="subagentPayers"
-          control={control}
-          render={({field}) => (
-            <RelationshipSelect
-              value={field.value || []}
-              placeholder="Выберите плательщика"
-              options={relatedPayers}
               onChange={field.onChange}
             />
           )}
@@ -112,5 +105,3 @@ function EditSubagent({data, onSubmit}: Props) {
     </form>
   )
 }
-
-export default EditSubagent

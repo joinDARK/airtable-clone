@@ -37,8 +37,8 @@ function SubagentsPage() {
     awaitRefetchQueries: true,
   })
 
-  const {data, isLoading, refetch} = useQuery("subagents", async () => {
-    const {data} = await client.query({query: queries[type]})
+  const {data, isLoading, refetch} = useQuery(type, async () => {
+    const {data} = await client.query({query: queries[type], fetchPolicy: 'cache-first'})
     return data
   })
 
@@ -48,6 +48,7 @@ function SubagentsPage() {
       const {data} = await deleteSubagent({variables: {id}})
       if (data?.deleteSubagent) {
         toast.success("Субагент успешно удалён")
+        refetch()
       } else {
         alert("Не удалось удалить субагента")
       }
@@ -55,7 +56,6 @@ function SubagentsPage() {
       toast.error("Произошла ошибка")
       console.debug("Ошибка удаления строки", error)
     } finally {
-      refetch()
       handlerLoader(false)
     }
   }
@@ -86,7 +86,6 @@ function SubagentsPage() {
       const { data } = await client.query({
         query: queries[type], fetchPolicy: 'network-only'
       });
-
       queryClient.setQueryData(type, data)
     } catch(e) {
       toast.error("Произошла ошибка при refetch данных");
@@ -107,7 +106,7 @@ function SubagentsPage() {
         const validatedData = z.array(ResSubagentSchema).parse(data[type])
         setTableData(validatedData)
       } catch (error) {
-        console.error("Validation error:", error)
+        console.error("Ошибка валидации страницы:", error)
       }
     }
   }, [isLoading, data, handlerLoader, setTableData, refetch])

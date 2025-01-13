@@ -7,15 +7,24 @@ import {
   ViewManager,
   ViewOrder,
   ViewSubagentPayer,
-  ViewSubagent
+  ViewSubagent,
+  ViewCountry,
+  ViewClient,
+  ViewAgent,
+  ViewContragent
 } from "./view";
 import { useModalStore } from "@store/useModalStore";
 import { ServerFileList } from "@components/file/ServerFileList";
 import { 
   EditManager, 
   EditSubagentPayer, 
-  EditSubagent 
+  EditSubagent, 
+  EditCountry,
+  EditClient,
+  EditAgent,
+  EditContragent
 } from "./edit";
+import UploadFiles from "@components/file/File";
 
 interface Props {
   screen: IModalScreen;
@@ -55,10 +64,18 @@ export default function ModalContent({ screen, submit }: Props) {
           table={relatedSettings.table ?? undefined}
         />
       );
-    case "managers":
-      return isEdit ? <EditManager data={screenData} onSubmit={submit}/> : <ViewManager view={screenData} />;
     case "orders":
       return isEdit ? "Пока ничего" : <ViewOrder view={screenData} />;
+    case "managers":
+      return isEdit ? <EditManager data={screenData} onSubmit={submit}/> : <ViewManager view={screenData} />;
+    case "agents":
+      return isEdit ? <EditAgent data={screenData} onSubmit={submit}/> : <ViewAgent view={screenData} />;
+    case "contragents":
+    return isEdit ? <EditContragent data={screenData} onSubmit={submit}/> : <ViewContragent view={screenData}/>;
+    case "clients":
+      return isEdit ? <EditClient data={screenData} onSubmit={submit}/> : <ViewClient view={screenData}/>;
+    case "countries":
+      return isEdit ? <EditCountry data={screenData} onSubmit={submit}/> : <ViewCountry view={screenData}/>;
     case "subagents":
       return isEdit ? <EditSubagent data={screenData} onSubmit={submit}/> : <ViewSubagent view={screenData} />;
     case "subagentPayers":
