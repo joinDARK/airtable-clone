@@ -1,9 +1,12 @@
 const express = require("express");
 const multer = require("multer");
 const fileController = require("../controllers/uploadController");
+const authMiddleware = require("../../middleware/authMiddleware");
 
 const router = express.Router();
 const upload = multer({ dest: "uploads/" });
+
+router.use(authMiddleware);
 
 // Создание
 router.post("/", upload.single("file"), fileController.uploadFile);
@@ -23,6 +26,5 @@ router.put("/:id", fileController.updateFileById);
 router.delete("/name/:fileName", fileController.deleteFileByName);
 router.delete("/id/:id", fileController.deleteFileById);
 router.delete("/all", fileController.deleteAllFiles);
-
 
 module.exports = router;

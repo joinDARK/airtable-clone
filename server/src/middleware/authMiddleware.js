@@ -24,6 +24,7 @@ async function authMiddleware(req, res, next) {
     req.user = { id: user.id, login: user.login };
     next();
   } catch (error) {
+    console.error("Error in authMiddleware:", error);
     return res.status(403).json({ message: "Invalid token" });
   }
 }

@@ -1,13 +1,14 @@
 const fs = require("fs");
-
-const BaseService = require("./baseService");
-const { S3_CLIENT } = require("../config/app.config")
-const { File } = require("../db/models");
+const path = require("path");
 const {
   S3Client,
   PutObjectCommand,
   DeleteObjectCommand,
 } = require("@aws-sdk/client-s3");
+
+const BaseService = require("./baseService");
+const { File } = require("../db/models");
+const { S3_CLIENT } = require("../config/app.config");
 
 const BUCKET_NAME = "airtable-clone";
 
@@ -37,7 +38,8 @@ class FileService extends BaseService {
 
     const command = new PutObjectCommand(params);
     await s3Client.send(command);
-    fs.unlinkSync(filePath); 
+
+    fs.unlinkSync(filePath);
 
     const fileUrl = `https://${BUCKET_NAME}.storage.yandexcloud.net/${encodeURIComponent(originalName)}`;
     return fileUrl;
@@ -53,7 +55,7 @@ class FileService extends BaseService {
     await s3Client.send(command);
   }
 
-  async uploadSingleFile(file, { orderId, type }) {
+  async uploadSingleFile(file, { orderId, type }, userName) {
     if (!file) {
       throw new Error("Файл не был предоставлен");
     }
@@ -64,17 +66,20 @@ class FileService extends BaseService {
 
     const fileUrl = await this.uploadFileToS3(file.path, file.originalname, file.mimetype);
 
-    const newFileRecord = await File.create({
-      fileName: file.originalname,
-      fileUrl,
-      orderId: orderId || null,
-      type: type || null,
-    });
+    const newFileRecord = await File.create(
+      {
+        fileName: file.originalname,
+        fileUrl,
+        orderId: orderId || null,
+        type: type || null,
+      },
+      { userName }
+    );
 
     return newFileRecord;
   }
 
-  async uploadMultipleFiles(files, { orderId, type }) {
+  async uploadMultipleFiles(files, { orderId, type }, userName) {
     if (!orderId) {
       throw new Error("orderId обязателен");
     }
@@ -87,12 +92,15 @@ class FileService extends BaseService {
 
       const fileUrl = await this.uploadFileToS3(file.path, file.originalname, file.mimetype);
 
-      const newFileRecord = await File.create({
-        fileName: file.originalname,
-        fileUrl,
-        orderId,
-        type: type || null,
-      });
+      const newFileRecord = await File.create(
+        {
+          fileName: file.originalname,
+          fileUrl,
+          orderId,
+          type: type || null,
+        },
+        { userName }
+      );
 
       uploadedFiles.push(newFileRecord);
     }
@@ -100,29 +108,33 @@ class FileService extends BaseService {
     return uploadedFiles;
   }
 
-  async removeFileById(id) {
+  async removeFileById(id, userName) {
     const fileRecord = await File.findByPk(id);
     if (!fileRecord) {
       throw new Error("Файл не найден в базе данных");
     }
 
     await this.deleteFileFromS3(fileRecord.fileName);
-    await fileRecord.destroy();
+
+    await fileRecord.destroy({ userName });
+
     return true;
   }
 
-  async removeFileByName(fileName) {
+  async removeFileByName(fileName, userName) {
     const fileRecord = await File.findOne({ where: { fileName } });
     if (!fileRecord) {
       throw new Error("Файл не найден в базе данных");
     }
 
     await this.deleteFileFromS3(fileRecord.fileName);
-    await fileRecord.destroy();
+
+    await fileRecord.destroy({ userName });
+
     return true;
   }
 
-  async removeAllFiles() {
+  async removeAllFiles(userName) {
     const files = await File.findAll();
     if (files.length === 0) {
       throw new Error("Нет файлов для удаления");
@@ -130,10 +142,21 @@ class FileService extends BaseService {
 
     for (const fileRecord of files) {
       await this.deleteFileFromS3(fileRecord.fileName);
+      await fileRecord.destroy({ userName });
     }
 
-    await File.destroy({ where: {} });
     return true;
+  }
+
+  async updateFileById(id, data, userName) {
+    const fileRecord = await File.findByPk(id);
+    if (!fileRecord) {
+      throw new Error("Файл не найден в базе данных");
+    }
+
+    await fileRecord.update(data, { userName });
+
+    return fileRecord;
   }
 }
 

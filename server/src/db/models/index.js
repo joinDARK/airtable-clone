@@ -1,4 +1,5 @@
 const Agent = require('./Agent');
+const AuditLog = require('./AuditLog');
 const Client = require('./Client');
 const Contragent = require('./Contragent');
 const Country = require('./Country');
@@ -23,4 +24,5 @@ module.exports = {
   Subagent,
   SubagentPayer,
   User,
+  AuditLog, 
 };

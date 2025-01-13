@@ -1,0 +1,637 @@
+authMiddleware
+
+Парсит Authorization заголовок.
+Проверяет токен, ищет юзера в БД.
+Кладёт req.user = { id, login } или null (если не авторизован).
+fileRoutes
+
+Подключает authMiddleware там, где нужно (либо глобально, либо на create/update/delete).
+Обрабатывает multer-загрузку.
+Вызывает соответствующие методы контроллера (например, fileController.uploadFile).
+fileController
+
+Считывает userId = req.user?.id (если пользователь авторизован).
+Вызывает метод сервиса (например, fileService.uploadSingleFile(req.file, { orderId, type }, userId)).
+Возвращает результат (JSON).
+fileService
+
+Имеет методы, которые обращаются к File.create, File.update, File.destroy и передают в опциях { userId }.
+По желанию, выполняет дополнительную логику (загрузка в S3 и т.д.).
+Модель File
+
+Содержит хуки afterCreate, afterUpdate, afterDestroy, где читается options.userId.
+Создаёт запись в AuditLog, записывая нужные данные: tableName, actionType, changedFields, previousValues, newValues, userId и т.д.
+Модель AuditLog
+
+Хранит логи в отдельной таблице audit_logs: поля userId, tableName, recordId, actionType, changedFields, previousValues, newValues, timestamp и т. д.
+
+
+
+
+
+
+const express = require("express");
+const multer = require("multer");
+const fileController = require("../controllers/uploadController");
+const authMiddleware = require("../../middleware/authMiddleware");
+
+const router = express.Router();
+const upload = multer({ dest: "uploads/" });
+
+router.use(authMiddleware);
+
+// Создание
+router.post("/", upload.single("file"), fileController.uploadFile);
+router.post("/upload-multiple", upload.array("files"), fileController.uploadMultipleFiles);
+
+// Чтение
+router.get("/", fileController.getAllFiles);
+router.get("/id/:id", fileController.getFileById);
+router.get("/name/:fileName", fileController.getFileByName);
+router.get("/type/:type", fileController.getFilesByType);
+router.get("/order/:orderId", fileController.getFilesByOrderId);
+
+// Обновление
+router.put("/:id", fileController.updateFileById);
+
+// Удаление
+router.delete("/name/:fileName", fileController.deleteFileByName);
+router.delete("/id/:id", fileController.deleteFileById);
+router.delete("/all", fileController.deleteAllFiles);
+
+module.exports = router;
+
+
+
+
+
+
+
+// controllers/uploadController.js
+
+const { fileService } = require("../../services");
+
+function setUtf8Header(res) {
+  res.setHeader("Content-Type", "application/json; charset=utf-8");
+}
+
+/**
+ * Загрузка одного файла.
+ * Создаёт запись в таблице File с использованием fileService.uploadSingleFile(...)
+ * и прокидывает userId, чтобы хуки смогли сохранить изменения в AuditLog.
+ */
+exports.uploadFile = async (req, res) => {
+  try {
+    // Предполагаем, что userId есть в req.user (например, после authMiddleware).
+    const userId = req.user?.id || null;
+
+    const { orderId, type } = req.body || {};
+    const fileRecord = await fileService.uploadSingleFile(
+      req.file,
+      { orderId, type },
+      userId
+    );
+
+    setUtf8Header(res);
+    res.json({ message: "Файл успешно загружен", file: fileRecord });
+  } catch (error) {
+    console.error("Ошибка при загрузке файла:", error);
+    setUtf8Header(res);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+/**
+ * Загрузка нескольких файлов.
+ * Аналогично, передаём userId в fileService.uploadMultipleFiles(...).
+ */
+exports.uploadMultipleFiles = async (req, res) => {
+  try {
+    const userId = req.user?.id || null;
+
+    const { orderId, type } = req.body;
+    const files = await fileService.uploadMultipleFiles(req.files, { orderId, type }, userId);
+
+    setUtf8Header(res);
+    res.json({ message: "Файлы успешно загружены", files });
+  } catch (error) {
+    console.error("Ошибка при загрузке файлов:", error);
+    setUtf8Header(res);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+/**
+ * Получение файла по имени (GET).
+ * Операция только читает данные, userId в данном случае не нужен
+ * (если вам не надо логировать чтение).
+ */
+exports.getFileByName = async (req, res) => {
+  try {
+    const { fileName } = req.params;
+    const file = await fileService.model.findOne({ where: { fileName } });
+    if (!file) {
+      setUtf8Header(res);
+      return res.status(404).json({ message: "Файл не найден в базе данных" });
+    }
+    setUtf8Header(res);
+    res.json({ file });
+  } catch (error) {
+    console.error("Ошибка при получении файла:", error);
+    setUtf8Header(res);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+/**
+ * Получение файла по ID (GET).
+ */
+exports.getFileById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const file = await fileService.getById(id);
+    setUtf8Header(res);
+    res.json({ file });
+  } catch (error) {
+    console.error("Ошибка при получении файла:", error);
+    setUtf8Header(res);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+/**
+ * Получение всех файлов (GET).
+ */
+exports.getAllFiles = async (req, res) => {
+  try {
+    const files = await fileService.getAll();
+    setUtf8Header(res);
+    res.json({ files });
+  } catch (error) {
+    console.error("Ошибка при получении файлов:", error);
+    setUtf8Header(res);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+/**
+ * Получение файлов по типу (GET).
+ */
+exports.getFilesByType = async (req, res) => {
+  try {
+    const { type } = req.params;
+    const files = await fileService.model.findAll({ where: { type } });
+    if (!files || files.length === 0) {
+      setUtf8Header(res);
+      return res.status(404).json({ message: "Не найдено файлов для данного типа" });
+    }
+    setUtf8Header(res);
+    res.json({ files });
+  } catch (error) {
+    console.error("Ошибка при получении файлов по типу:", error);
+    setUtf8Header(res);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+/**
+ * Получение файлов по orderId (GET).
+ */
+exports.getFilesByOrderId = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const files = await fileService.model.findAll({ where: { orderId } });
+    if (!files || files.length === 0) {
+      setUtf8Header(res);
+      return res.status(404).json({ message: "Не найдено файлов для данного orderId" });
+    }
+    setUtf8Header(res);
+    res.json({ files });
+  } catch (error) {
+    console.error("Ошибка при получении файлов по orderId:", error);
+    setUtf8Header(res);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+/**
+ * Обновление файла по ID (PUT).
+ * Здесь также важно передать userId, чтобы хук (beforeUpdate/afterUpdate) сохранил изменения.
+ */
+exports.updateFileById = async (req, res) => {
+  try {
+    const userId = req.user?.id || null;
+
+    const { id } = req.params;
+    const { orderId, type } = req.body;
+
+    // Предположим, у вас в fileService есть метод update(id, data, userId)
+    // или вам нужно было написать что-то вроде updateFileById(id, data, userId).
+    // Ниже пример, если он называется update:
+    const updatedFile = await fileService.update(id, { orderId, type }, userId);
+
+    setUtf8Header(res);
+    res.json({ message: "Файл успешно обновлен", file: updatedFile });
+  } catch (error) {
+    console.error("Ошибка при обновлении файла:", error);
+    setUtf8Header(res);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+/**
+ * Удаление файла по имени (DELETE).
+ */
+exports.deleteFileByName = async (req, res) => {
+  try {
+    const userId = req.user?.id || null;
+
+    const { fileName } = req.params;
+    await fileService.removeFileByName(fileName, userId);
+
+    setUtf8Header(res);
+    res.json({ message: `Файл ${fileName} успешно удален` });
+  } catch (error) {
+    console.error("Ошибка при удалении файла:", error);
+    setUtf8Header(res);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+/**
+ * Удаление файла по ID (DELETE).
+ */
+exports.deleteFileById = async (req, res) => {
+  try {
+    const userId = req.user?.id || null;
+
+    const { id } = req.params;
+    await fileService.removeFileById(id, userId);
+
+    setUtf8Header(res);
+    res.json({ message: `Файл с id ${id} успешно удален` });
+  } catch (error) {
+    console.error("Ошибка при удалении файла:", error);
+    setUtf8Header(res);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+/**
+ * Удаление всех файлов (DELETE).
+ */
+exports.deleteAllFiles = async (req, res) => {
+  try {
+    const userId = req.user?.id || null;
+
+    await fileService.removeAllFiles(userId);
+
+    setUtf8Header(res);
+    res.json({ message: "Все файлы успешно удалены" });
+  } catch (error) {
+    console.error("Ошибка при удалении всех файлов:", error);
+    setUtf8Header(res);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+
+
+
+
+const fs = require("fs");
+const path = require("path");
+const {
+  S3Client,
+  PutObjectCommand,
+  DeleteObjectCommand,
+} = require("@aws-sdk/client-s3");
+
+const BaseService = require("./baseService");
+const { File } = require("../db/models");
+const { S3_CLIENT } = require("../config/app.config");
+
+const BUCKET_NAME = "airtable-clone";
+
+const s3Client = new S3Client({
+  region: "ru-central1",
+  endpoint: "https://storage.yandexcloud.net",
+  credentials: {
+    accessKeyId: S3_CLIENT.S3_ACCESS_KEY,
+    secretAccessKey: S3_CLIENT.S3_SECRET_KEY,
+  },
+});
+
+class FileService extends BaseService {
+  constructor() {
+    super(File);
+  }
+
+  async uploadFileToS3(filePath, originalName, mimeType) {
+    const fileContent = fs.readFileSync(filePath);
+
+    const params = {
+      Bucket: BUCKET_NAME,
+      Key: originalName,
+      Body: fileContent,
+      ContentType: mimeType,
+    };
+
+    const command = new PutObjectCommand(params);
+    await s3Client.send(command);
+
+    fs.unlinkSync(filePath);
+
+    const fileUrl = `https://${BUCKET_NAME}.storage.yandexcloud.net/${encodeURIComponent(originalName)}`;
+    return fileUrl;
+  }
+
+  async deleteFileFromS3(fileName) {
+    const params = {
+      Bucket: BUCKET_NAME,
+      Key: fileName,
+    };
+
+    const command = new DeleteObjectCommand(params);
+    await s3Client.send(command);
+  }
+
+  async uploadSingleFile(file, { orderId, type }, userId) {
+    if (!file) {
+      throw new Error("Файл не был предоставлен");
+    }
+
+    if (!fs.existsSync(file.path)) {
+      throw new Error("Файл не найден во временном хранилище");
+    }
+
+    const fileUrl = await this.uploadFileToS3(file.path, file.originalname, file.mimetype);
+
+    const newFileRecord = await File.create(
+      {
+        fileName: file.originalname,
+        fileUrl,
+        orderId: orderId || null,
+        type: type || null,
+      },
+      { userId }
+    );
+
+    return newFileRecord;
+  }
+
+  async uploadMultipleFiles(files, { orderId, type }, userId) {
+    if (!orderId) {
+      throw new Error("orderId обязателен");
+    }
+
+    const uploadedFiles = [];
+    for (const file of files) {
+      if (!fs.existsSync(file.path)) {
+        throw new Error(`Файл ${file.originalname} не найден во временном хранилище`);
+      }
+
+      const fileUrl = await this.uploadFileToS3(file.path, file.originalname, file.mimetype);
+
+      const newFileRecord = await File.create(
+        {
+          fileName: file.originalname,
+          fileUrl,
+          orderId,
+          type: type || null,
+        },
+        { userId }
+      );
+
+      uploadedFiles.push(newFileRecord);
+    }
+
+    return uploadedFiles;
+  }
+
+  async removeFileById(id, userId) {
+    const fileRecord = await File.findByPk(id);
+    if (!fileRecord) {
+      throw new Error("Файл не найден в базе данных");
+    }
+
+    await this.deleteFileFromS3(fileRecord.fileName);
+
+    await fileRecord.destroy({ userId });
+
+    return true;
+  }
+
+  async removeFileByName(fileName, userId) {
+    const fileRecord = await File.findOne({ where: { fileName } });
+    if (!fileRecord) {
+      throw new Error("Файл не найден в базе данных");
+    }
+
+    await this.deleteFileFromS3(fileRecord.fileName);
+
+    await fileRecord.destroy({ userId });
+
+    return true;
+  }
+
+  async removeAllFiles(userId) {
+    const files = await File.findAll();
+    if (files.length === 0) {
+      throw new Error("Нет файлов для удаления");
+    }
+
+    for (const fileRecord of files) {
+      await this.deleteFileFromS3(fileRecord.fileName);
+      await fileRecord.destroy({ userId });
+    }
+
+    return true;
+  }
+
+  async updateFileById(id, data, userId) {
+    const fileRecord = await File.findByPk(id);
+    if (!fileRecord) {
+      throw new Error("Файл не найден в базе данных");
+    }
+
+    await fileRecord.update(data, { userId });
+
+    return fileRecord;
+  }
+}
+
+module.exports = new FileService();
+
+
+
+
+
+const { DataTypes } = require('sequelize');
+const sequelize = require('../index');
+const AuditLog = require('./AuditLog');
+
+const File = sequelize.define(
+  'File',
+  {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    fileName: { type: DataTypes.TEXT, allowNull: false },
+    fileUrl: { type: DataTypes.TEXT, allowNull: false },
+    orderId: { type: DataTypes.INTEGER, allowNull: false },
+    type: { type: DataTypes.STRING, allowNull: false },
+  },
+  {
+    timestamps: false,
+    hooks: {
+      afterCreate: async (instance, options) => {
+        console.log('instance', instance);
+        console.log('options', options);
+        const userId = options.userId || null;
+        await AuditLog.create({
+          userId,
+          tableName: 'files',
+          recordId: instance.id,
+          actionType: 'create',
+          changedFields: Object.keys(instance.dataValues),
+          previousValues: null,
+          newValues: instance.dataValues,
+          operationDescription: 'Создана новая запись в files',
+        });
+      },
+      beforeUpdate: (instance, options) => {
+        // Сохраняем "старые" значения в options
+        options.previousDataValues = { ...instance._previousDataValues };
+      },
+      afterUpdate: async (instance, options) => {
+        const userId = options.userId || null;
+        const changedFields = instance.changed() || [];
+        const previousValues = {};
+        const newValues = {};
+
+        changedFields.forEach((field) => {
+          previousValues[field] = options.previousDataValues[field];
+          newValues[field] = instance.dataValues[field];
+        });
+
+        await AuditLog.create({
+          userId,
+          tableName: 'files',
+          recordId: instance.id,
+          actionType: 'update',
+          changedFields,
+          previousValues,
+          newValues,
+          operationDescription: 'Обновлена запись в files',
+        });
+      },
+      afterDestroy: async (instance, options) => {
+        const userId = options.userId || null;
+        await AuditLog.create({
+          userId,
+          tableName: 'files',
+          recordId: instance.id,
+          actionType: 'delete',
+          changedFields: null,
+          previousValues: instance.dataValues,
+          newValues: null,
+          operationDescription: 'Удалена запись из files',
+        });
+      },
+    },
+  }
+);
+
+module.exports = File;
+
+
+
+
+const { DataTypes } = require('sequelize');
+const sequelize = require('../index');
+
+const AuditLog = sequelize.define('AuditLog', {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  userId: { type: DataTypes.INTEGER, allowNull: true },
+  tableName: { type: DataTypes.STRING, allowNull: false },
+  recordId: { type: DataTypes.INTEGER, allowNull: false },
+  actionType: { type: DataTypes.ENUM('create', 'update', 'delete'), allowNull: false },
+  changedFields: { type: DataTypes.JSONB, allowNull: true },
+  previousValues: { type: DataTypes.JSONB, allowNull: true },
+  newValues: { type: DataTypes.JSONB, allowNull: true },
+  operationDescription: { type: DataTypes.STRING, allowNull: true },
+  timestamp: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW,
+  },
+}, {
+  tableName: 'audit_logs',
+  timestamps: false,
+});
+
+module.exports = AuditLog;
+
+
+
+
+const jwt = require("jsonwebtoken");
+const { JWT_SECRET } = require("../config/app.config");
+const { User } = require("../db/models");
+
+async function authMiddleware(req, res, next) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    req.user = null;
+    return next();
+    // return res.status(403).json({ message: "authHeader is missing" });
+  }
+
+  const token = authHeader.split(" ")[1];
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+
+    const user = await User.findOne({ where: { login: decoded.login } });
+    if (!user) {
+      req.user = null;
+      return res.status(403).json({ message: "Invalid token: user not found" });
+    }
+
+    req.user = { id: user.id, login: user.login };
+    next();
+  } catch (error) {
+    return res.status(403).json({ message: "Invalid token" });
+  }
+}
+
+module.exports = authMiddleware;
+
+
+
+const { Sequelize } = require("sequelize");
+const { DB } = require("../config/app.config");
+
+
+const sequelize = new Sequelize(DB.DATABASE, DB.USER, DB.PASSWORD, {
+  host: DB.HOST,
+  port: DB.PORT,
+  dialect: "postgres",
+  logging: false,
+});
+
+sequelize
+  .authenticate()
+  .then(() => console.log("Подключение к бд успешное!"))
+  .catch((err) => console.log(`Ошибка подключения к бд: ${err}`));
+
+sequelize.sync({ alter: true })
+  .catch(err => {
+    console.error('Ошибка синхронизации с БД:', err);
+  });
+
+module.exports = sequelize;
+
+
+
+почему хуки не вызываются и записи не создаются, сама таблица создалась
