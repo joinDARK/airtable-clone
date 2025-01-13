@@ -2,12 +2,14 @@ import axios from "axios";
 import type { AxiosError } from "axios";
 
 const API_URL = `${import.meta.env.VITE_API_URL}/api`;
+const token = localStorage.getItem('jwt');
 
 const axiosInstance = axios.create({
   baseURL: API_URL,
   headers: {
     "Content-Type": "application/json",
     "ngrok-skip-browser-warning": "1",
+    "Authorization": `Bearer ${token}`
   },
 });
 
