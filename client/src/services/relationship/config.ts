@@ -29,7 +29,7 @@ const relationshipConfig: Record<TableKey, Record<string, TableKey>> = {
   },
   subagents: {
     orders: "orders",
-    payers: "subagentPayers",
+    subagentPayers: "subagentPayers",
   },
   subagentPayers: {
     orders: "orders",

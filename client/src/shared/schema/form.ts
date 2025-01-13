@@ -81,19 +81,28 @@ const FormClientSchema: ZodType = z.object({
   id: z.number().optional(),
   name: z.string().min(1),
   inn: z.string().min(1),
-  orders: z.array(z.number()),
+  orders: z
+    .array(z.object({ id: z.number(), name: z.string().optional() }))
+    .transform((data) => data.map((item) => item.id))
+    .default([]),
 })
 
 const FormContragentSchema: ZodType = z.object({
   id: z.number().optional(),
   name: z.string().min(1),
-  orders: z.array(z.number()),
+  orders: z
+    .array(z.object({ id: z.number(), name: z.string().optional() }))
+    .transform((data) => data.map((item) => item.id))
+    .default([]),
 })
 
 const FormAgentSchema: ZodType = z.object({
   id: z.number().optional(),
   name: z.string().min(1),
-  orders: z.array(z.number()),
+  orders: z
+    .array(z.object({ id: z.number(), name: z.string().optional() }))
+    .transform((data) => data.map((item) => item.id))
+    .default([]),
 })
 
 const FormCountrySchema: ZodType = z.object({
@@ -101,7 +110,10 @@ const FormCountrySchema: ZodType = z.object({
   name: z.string().min(1),
   code: z.string().min(1),
   full_name: z.string().min(1),
-  orders: z.array(z.number()),
+  orders: z
+    .array(z.object({ id: z.number(), name: z.string().optional() }))
+    .transform((data) => data.map((item) => item.id))
+    .default([]),
 })
 
 const FormManagerSchema: ZodType = z.object({
@@ -135,8 +147,14 @@ const FormSubagentSchema: ZodType = z.object({
 const FormSubagentPayerSchema: ZodType = z.object({
   id: z.number().optional(),
   name: z.string().min(1),
-  orders: z.array(z.number()),
-  subagents: z.array(z.number()),
+  orders: z
+    .array(z.object({ id: z.number(), name: z.string().optional() }))
+    .transform((data) => data.map((item) => item.id))
+    .default([]),
+  subagents: z
+    .array(z.object({ id: z.number(), name: z.string().optional() }))
+    .transform((data) => data.map((item) => item.id))
+    .default([]),
 })
 
 const UserShema: ZodType = z.object({

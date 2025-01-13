@@ -12,12 +12,15 @@ import TableLayout from "@components/table/TableLayout"
 import useTableStore from "@store/useTableStore"
 import { Modal } from "@components/modal/Modal"
 import useLoaderStore from "@store/useLoaderStore"
+import { queryClient } from "@services/api/queryClient"
+import { FormManagerSchema } from "@schema/form"
 
 function ManagersPage() {
   const type: TableKey = "managers"
   const setTableData = useTableStore((store) => store.setData)
   const setRefetch = useTableStore((store) => store.setRefetchTable)
   const handlerLoader = useLoaderStore((store) => store.setIsLoading)
+  const setForceRefetch = useTableStore(store => store.setForceRefetchTable)
 
   const [deleteManager] = useMutation(mutation.delete[type], {
     refetchQueries: [{ query: queries[type] }],
@@ -35,7 +38,7 @@ function ManagersPage() {
   })
 
   const { data, isLoading, refetch } = useQuery(type, async () => {
-    const { data } = await client.query({ query: queries[type] })
+    const { data } = await client.query({ query: queries[type], fetchPolicy: 'cache-first' })
     return data
   })
 
@@ -59,12 +62,13 @@ function ManagersPage() {
 
   const handleCreate = async (newData: IManager) => {
     handlerLoader(true)
+    const parse = FormManagerSchema.safeParse(newData)
     try {
       if (newData.id) {
-        await updateManager({variables: { input: newData }})
+        await updateManager({variables: { input: parse.success ? parse.data : newData }})
         toast.success("Менеджер обновлен успешно!");
       } else {
-        await createManager({variables: { input: newData }})
+        await createManager({variables: { input: parse.success ? parse.data : newData }})
         toast.success("Менеджер создан успешно!");
       }
     } catch (error) {
@@ -76,8 +80,24 @@ function ManagersPage() {
     }
   }
 
-  useEffect(() => {// Добавлено для отладки
+  const handleRefetch = async () => {
+    handlerLoader(true)
+    try {
+      const { data } = await client.query({
+        query: queries[type], fetchPolicy: 'network-only'
+      });
+      queryClient.setQueryData(type, data)
+    } catch(e) {
+      toast.error("Произошла ошибка при refetch данных");
+      console.debug("Ошибка при refetch данных:", e);
+    } finally {
+      handlerLoader(false)
+    }
+  }
+
+  useEffect(() => {
     setRefetch(refetch)
+    setForceRefetch(handleRefetch)
     if (isLoading) {
       handlerLoader(true)
     } else {
@@ -94,7 +114,7 @@ function ManagersPage() {
   return (
     <>
       <TableLayout type={type} delete={handleDelete} create={handleCreate}/>
-      <Modal/>
+      <Modal submit={handleCreate}/>
     </>
   )
 }

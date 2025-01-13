@@ -1,6 +1,9 @@
 import { useEffect } from "react";
 import { z } from "zod";
 import { useQuery } from "react-query";
+import { useMutation } from "@apollo/client"
+import { toast } from "react-toastify";
+
 import { Modal } from "@components/modal/Modal";
 import TableLayout from "@components/table/TableLayout";
 import useTableStore from "@store/useTableStore";
@@ -8,7 +11,7 @@ import useLoaderStore from "@store/useLoaderStore";
 import { TableKey } from "@shared_types/TableKey";
 import { ResOrderSchema } from "@schema/response";
 import { client, queries } from "@services/graphql";
-// import configs from "@configs/index";
+import { queryClient } from "@services/api/queryClient"
 
 function OrdersPage() {
   const type: TableKey = "orders";
@@ -16,15 +19,13 @@ function OrdersPage() {
   const handlerLoader = useLoaderStore((store) => store.setIsLoading);
   const setRefetch = useTableStore((store) => store.setRefetchTable)
 
-
   const { data, isLoading, refetch } = useQuery(type, async () => {
-    const { data } = await client.query({ query: queries[type] });
+    const { data } = await client.query({ query: queries[type], fetchPolicy: 'cache-first' });
     return data;
   });
 
-
   useEffect(() => {
-    setRefetch(refetch);
+    setRefetch(handleRefetch);
     if (isLoading) {
       handlerLoader(true);
     } else {
@@ -38,7 +39,20 @@ function OrdersPage() {
     }
   }, [isLoading, data, handlerLoader, setTableData, refetch]);
 
-  // const { columns } = configs[type];
+  const handleRefetch = async () => {
+    handlerLoader(true)
+    try {
+      const { data } = await client.query({
+        query: queries[type], fetchPolicy: 'network-only'
+      });
+      queryClient.setQueryData(type, data)
+    } catch(e) {
+      toast.error("Произошла ошибка при refetch данных");
+      console.debug("Ошибка при refetch данных:", e);
+    } finally {
+      handlerLoader(false)
+    }
+  }
 
   return (
     <>

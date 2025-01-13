@@ -6,16 +6,32 @@ import {
   ViewRelated,
   ViewManager,
   ViewOrder,
+  ViewSubagentPayer,
+  ViewSubagent,
+  ViewCountry,
+  ViewClient,
+  ViewAgent,
+  ViewContragent
 } from "./view";
 import { useModalStore } from "@store/useModalStore";
 import { ServerFileList } from "@components/file/ServerFileList";
+import { 
+  EditManager, 
+  EditSubagentPayer, 
+  EditSubagent, 
+  EditCountry,
+  EditClient,
+  EditAgent,
+  EditContragent
+} from "./edit";
 import UploadFiles from "@components/file/File";
 
 interface Props {
   screen: IModalScreen;
+  submit: (newData: any) => Promise<void>
 }
 
-export default function ModalContent({ screen }: Props) {
+export default function ModalContent({ screen, submit }: Props) {
   const { screenType, screenData, isEdit, screenFileType } = screen;
   const { relatedSettings } = useModalStore();
 
@@ -48,10 +64,22 @@ export default function ModalContent({ screen }: Props) {
           table={relatedSettings.table ?? undefined}
         />
       );
-    case "managers":
-      return isEdit ? "Пока ничего" : <ViewManager view={screenData} />;
     case "orders":
       return isEdit ? "Пока ничего" : <ViewOrder view={screenData} />;
+    case "managers":
+      return isEdit ? <EditManager data={screenData} onSubmit={submit}/> : <ViewManager view={screenData} />;
+    case "agents":
+      return isEdit ? <EditAgent data={screenData} onSubmit={submit}/> : <ViewAgent view={screenData} />;
+    case "contragents":
+    return isEdit ? <EditContragent data={screenData} onSubmit={submit}/> : <ViewContragent view={screenData}/>;
+    case "clients":
+      return isEdit ? <EditClient data={screenData} onSubmit={submit}/> : <ViewClient view={screenData}/>;
+    case "countries":
+      return isEdit ? <EditCountry data={screenData} onSubmit={submit}/> : <ViewCountry view={screenData}/>;
+    case "subagents":
+      return isEdit ? <EditSubagent data={screenData} onSubmit={submit}/> : <ViewSubagent view={screenData} />;
+    case "subagentPayers":
+      return isEdit ? <EditSubagentPayer data={screenData} onSubmit={submit}/> : <ViewSubagentPayer view={screenData} />
     default:
       return <div className="text-red-500">Новый или неизвестный тип</div>;
   }

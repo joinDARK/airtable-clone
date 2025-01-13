@@ -7,6 +7,7 @@ import { TableKey } from "@shared_types/TableKey";
 import { useTableSort } from "@hooks/useTableSort";
 import useTableStore from "@store/useTableStore";
 import { useTableFilter } from "@hooks/useTableFilter";
+import { useModalStore } from "@store/useModalStore";
 
 interface Props {
   type: TableKey;
@@ -18,9 +19,10 @@ export const TableLayoutContext = createContext<Props | undefined>(undefined);
 
 export default function TableLayout({ type, delete: handleDelete, create: handleCreate}: Props) {
   const tableConfig = config[type as keyof typeof config];
-  const { data, refetchTable } = useTableStore();
+  const { data, forceRefetchTable } = useTableStore();
   const { sortedData, sortConfig ,handleSort } = useTableSort(data);
   const { filteredData, setSearchTerm } = useTableFilter(sortedData);
+  const { openModal } = useModalStore()
 
   return (
     <div className="flex flex-col h-full transition-all duration-300">
@@ -31,7 +33,7 @@ export default function TableLayout({ type, delete: handleDelete, create: handle
               <button
                 className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition-all shadow-sm active:scale-90"
                 onClick={() => {
-
+                  openModal({ screenType: type, screenData: null, title: `Добавить нового ${tableConfig.title}`, isEdit: true, readonly: true })
                 }}
               >
                 <Plus size={20} />
@@ -40,7 +42,7 @@ export default function TableLayout({ type, delete: handleDelete, create: handle
               <button
                 className="p-2 border border-gray-300 dark:border-gray-500 hover:bg-gray-100 rounded-lg transition-all shadow-sm active:scale-90 dark:hover:bg-gray-600"
                 title="Refresh"
-                onClick={refetchTable}
+                onClick={forceRefetchTable}
               >
                 <RefreshCw size={20} className="text-gray-600 dark:text-gray-400" />
               </button>

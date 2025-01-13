@@ -9,12 +9,12 @@ import { RelationshipSelect } from "@components/select/RelationshipSelect"
 import IManager from "@interfaces/table/IManager"
 import {FormManagerSchema} from "@schema/form"
 
-interface ManagerFormProps {
+interface EditManagerProps {
   data?: IManager;
   onSubmit: (newManager: IManager) => Promise<void>
 }
 
-function ManagerForm({data, onSubmit}: ManagerFormProps) {
+function EditManager({data, onSubmit}: EditManagerProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const methods = useForm<IManager>({
     resolver: zodResolver(FormManagerSchema),
@@ -36,13 +36,13 @@ function ManagerForm({data, onSubmit}: ManagerFormProps) {
 
   const {register, handleSubmit, control} = methods
 
-  const { modalHandler, setIsEdit } = useModalStore()
+  const { closeModal } = useModalStore()
 
   const handleFormSubmit = async (newData: IManager) => {
     setIsSubmitting(true);
     await onSubmit(newData);
     setIsSubmitting(false);
-    modalHandler()
+    closeModal()
   }
 
   return (
@@ -120,7 +120,7 @@ function ManagerForm({data, onSubmit}: ManagerFormProps) {
         <button
           type='button'
           className='px-4 py-2 text-sm font-medium border border-transparent rounded-md bg-red-600 hover:bg-red-700 transition-all duration-300 text-white'
-          onClick={() => setIsEdit(false)}
+          onClick={() => closeModal()}
           disabled={isSubmitting}
         >
           Закрыть
@@ -137,4 +137,4 @@ function ManagerForm({data, onSubmit}: ManagerFormProps) {
   )
 }
 
-export default ManagerForm
+export default EditManager
