@@ -6,6 +6,7 @@ import { LocalFileList } from "./LocalFileList";
 import api from "@services/api/file";
 import IFile from "@interfaces/IFile";
 import { useModalStore } from "@store/useModalStore";
+import useTableStore from "@store/useTableStore";
 
 interface Props {
   data: FileData;
@@ -21,14 +22,11 @@ interface FileData {
   orderId: string;
 }
 
-const UploadFiles: React.FC<Props> = ({
-  typeCell,
-  orderId,
-}) => {
+const UploadFiles: React.FC<Props> = ({ typeCell, orderId }) => {
   const [files, setFiles] = useState<IFile[]>([]);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const closeModal = useModalStore(store => store.closeModal);
-  
+  const closeModal = useModalStore((store) => store.closeModal);
+  const refetchTable = useTableStore((stroe) => stroe.refetchTable);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = e.target.files ? Array.from(e.target.files) : [];
@@ -59,6 +57,7 @@ const UploadFiles: React.FC<Props> = ({
       const res = await api.files.uploadMultiple(formData);
       if (res.status === 200) {
         toast.success("Файлы загружены!");
+        refetchTable();
         setFiles([]);
       } else {
         console.log("Ошибка", res);
@@ -81,11 +80,19 @@ const UploadFiles: React.FC<Props> = ({
         />
         {files.length > 0 && (
           <>
-            <LocalFileList files={files} handleRemoveLocalFile={handleRemoveLocalFile} />
+            <LocalFileList
+              files={files}
+              handleRemoveLocalFile={handleRemoveLocalFile}
+            />
           </>
         )}
         <div className="flex justify-end my-2">
-          <button type="submit" className="px-4 py-2 text-sm font-medium border border-transparent rounded-md bg-green-600 hover:bg-green-700 transition-all duration-300 text-white">Сохранить</button>
+          <button
+            type="submit"
+            className="px-4 py-2 text-sm font-medium border border-transparent rounded-md bg-green-600 hover:bg-green-700 transition-all duration-300 text-white"
+          >
+            Сохранить
+          </button>
         </div>
       </form>
     </div>
