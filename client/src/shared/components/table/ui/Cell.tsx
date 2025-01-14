@@ -27,7 +27,7 @@ export default function Cell({ item, column }: Props) {
         if(column.type == "files")
           openModal({screenType: column.type, screenData: (item as any)[column.type], title: column.label, isEdit: false, readonly: column.readonly, screenFileType: column.key})
         else
-          openModal({screenType: column.type, screenData: item[key], title: column.label, isEdit: false, readonly: column.readonly})
+          openModal({screenType: column.type, screenData: {id: item.id, data: item[key], key: key}, title: column.label, isEdit: false, readonly: column.readonly})
         if (context?.type) {
           setRelatedSettings({table: context.type, relatedKey: transformColumnKey(column.key)})
         }

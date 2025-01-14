@@ -95,6 +95,20 @@ function SubagentsPage() {
     }
   }
 
+  const handleUpdateValue = async (newData: any) => {
+    handlerLoader(true)
+    try {
+      await updateSubagent({variables: { input: newData }})
+      toast.success("Субагент обновлен успешно!");
+    } catch(e) {
+      toast.error("Произошла ошибка при отправке данных");
+      console.debug("Ошибка при отправке данных:", e);
+    } finally {
+      refetch()
+      handlerLoader(false)
+    }
+  }
+
   useEffect(() => {
     setRefetch(refetch)
     setForceRefetch(handleRefetch)
@@ -114,7 +128,7 @@ function SubagentsPage() {
   return (
     <>
       <TableLayout type={type} delete={handleDelete} create={handleCreate} />
-      <Modal submit={handleCreate} />
+      <Modal submit={handleCreate} handlerValue={handleUpdateValue}/>
     </>
   )
 }
