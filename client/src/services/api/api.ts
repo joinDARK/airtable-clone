@@ -105,4 +105,10 @@ export const rest = {
     updateById: (fileId: string, data: { originalname: string }) => axiosInstance.put(`/files/${fileId}`, data),
     getAll: () => axiosInstance.get('/files'),
   },
+  history: {
+    getAll: () => axiosInstance.get('/history'),
+    getByName: (name: string) => axiosInstance.get(`/history/user/${name}`),
+    deleteAll: () => axiosInstance.delete(`/history`),
+    deleteByName: (name: string) => axiosInstance.delete(`/history/user/${name}`)
+  }
 };
