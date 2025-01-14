@@ -46,7 +46,7 @@ function ContragentsPage() {
     handlerLoader(true)
     try {
       const { data } = await deleteContragent({variables: {id}})
-      if (data?.deleteManager) {
+      if (data?.deleteContragent) {
         toast.success("Контрагент успешно удалён");
         refetch();
       } else {
