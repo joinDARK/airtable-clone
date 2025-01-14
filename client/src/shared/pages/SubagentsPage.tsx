@@ -66,10 +66,10 @@ function SubagentsPage() {
     try {
       if (newData.id) {
         await updateSubagent({variables: {input: parse.success ? parse.data : newData}})
-        toast.success("Менеджер обновлен успешно!")
+        toast.success("Субагент обновлен успешно!")
       } else {
         await createSubagent({variables: {input: parse.success ? parse.data : newData}})
-        toast.success("Менеджер создан успешно!")
+        toast.success("Субагент создан успешно!")
       }
     } catch (error) {
       toast.error("Произошла ошибка")

@@ -47,7 +47,7 @@ function CountriesPage() {
     try {
       const { data } = await deleteCountry({variables: {id}})
       if (data?.deleteCountry) {
-        toast.success("Страна успешно удалён");
+        toast.success("Страна успешна удалён");
         refetch();
       } else {
         alert("Не удалось удалить страну");
@@ -66,10 +66,10 @@ function CountriesPage() {
     try {
       if (newData.id) {
         await updateCountry({variables: { input: parse.success ? parse.data : newData }})
-        toast.success("Менеджер обновлен успешно!");
+        toast.success("Страна обновлена успешно!");
       } else {
         await createCountry({variables: { input: parse.success ? parse.data : newData }})
-        toast.success("Менеджер создан успешно!");
+        toast.success("Страна создана успешно!");
       }
     } catch (error) {
       toast.error("Произошла ошибка при отправке данных");
@@ -95,6 +95,20 @@ function CountriesPage() {
     }
   }
 
+  const handleUpdateValue = async (newData: any) => {
+    handlerLoader(true)
+    try {
+      await updateCountry({variables: { input: newData }})
+      toast.success("Страна обновлена успешно!");
+    } catch(e) {
+      toast.error("Произошла ошибка при отправке данных");
+      console.debug("Ошибка при отправке данных:", e);
+    } finally {
+      refetch()
+      handlerLoader(false)
+    }
+  }
+
   useEffect(() => {
     setRefetch(refetch)
     setForceRefetch(handleRefetch)
@@ -114,7 +128,7 @@ function CountriesPage() {
   return (
     <>
       <TableLayout type={type} delete={handleDelete} create={handleCreate}/>
-      <Modal submit={handleCreate}/>
+      <Modal submit={handleCreate} handlerValue={handleUpdateValue}/>
     </>
   )
 }

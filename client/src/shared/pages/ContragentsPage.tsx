@@ -47,10 +47,10 @@ function ContragentsPage() {
     try {
       const { data } = await deleteContragent({variables: {id}})
       if (data?.deleteManager) {
-        toast.success("Менеджер успешно удалён");
+        toast.success("Контрагент успешно удалён");
         refetch();
       } else {
-        alert("Не удалось удалить менеджера");
+        alert("Не удалось удалить контрагента");
       }
     } catch (error) {
       toast.error("Произошла ошибка");
@@ -66,10 +66,10 @@ function ContragentsPage() {
     try {
       if (newData.id) {
         await updateContragent({variables: { input: parse.success ? parse.data : newData }})
-        toast.success("Менеджер обновлен успешно!");
+        toast.success("Контрагент обновлен успешно!");
       } else {
         await createContragent({variables: { input: parse.success ? parse.data : newData }})
-        toast.success("Менеджер создан успешно!");
+        toast.success("Контрагент создан успешно!");
       }
     } catch (error) {
       toast.error("Произошла ошибка при отправке данных");
@@ -95,6 +95,20 @@ function ContragentsPage() {
     }
   }
 
+  const handleUpdateValue = async (newData: any) => {
+    handlerLoader(true)
+    try {
+      await updateContragent({variables: { input: newData }})
+      toast.success("Контрагент обновлен успешно!");
+    } catch(e) {
+      toast.error("Произошла ошибка при отправке данных");
+      console.debug("Ошибка при отправке данных:", e);
+    } finally {
+      refetch()
+      handlerLoader(false)
+    }
+  }
+
   useEffect(() => {
     setRefetch(refetch)
     setForceRefetch(handleRefetch)
@@ -114,7 +128,7 @@ function ContragentsPage() {
   return (
     <>
       <TableLayout type={type} delete={handleDelete} create={handleCreate}/>
-      <Modal submit={handleCreate}/>
+      <Modal submit={handleCreate} handlerValue={handleUpdateValue}/>
     </>
   )
 }
