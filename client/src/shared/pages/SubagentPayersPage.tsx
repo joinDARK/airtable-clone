@@ -47,7 +47,7 @@ function SubagentPayersPage() {
     try {
       const { data } = await deleteSubagentPayers({variables: {id}})
       if (data?.deleteSubagentPayers) {
-        toast.success("Плательщика успешно удалён");
+        toast.success("Плательщик успешно удалён");
         refetch();
       } else {
         alert("Не удалось удалить плательщика");
@@ -66,10 +66,10 @@ function SubagentPayersPage() {
     try {
       if (newData.id) {
         await updateSubagentPayers({variables: { input: parse.success ? parse.data : newData }})
-        toast.success("Менеджер обновлен успешно!");
+        toast.success("Плательщик обновлен успешно!");
       } else {
         await createSubagentPayers({variables: { input: parse.success ? parse.data : newData }})
-        toast.success("Менеджер создан успешно!");
+        toast.success("Плательщик создан успешно!");
       }
     } catch (error) {
       toast.error("Произошла ошибка при отправке данных");
@@ -96,6 +96,20 @@ function SubagentPayersPage() {
     }
   }
 
+  const handleUpdateValue = async (newData: any) => {
+    handlerLoader(true)
+    try {
+      await updateSubagentPayers({variables: { input: newData }})
+      toast.success("Плательщик обновлен успешно!");
+    } catch(e) {
+      toast.error("Произошла ошибка при отправке данных");
+      console.debug("Ошибка при отправке данных:", e);
+    } finally {
+      refetch()
+      handlerLoader(false)
+    }
+  }
+
   useEffect(() => {
     setRefetch(refetch)
     setForceRefetch(handleRefetch)
@@ -115,7 +129,7 @@ function SubagentPayersPage() {
   return (
     <>
       <TableLayout type={type} delete={handleDelete} create={handleCreate} />
-      <Modal submit={handleCreate}/>
+      <Modal submit={handleCreate} handlerValue={handleUpdateValue}/>
     </>
   )
 }

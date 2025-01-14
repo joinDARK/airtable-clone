@@ -26,7 +26,6 @@ interface Props {
 export default function TypeCell({ type, value, title, columnKey, item }: Props) {
   const baseClass = "px-2 text-gray-900 dark:text-white";
   const downloadFile = useDownloadFile();
-  
 
   if (type === "files") {
     const filesArray = (item && item.files) as IFile[] | undefined;

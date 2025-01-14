@@ -22,16 +22,18 @@ import {
   EditCountry,
   EditClient,
   EditAgent,
-  EditContragent
+  EditContragent,
+  EditText
 } from "./edit";
 import UploadFiles from "@components/file/File";
 
 interface Props {
   screen: IModalScreen;
-  submit: (newData: any) => Promise<void>
+  submit: (newData: any) => Promise<void>;
+  updVal: (newData: any) => Promise<void>;
 }
 
-export default function ModalContent({ screen, submit }: Props) {
+export default function ModalContent({ screen, submit, updVal }: Props) {
   const { screenType, screenData, isEdit, screenFileType } = screen;
   const { relatedSettings } = useModalStore();
 
@@ -39,21 +41,21 @@ export default function ModalContent({ screen, submit }: Props) {
     case "files":
       return isEdit ? (
         <UploadFiles
-          data={screenData}
+          data={screenData.data}
           orderId={2} // todo
           typeCell={screenFileType ?? ""}
         />
       ) : (
-        <ServerFileList serverFiles={screenData} />
+        <ServerFileList serverFiles={screenData.data} />
       );
     case "text":
-      return isEdit ? "Пока ничего" : <ViewText view={screenData} />;
+      return isEdit ? <EditText val={screenData} onSubmit={updVal}/> : <ViewText view={screenData.data} />;
     case "date":
-      return isEdit ? "Пока ничего" : <ViewDate view={screenData} />;
+      return isEdit ? "Пока ничего" : <ViewDate view={screenData.data} />;
     case "number":
-      return isEdit ? "Пока ничего" : <ViewText view={String(screenData)} />;
+      return isEdit ? "Пока ничего" : <ViewText view={String(screenData.data)} />;
     case "option":
-      return isEdit ? "Пока ничего" : <ViewOption view={screenData} />;
+      return isEdit ? "Пока ничего" : <ViewOption view={screenData.data} />;
     case "related":
       return isEdit ? (
         "Пока ничего"

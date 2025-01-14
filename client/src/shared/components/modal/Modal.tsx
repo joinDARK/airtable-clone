@@ -6,10 +6,11 @@ import { X, Edit, Eye, ChevronLeft, ChevronRight, SquareGantt } from "lucide-rea
 import ModalContent from "./ui/ModalContent";
 
 interface Props {
-  submit: (newData: any) => Promise<void>
+  submit: (newData: any) => Promise<void>;
+  handlerValue: (newData: any) => Promise<void>;
 }
 
-export const Modal = ({ submit }: Props) => {
+export const Modal = ({ submit, handlerValue }: Props) => {
   const {
     isOpen,
     screensStack,
@@ -103,7 +104,7 @@ export const Modal = ({ submit }: Props) => {
               </div>
             </div>
             <div className="max-h-[80vh] overflow-scroll p-4 resize-y">
-              <ModalContent screen={currentScreen} submit={submit}/>
+              <ModalContent screen={currentScreen} submit={submit} updVal={handlerValue}/>
             </div>
           </Dialog.Panel>
         </div>
