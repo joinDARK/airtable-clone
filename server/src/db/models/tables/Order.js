@@ -1,7 +1,10 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../index');
+const sequelize = require('../../index');
+const BaseModel = require('./BaseModel');
 
-const Order = sequelize.define('Order', {
+class Order extends BaseModel {};
+
+Order.init({
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   autonumber: { type: DataTypes.INTEGER, unique: true },
   status: { type: DataTypes.STRING, allowNull: false },
@@ -75,6 +78,14 @@ const Order = sequelize.define('Order', {
   act: { type: DataTypes.STRING, allowNull: true },
   act_link: { type: DataTypes.STRING, allowNull: true },
   money_gone: { type: DataTypes.BOOLEAN, allowNull: true }
-}, { timestamps: false });
+},
+{
+  sequelize,
+  modelName: 'Order',
+  tableName: 'Orders',
+  timestamps: false,
+});
+
+Order.initAuditHooks();
 
 module.exports = Order;

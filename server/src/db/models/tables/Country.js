@@ -1,11 +1,22 @@
+const BaseModel = require('./BaseModel');
 const { DataTypes } = require('sequelize');
-const sequelize = require('../index');
+const sequelize = require('../../index');
 
-const Country = sequelize.define('Country', {
+class Country extends BaseModel {}
+
+Country.init({
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   name: { type: DataTypes.STRING, allowNull: false },
   code: { type: DataTypes.STRING, allowNull: true },
   full_name: { type: DataTypes.STRING, allowNull: true },
-}, { timestamps: false });
+},
+{
+  sequelize,
+  modelName: 'Country',
+  tableName: 'Countries',
+  timestamps: false,
+});
+
+Country.initAuditHooks();
 
 module.exports = Country;

@@ -1,14 +1,14 @@
-const Agent = require('./Agent');
+const Agent = require('./tables/Agent');
 const AuditLog = require('./AuditLog');
-const Client = require('./Client');
-const Contragent = require('./Contragent');
-const Country = require('./Country');
-const File = require('./File');
-const Manager = require('./Manager');
-const Order = require('./Order');
-const Reviewer = require('./Reviewer');
-const Subagent = require('./Subagent');
-const SubagentPayer = require('./SubagentPayer');
+const Client = require('./tables/Client');
+const Contragent = require('./tables/Contragent');
+const Country = require('./tables/Country');
+const File = require('./tables/File');
+const Manager = require('./tables/Manager');
+const Order = require('./tables/Order');
+const Reviewer = require('./tables/Reviewer');
+const Subagent = require('./tables/Subagent');
+const SubagentPayer = require('./tables/SubagentPayer');
 const User = require('./User');
 
 

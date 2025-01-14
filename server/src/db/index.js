@@ -11,7 +11,7 @@ const sequelize = new Sequelize(DB.DATABASE, DB.USER, DB.PASSWORD, {
 
 sequelize
   .authenticate()
-  .then(() => console.log("Подключение к бд успешное!"))
+  .then(() => console.log("Подключение к бд успешное!", "\nDirectory:", __dirname))
   .catch((err) => console.log(`Ошибка подключения к бд: ${err}`));
 
 sequelize.sync({ alter: true })

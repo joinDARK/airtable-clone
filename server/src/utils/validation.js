@@ -1,10 +1,12 @@
 const Joi = require('joi');
 
-// Общие схемы для повторяющихся типов
+// ====================== Общие схемы ======================
 const dateISO = Joi.string().isoDate().allow(null);
 const optionalIntArray = Joi.array().items(Joi.number().integer()).allow(null);
 
-// Схема для CreateOrderInput
+// ====================== Order ======================
+
+// Создание
 const createOrderSchema = Joi.object({
   status: Joi.string().required(),
   order_number: Joi.number().integer().required(),
@@ -81,44 +83,48 @@ const createOrderSchema = Joi.object({
   money_gone: Joi.boolean().required()
 });
 
-// Схема для UpdateOrderInput (все поля опциональны, кроме id)
-const updateOrderSchema = createOrderSchema.keys({
+// Обновление (все поля, кроме id, делаем опциональными)
+const updateOrderSchema = createOrderSchema.fork(Object.keys(createOrderSchema.describe().keys), (field) => field.optional()).keys({
   id: Joi.number().integer().required()
 });
 
-// Схемы для Agent
+// ====================== Agent ======================
+
 const createAgentSchema = Joi.object({
   name: Joi.string().required(),
   orders: optionalIntArray
 });
 
-const updateAgentSchema = createAgentSchema.keys({
-  id: Joi.number().integer().required(),
-  name: Joi.string().optional()
+// Аналогично делаем поля опциональными, кроме id
+const updateAgentSchema = createAgentSchema.fork(Object.keys(createAgentSchema.describe().keys), (field) => field.optional()).keys({
+  id: Joi.number().integer().required()
 });
 
-// Схемы для Client
+// ====================== Client ======================
+
 const createClientSchema = Joi.object({
   name: Joi.string().required(),
   inn: Joi.string().required(),
   orders: optionalIntArray
 });
 
-const updateClientSchema = createClientSchema.keys({
+const updateClientSchema = createClientSchema.fork(Object.keys(createClientSchema.describe().keys), (field) => field.optional()).keys({
   id: Joi.number().integer().required()
 });
 
-// Схемы для Contragent
+// ====================== Contragent ======================
+
 const createContragentSchema = Joi.object({
   name: Joi.string().required(),
   orders: optionalIntArray
 });
 
-const updateContragentSchema = createContragentSchema.keys({
+const updateContragentSchema = createContragentSchema.fork(Object.keys(createContragentSchema.describe().keys), (field) => field.optional()).keys({
   id: Joi.number().integer().required()
 });
 
-// Схемы для Manager
+// ====================== Manager ======================
+
 const createManagerSchema = Joi.object({
   name: Joi.string().required(),
   tel: Joi.string().required(),
@@ -127,11 +133,12 @@ const createManagerSchema = Joi.object({
   review_table: optionalIntArray
 });
 
-const updateManagerSchema = createManagerSchema.keys({
+const updateManagerSchema = createManagerSchema.fork(Object.keys(createManagerSchema.describe().keys), (field) => field.optional()).keys({
   id: Joi.number().integer().required()
 });
 
-// Схемы для Country
+// ====================== Country ======================
+
 const createCountrySchema = Joi.object({
   name: Joi.string().required(),
   code: Joi.string().required(),
@@ -139,36 +146,36 @@ const createCountrySchema = Joi.object({
   orders: optionalIntArray
 });
 
-const updateCountrySchema = createCountrySchema.keys({
+const updateCountrySchema = createCountrySchema.fork(Object.keys(createCountrySchema.describe().keys), (field) => field.optional()).keys({
   id: Joi.number().integer().required()
 });
 
-// Схемы для Subagent
+// ====================== Subagent ======================
+
 const createSubagentSchema = Joi.object({
   name: Joi.string().required(),
-  subagentPayers: optionalIntArray,  // <-- Обязательно добавьте это поле
+  subagentPayers: optionalIntArray,  // <-- по условию обязательно добавили
   orders: optionalIntArray
 });
 
-const updateSubagentSchema = createSubagentSchema.keys({
+const updateSubagentSchema = createSubagentSchema.fork(Object.keys(createSubagentSchema.describe().keys), (field) => field.optional()).keys({
   id: Joi.number().integer().required()
 });
 
-// Схемы для SubagentPayer
+// ====================== SubagentPayer ======================
+
 const createSubagentPayerSchema = Joi.object({
   name: Joi.string().required(),
   subagents: optionalIntArray,
   orders: optionalIntArray
 });
 
-const updateSubagentPayerSchema = createSubagentPayerSchema.keys({
-  id: Joi.number().integer().required(),
-  name: Joi.string().optional(),
-  subagents: optionalIntArray,
-  orders: optionalIntArray
+const updateSubagentPayerSchema = createSubagentPayerSchema.fork(Object.keys(createSubagentPayerSchema.describe().keys), (field) => field.optional()).keys({
+  id: Joi.number().integer().required()
 });
 
-// Схемы для File
+// ====================== File ======================
+
 const createFileSchema = Joi.object({
   fileName: Joi.string().required(),
   fileUrl: Joi.string().required(),
@@ -176,10 +183,11 @@ const createFileSchema = Joi.object({
   orderId: Joi.number().integer().allow(null)
 });
 
-const updateFileSchema = createFileSchema.keys({
+const updateFileSchema = createFileSchema.fork(Object.keys(createFileSchema.describe().keys), (field) => field.optional()).keys({
   id: Joi.number().integer().required()
 });
 
+// ====================== Универсальная функция валидации ======================
 /**
  * Универсальная функция валидации.
  * @param {Object} input - Входные данные mutation
@@ -194,25 +202,35 @@ function validateInput(input, schema) {
   return value;
 }
 
+// ====================== Экспорт ======================
 module.exports = {
   validateInput,
   schemas: {
+    // Order
     createOrder: createOrderSchema,
     updateOrder: updateOrderSchema,
+    // Agent
     createAgent: createAgentSchema,
     updateAgent: updateAgentSchema,
+    // Client
     createClient: createClientSchema,
     updateClient: updateClientSchema,
+    // Contragent
     createContragent: createContragentSchema,
     updateContragent: updateContragentSchema,
+    // Manager
     createManager: createManagerSchema,
     updateManager: updateManagerSchema,
+    // Country
     createCountry: createCountrySchema,
     updateCountry: updateCountrySchema,
+    // Subagent
     createSubagent: createSubagentSchema,
     updateSubagent: updateSubagentSchema,
+    // SubagentPayer
     createSubagentPayer: createSubagentPayerSchema,
     updateSubagentPayer: updateSubagentPayerSchema,
+    // File
     createFile: createFileSchema,
     updateFile: updateFileSchema
   }

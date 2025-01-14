@@ -1,10 +1,21 @@
+const BaseModel = require('./BaseModel');
 const { DataTypes } = require('sequelize');
-const sequelize = require('../index');
+const sequelize = require('../../index');
 
-const Client = sequelize.define('Client', {
+class Client extends BaseModel {};
+
+Client.init({
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   name: { type: DataTypes.STRING, allowNull: false },
   inn: { type: DataTypes.STRING, allowNull: true },
-}, { timestamps: false });
+},
+{
+  sequelize,
+  modelName: 'Client',
+  tableName: 'Clients',
+  timestamps: false,
+});
+
+Client.initAuditHooks();
 
 module.exports = Client;

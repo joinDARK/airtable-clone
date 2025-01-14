@@ -1,10 +1,10 @@
 const { Model } = require("sequelize");
-const AuditLog = require("./AuditLog");
+const AuditLog = require("../AuditLog");
 
 class BaseModel extends Model {
   static initAuditHooks() {
     this.addHook("afterCreate", async (instance, options) => {
-      const userName = options?.userName;
+      const userName = options?.userName || "unknown";
 
       await AuditLog.create({
         userName: userName,
@@ -25,7 +25,7 @@ class BaseModel extends Model {
     });
 
     this.addHook("afterUpdate", async (instance, options) => {
-      const userName = options?.userName || null;
+      const userName = options?.userName || "unknown";
       const changedFields = instance.changed() || [];
       const previousValues = {};
       const newValues = {};
@@ -50,7 +50,7 @@ class BaseModel extends Model {
     });
 
     this.addHook("afterDestroy", async (instance, options) => {
-      const userName = options?.userName || null;
+      const userName = options?.userName || "unknown";
       await AuditLog.create({
         userName,
         tableName: this.tableName,
