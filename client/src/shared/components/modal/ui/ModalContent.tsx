@@ -42,7 +42,7 @@ export default function ModalContent({ screen, submit, updVal }: Props) {
       return isEdit ? (
         <UploadFiles
           data={screenData.data}
-          orderId={2} // todo
+          orderId={screenData.id}
           typeCell={screenFileType ?? ""}
         />
       ) : (

@@ -25,7 +25,7 @@ export default function Cell({ item, column }: Props) {
                  px-4 py-1"
       onClick={() => {
         if(column.type == "files")
-          openModal({screenType: column.type, screenData: (item as any)[column.type], title: column.label, isEdit: false, readonly: column.readonly, screenFileType: column.key})
+          openModal({screenType: column.type, screenData: {id: item.id, data: (item as any)[column.type], key: key}, title: column.label, isEdit: false, readonly: column.readonly, screenFileType: column.key})
         else
           openModal({screenType: column.type, screenData: {id: item.id, data: item[key], key: key}, title: column.label, isEdit: false, readonly: column.readonly})
         if (context?.type) {
