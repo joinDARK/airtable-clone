@@ -14,7 +14,7 @@ import {
   ViewContragent
 } from "./view";
 import { useModalStore } from "@store/useModalStore";
-import { ServerFileList } from "@components/file/ServerFileList";
+import { ViewFileList } from "@components/file/ViewFileList";
 import { 
   EditManager, 
   EditSubagentPayer, 
@@ -23,7 +23,10 @@ import {
   EditClient,
   EditAgent,
   EditContragent,
-  EditText
+  EditText,
+  EditDate,
+  EditNumber,
+  EditOption
 } from "./edit";
 import UploadFiles from "@components/file/File";
 
@@ -37,6 +40,8 @@ export default function ModalContent({ screen, submit, updVal }: Props) {
   const { screenType, screenData, isEdit, screenFileType } = screen;
   const { relatedSettings } = useModalStore();
 
+  console.log(screenData)
+
   switch (screenType) {
     case "files":
       return isEdit ? (
@@ -46,22 +51,22 @@ export default function ModalContent({ screen, submit, updVal }: Props) {
           typeCell={screenFileType ?? ""}
         />
       ) : (
-        <ServerFileList serverFiles={screenData.data} />
+        <ViewFileList serverFiles={screenData.data} />
       );
     case "text":
       return isEdit ? <EditText val={screenData} onSubmit={updVal}/> : <ViewText view={screenData.data} />;
     case "date":
-      return isEdit ? "Пока ничего" : <ViewDate view={screenData.data} />;
+      return isEdit ? <EditDate val={screenData} onSubmit={updVal}/> : <ViewDate view={screenData.data} />;
     case "number":
-      return isEdit ? "Пока ничего" : <ViewText view={String(screenData.data)} />;
+      return isEdit ? <EditNumber val={screenData} onSubmit={updVal}/> : <ViewText view={String(screenData.data)} />;
     case "option":
-      return isEdit ? "Пока ничего" : <ViewOption view={screenData.data} />;
+      return isEdit ? <EditOption val={screenData} onSubmit={updVal}/> : <ViewOption view={screenData.data} />;
     case "related":
       return isEdit ? (
         "Пока ничего"
       ) : (
         <ViewRelated
-          view={screenData}
+          view={screenData.data}
           colKey={relatedSettings.relatedKey ?? undefined}
           table={relatedSettings.table ?? undefined}
         />

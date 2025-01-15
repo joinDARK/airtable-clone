@@ -3,7 +3,7 @@ import { Trash2 } from "lucide-react";
 import { FiFileText as FileText } from "react-icons/fi";
 import { toast } from "react-toastify";
 import useDownloadFile from "@services/file/useDownloadFile";
-import fileService from "@services/api/file"; 
+import fileService from "@services/api/file";
 import useLoaderStore from "@store/useLoaderStore";
 import useTableStore from "@store/useTableStore";
 
@@ -21,13 +21,11 @@ interface Props {
   invalidateTable?: () => void;
 }
 
-export const ServerFileList: React.FC<Props> = ({
-  serverFiles,
-}) => {
+export const ViewFileList: React.FC<Props> = ({ serverFiles }) => {
   const [files, setFiles] = useState<FileData[]>(serverFiles || []);
   const downloadFile = useDownloadFile();
-  const setIsLoading = useLoaderStore(store => store.setIsLoading);
-  const refetch = useTableStore(store => store.refetchTable)
+  const setIsLoading = useLoaderStore((store) => store.setIsLoading);
+  const refetch = useTableStore((store) => store.refetchTable);
 
   const handleDelete = async (fileId: string) => {
     setIsLoading(true);
@@ -35,7 +33,7 @@ export const ServerFileList: React.FC<Props> = ({
       await fileService.files.deleteById(fileId);
       setFiles((prevFiles) => prevFiles.filter((f) => f.id !== fileId));
       toast.success("Файл успешно удален!");
-      refetch()
+      refetch();
     } catch (error) {
       console.error("Ошибка при удалении файла:", error);
       toast.error("Ошибка при удалении файла!");
@@ -56,21 +54,31 @@ export const ServerFileList: React.FC<Props> = ({
             key={file.id}
             className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-gray-200 dark:bg-gray-800 p-2 rounded"
           >
-            <button
-              className="truncate flex-1 flex gap-1 items-center text-blue-600 hover:text-blue-800 transition-colors"
-              onClick={() => downloadFile(file.fileUrl, file.fileName)}
-            >
-              <FileText size={18} /> {file.fileName}
-            </button>
-
-            <button
-              type="button"
-              onClick={() => handleDelete(file.id)}
-              className="p-1 text-gray-500 dark:text-gray-300 hover:text-red-600 transition-colors"
-              title="Удалить"
-            >
-              <Trash2 size={18} />
-            </button>
+            <div>
+              <button
+                className="truncate flex-1 flex gap-1 items-center text-blue-600 hover:text-blue-800 transition-colors"
+                onClick={() => downloadFile(file.fileUrl, file.fileName)}
+              >
+                <FileText size={18} /> {file.fileName}
+              </button>
+            </div>
+            <div className="flex gap-2">
+              <a
+                href={file.fileUrl}
+                className="truncate flex-1 flex gap-1 items-center text-white transition-colors p-2 bg-gray-400 rounded"
+                target="_blank"
+              >
+                Открыть
+              </a>
+              <button
+                type="button"
+                onClick={() => handleDelete(file.id)}
+                className="p-1 text-gray-500 dark:text-gray-300 hover:text-red-600 transition-colors"
+                title="Удалить"
+              >
+                <Trash2 size={18} />
+              </button>
+            </div>
           </li>
         ))}
       </ul>
