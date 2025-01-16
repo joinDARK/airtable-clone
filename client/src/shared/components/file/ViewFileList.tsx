@@ -30,7 +30,7 @@ export const ViewFileList: React.FC<Props> = ({ serverFiles }) => {
   const handleDelete = async (fileId: string) => {
     setIsLoading(true);
     try {
-      await fileService.files.deleteById(fileId);
+      await fileService.deleteById(fileId);
       setFiles((prevFiles) => prevFiles.filter((f) => f.id !== fileId));
       toast.success("Файл успешно удален!");
       refetch();
