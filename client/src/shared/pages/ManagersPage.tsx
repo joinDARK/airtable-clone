@@ -20,7 +20,6 @@ function ManagersPage() {
   const setTableData = useTableStore((store) => store.setData)
   const setRefetch = useTableStore((store) => store.setRefetchTable)
   const handlerLoader = useLoaderStore((store) => store.setIsLoading)
-  const setForceRefetch = useTableStore(store => store.setForceRefetchTable)
 
   const [deleteManager] = useMutation(mutation.delete[type], {
     refetchQueries: [{ query: queries[type] }],
@@ -111,7 +110,6 @@ function ManagersPage() {
 
   useEffect(() => {
     setRefetch(refetch)
-    setForceRefetch(handleRefetch)
     if (isLoading) {
       handlerLoader(true)
     } else {
@@ -127,7 +125,7 @@ function ManagersPage() {
 
   return (
     <>
-      <TableLayout type={type} delete={handleDelete} create={handleCreate}/>
+      <TableLayout type={type} delete={handleDelete} create={handleCreate} forceRefetch={handleRefetch}/>
       <Modal submit={handleCreate} handlerValue={handleUpdateValue}/>
     </>
   )

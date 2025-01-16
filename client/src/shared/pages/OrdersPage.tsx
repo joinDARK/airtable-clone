@@ -24,21 +24,6 @@ function OrdersPage() {
     return data;
   });
 
-  useEffect(() => {
-    setRefetch(handleRefetch);
-    if (isLoading) {
-      handlerLoader(true);
-    } else {
-      handlerLoader(false);
-      try {
-        const validatedData = z.array(ResOrderSchema).parse(data?.[type]);
-        setTableData(validatedData);
-      } catch (error) {
-        console.error("Ошибка валидации страницы:", error);
-      }
-    }
-  }, [isLoading, data, handlerLoader, setTableData, refetch]);
-
   const handleRefetch = async () => {
     handlerLoader(true)
     try {
@@ -54,9 +39,24 @@ function OrdersPage() {
     }
   }
 
+  useEffect(() => {
+    setRefetch(refetch)
+    if (isLoading) {
+      handlerLoader(true);
+    } else {
+      handlerLoader(false);
+      try {
+        const validatedData = z.array(ResOrderSchema).parse(data?.[type]);
+        setTableData(validatedData);
+      } catch (error) {
+        console.error("Ошибка валидации страницы:", error);
+      }
+    }
+  }, [isLoading, data, handlerLoader, setTableData, refetch]);
+
   return (
     <>
-      <TableLayout type={type} delete={async () => console.log("Delete")} create={async () => console.log("Create")}/>
+      <TableLayout type={type} delete={async () => console.log("Delete")} create={async () => console.log("Create")} forceRefetch={handleRefetch}/>
       <Modal />
     </>
   );

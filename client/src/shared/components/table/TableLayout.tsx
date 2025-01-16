@@ -9,17 +9,21 @@ import useTableStore from "@store/useTableStore";
 import { useTableFilter } from "@hooks/useTableFilter";
 import { useModalStore } from "@store/useModalStore";
 
-interface Props {
+interface Props extends ITableLayoutContext {
+  forceRefetch: () => Promise<void>;
+}
+
+interface ITableLayoutContext {
   type: TableKey;
   delete: (id: number) => Promise<void>;
   create: (data: any) => Promise<void>;
 }
 
-export const TableLayoutContext = createContext<Props | undefined>(undefined);
+export const TableLayoutContext = createContext<ITableLayoutContext | undefined>(undefined);
 
-export default function TableLayout({ type, delete: handleDelete, create: handleCreate}: Props) {
+export default function TableLayout({ type, delete: handleDelete, create: handleCreate, forceRefetch}: Props) {
   const tableConfig = config[type as keyof typeof config];
-  const { data, forceRefetchTable } = useTableStore();
+  const { data } = useTableStore();
   const { sortedData, sortConfig ,handleSort } = useTableSort(data);
   const { filteredData, setSearchTerm } = useTableFilter(sortedData);
   const { openModal } = useModalStore()
@@ -42,7 +46,7 @@ export default function TableLayout({ type, delete: handleDelete, create: handle
               <button
                 className="p-2 border border-gray-300 dark:border-gray-500 hover:bg-gray-100 rounded-lg transition-all shadow-sm active:scale-90 dark:hover:bg-gray-600"
                 title="Refresh"
-                onClick={forceRefetchTable}
+                onClick={forceRefetch}
               >
                 <RefreshCw size={20} className="text-gray-600 dark:text-gray-400" />
               </button>
