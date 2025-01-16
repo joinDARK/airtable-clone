@@ -61,7 +61,7 @@ export default function ModalContent({ screen, submit, updVal }: Props) {
         "Пока ничего"
       ) : (
         <ViewRelated
-          view={screenData}
+          view={screenData.data}
           colKey={relatedSettings.relatedKey ?? undefined}
           table={relatedSettings.table ?? undefined}
         />

@@ -46,7 +46,7 @@ function AgentsPage() {
     handlerLoader(true)
     try {
       const { data } = await deleteAgent({variables: {id}})
-      if (data?.deleteManager) {
+      if (data?.deleteAgent) {
         toast.success("Агент успешно удалён");
         refetch();
       } else {

@@ -46,7 +46,7 @@ function SubagentPayersPage() {
     handlerLoader(true)
     try {
       const { data } = await deleteSubagentPayers({variables: {id}})
-      if (data?.deleteSubagentPayers) {
+      if (data?.deleteSubagentPayer) {
         toast.success("Плательщик успешно удалён");
         refetch();
       } else {
