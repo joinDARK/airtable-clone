@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   FileText,
+  History,
   Users,
   ChevronLeft,
   ChevronRight,
@@ -19,7 +20,7 @@ import { clsx } from "clsx";
 import useThemeStore from "@services/theme/useThemeStore";
 import { toast } from "react-toastify";
 import { decodeToken } from "@services/jwt";
-import { rest } from "@services/api/api";
+import historyApi from "@services/api/history";
 
 const navItems = [
   { path: "/orders", label: "Заявки", icon: FileText },
@@ -111,7 +112,7 @@ export const Sidebar = ({ exitApp }: Props) => {
   const handleHistoryClick = async () => {
     // todo
     try {
-      const history = await rest.history.getAll();
+      const history = await historyApi.getAll();
       const data = history.data;
       const allHistory = JSON.stringify(data, null, 2);
       console.info(allHistory);
@@ -209,6 +210,17 @@ export const Sidebar = ({ exitApp }: Props) => {
                   "animate-fadeIn"
                 )}
               >
+                <NavLink
+                  key={"history"}
+                  to={"history"}
+                  className="flex items-center gap-2 px-3 py-2 w-full rounded hover:bg-gray-100"
+                  title={isCollapsed ? "История изменений" : undefined}
+                  onClick={() => closeDropdown()}
+                >
+                  <History size={20} />
+                  {!isCollapsed && !isAnimating && <span>История изменений</span>}
+                </NavLink>
+
                 <button
                   className="flex items-center gap-2 px-3 py-2 w-full rounded hover:bg-gray-100"
                   onClick={() => {
@@ -217,17 +229,7 @@ export const Sidebar = ({ exitApp }: Props) => {
                   }}
                 >
                   <SunMoon size={20} />
-                  <span>Изменить тему</span>
-                </button>
-                <button
-                  className="flex items-center gap-2 px-3 py-2 w-full rounded hover:bg-gray-100"
-                  onClick={() => {
-                    handleHistoryClick();
-                    closeDropdown();
-                  }}
-                >
-                  <FileText size={20} />
-                  <span>История изменений</span>
+                  {!isCollapsed && !isAnimating && <span>Изменить тему</span>}
                 </button>
               </div>
             )}
