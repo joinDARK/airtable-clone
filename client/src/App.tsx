@@ -19,6 +19,7 @@ import SubagentsPage from "./shared/pages/SubagentsPage";
 import SubagentPayersPage from "./shared/pages/SubagentPayersPage";
 import { ApolloProvider } from "@apollo/client";
 import { client } from "./services/graphql";
+import { HistoryPage } from "@pages/HistoryPage";
 
 function App() {
   const [isLogin, setIsLogin] = useState(false);
@@ -55,6 +56,7 @@ function App() {
                       element={<SubagentPayersPage />}
                     />
                   </Route>
+                    <Route path="/history" element={<HistoryPage />} />
                 </Routes>
               </div>
 
