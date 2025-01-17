@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useModalStore } from "@store/useModalStore";
 import OptionInput from "@components/input/OptionInput";
+import { optionsConfig } from "@configs/options/optionConfig";
 
 interface Props {
   val: { id: number; data: string; key: string };
@@ -11,13 +12,8 @@ export default function EditOption({ val, onSubmit }: Props) {
   const { id, data, key } = val;
   const [value, setValue] = useState(data);
   const close = useModalStore((store) => store.closeModal);
-  
-  const optionsArray = [ // Заглушка
-    { value: "value1", label: "Завершен" },
-    { value: "value2", label: "В процессе" },
-    { value: "value3", label: "Открыт" },
-    { value: "value4", label: "Другое" },
-  ];
+
+  const optionsArray = optionsConfig[key]
 
   return (
     <form
@@ -25,6 +21,7 @@ export default function EditOption({ val, onSubmit }: Props) {
       onSubmit={async (e) => {
         e.preventDefault();
         await onSubmit({ id: id, [key]: value });
+        console.log({ id: id, [key]: value })
         close();
       }}
     >
