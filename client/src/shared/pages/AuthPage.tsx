@@ -67,9 +67,9 @@ function AuthPage({onLogin}: AuthPageProps) {
   })
 
   return (
-    <div className="dark:text-white flex h-full justify-center items-center">
-      <form className="w-[500px] h-fit border p-5 rounded-md dark:border-gray-600 flex flex-col" onSubmit={handleSubmit(onSubmit)}>
-        <h1 className="text-3xl font-black mb-3 text-center">Вход</h1>
+    <div className="text-white flex h-full justify-center items-center">
+      <form className="w-[500px] h-fit border p-5 rounded-md white:bg-gray-100 dark:border-gray-600 flex flex-col" onSubmit={handleSubmit(onSubmit)}>
+        <h1 className="text-3xl font-black mb-3 text-center text-gray-900 dark:text-gray-100">Вход</h1>
         <div className="mb-2">
           <span className={`${errors.login ? "text-red-500" : "text-transparent"} select-none`}>Логин не может быть пустым</span>
           <input 
