@@ -21,6 +21,12 @@ export default function ViewOrder({view}: Props) {
           <ViewRelated view={view?.managers} table="orders" colKey="managers" />
         </div>
       </div>
+      <div className="flex items-center gap-2">
+        <p>Проверяющие:</p>
+        <div className="text-xs">
+          <ViewRelated view={view?.reviewers} table="orders" colKey="managers" />
+        </div>
+      </div>
     </div>
   )
 }

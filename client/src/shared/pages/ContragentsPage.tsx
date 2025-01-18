@@ -20,7 +20,6 @@ function ContragentsPage() {
   const setTableData = useTableStore((store) => store.setData)
   const setRefetch = useTableStore((store) => store.setRefetchTable)
   const handlerLoader = useLoaderStore((store) => store.setIsLoading)
-  const setForceRefetch = useTableStore(store => store.setForceRefetchTable)
 
   const [deleteContragent] = useMutation(mutation.delete[type], {
     refetchQueries: [{ query: queries[type] }],
@@ -111,7 +110,6 @@ function ContragentsPage() {
 
   useEffect(() => {
     setRefetch(refetch)
-    setForceRefetch(handleRefetch)
     if (isLoading) {
       handlerLoader(true);
     } else {
@@ -127,8 +125,8 @@ function ContragentsPage() {
 
   return (
     <>
-      <TableLayout type={type} delete={handleDelete} create={handleCreate}/>
-      <Modal submit={handleCreate} handlerValue={handleUpdateValue}/>
+      <TableLayout type={type} delete={handleDelete} create={handleCreate} forceRefetch={handleRefetch}/>
+      <Modal handlerValue={handleUpdateValue}/>
     </>
   )
 }

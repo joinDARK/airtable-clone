@@ -20,7 +20,6 @@ function AgentsPage() {
   const setTableData = useTableStore((store) => store.setData)
   const setRefetch = useTableStore((store) => store.setRefetchTable)
   const handlerLoader = useLoaderStore((store) => store.setIsLoading)
-  const setForceRefetch = useTableStore(store => store.setForceRefetchTable)
 
   const [deleteAgent] = useMutation(mutation.delete[type], {
     refetchQueries: [{ query: queries[type] }],
@@ -46,7 +45,7 @@ function AgentsPage() {
     handlerLoader(true)
     try {
       const { data } = await deleteAgent({variables: {id}})
-      if (data?.deleteManager) {
+      if (data?.deleteAgent) {
         toast.success("Агент успешно удалён");
         refetch();
       } else {
@@ -111,7 +110,6 @@ function AgentsPage() {
 
   useEffect(() => {
     setRefetch(refetch)
-    setForceRefetch(handleRefetch)
     if (isLoading) {
       handlerLoader(true);
     } else {
@@ -127,8 +125,8 @@ function AgentsPage() {
 
   return (
     <>
-      <TableLayout type={type} delete={handleDelete} create={handleCreate}/>
-      <Modal submit={handleCreate} handlerValue={handleUpdateValue}/>
+      <TableLayout type={type} delete={handleDelete} create={handleCreate} forceRefetch={handleRefetch}/>
+      <Modal handlerValue={handleUpdateValue}/>
     </>
   )
 }

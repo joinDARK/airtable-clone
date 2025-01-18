@@ -20,7 +20,6 @@ function SubagentPayersPage() {
   const setTableData = useTableStore((store) => store.setData)
   const setRefetch = useTableStore((store) => store.setRefetchTable)
   const handlerLoader = useLoaderStore((store) => store.setIsLoading)
-  const setForceRefetch = useTableStore(store => store.setForceRefetchTable)
 
   const [deleteSubagentPayers] = useMutation(mutation.delete[type], {
     refetchQueries: [{ query: queries[type] }],
@@ -46,7 +45,7 @@ function SubagentPayersPage() {
     handlerLoader(true)
     try {
       const { data } = await deleteSubagentPayers({variables: {id}})
-      if (data?.deleteSubagentPayers) {
+      if (data?.deleteSubagentPayer) {
         toast.success("Плательщик успешно удалён");
         refetch();
       } else {
@@ -112,7 +111,6 @@ function SubagentPayersPage() {
 
   useEffect(() => {
     setRefetch(refetch)
-    setForceRefetch(handleRefetch)
     if (isLoading) {
       handlerLoader(true);
     } else {
@@ -128,8 +126,8 @@ function SubagentPayersPage() {
 
   return (
     <>
-      <TableLayout type={type} delete={handleDelete} create={handleCreate} />
-      <Modal submit={handleCreate} handlerValue={handleUpdateValue}/>
+      <TableLayout type={type} delete={handleDelete} create={handleCreate} forceRefetch={handleRefetch}/>
+      <Modal handlerValue={handleUpdateValue}/>
     </>
   )
 }

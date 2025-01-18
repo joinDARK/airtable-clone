@@ -14,10 +14,9 @@ export default async function getRelatedData(table: TableKey, uniqueKey: string,
 
   if (!cashedData) {
     const { data } = await client.query({query: queries[queryKey]})
-    cashedData = data.relationshipKey
+    cashedData = data
     queryClient.setQueryData([relationshipKey], cashedData)
   }
-  
 
   return cashedData[relationshipKey].find((item: any) => item.id === relatedData.id)
 }

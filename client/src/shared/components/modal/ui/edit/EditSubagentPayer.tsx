@@ -8,13 +8,15 @@ import useRelatedData from "@services/relationship/useRelatedData";
 import { useModalStore } from "@store/useModalStore";
 import { RelationshipSelect } from "@components/select/RelationshipSelect";
 import ISubagentPayer from "@interfaces/table/ISubagentPayer";
+import { useMutation } from "@apollo/client";
+import { mutation } from "@services/graphql";
+import useTableStore from "@store/useTableStore";
 
 interface Props {
   data?: ISubagentPayer;
-  onSubmit: (newSubagent: ISubagentPayer) => Promise<void>
 }
 
-export default function EditSubagentPayer({data, onSubmit}: Props) {
+export default function EditSubagentPayer({data}: Props) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const methods = useForm<ISubagentPayer>({
     resolver: zodResolver(FormSubagentPayerSchema),
@@ -37,11 +39,22 @@ export default function EditSubagentPayer({data, onSubmit}: Props) {
 
   const { closeModal } = useModalStore()
 
+  const refetch = useTableStore(store => store.refetchTable)
+
+  const [updateSubagentPayer] = useMutation(mutation.update["subagentPayers"])
+
   const handleFormSubmit = async (newData: ISubagentPayer) => {
     setIsSubmitting(true);
-    await onSubmit(newData);
-    setIsSubmitting(false);
-    closeModal()
+    try {
+      await updateSubagentPayer({variables: { input: newData }});
+      toast.success("Плательщик обновлен успешно!")
+    } catch(e) {
+      toast.error(`${e}`)
+    } finally {
+      refetch()
+      setIsSubmitting(false);
+      closeModal()
+    }
   }
 
   return (
