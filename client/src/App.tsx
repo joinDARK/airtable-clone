@@ -55,8 +55,8 @@ function App() {
                       path="/subagent-payers"
                       element={<SubagentPayersPage />}
                     />
-                  </Route>
                     <Route path="/history" element={<HistoryPage />} />
+                  </Route>
                 </Routes>
               </div>
 
