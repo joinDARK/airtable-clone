@@ -8,13 +8,15 @@ import useRelatedData from "@services/relationship/useRelatedData";
 import { useModalStore } from "@store/useModalStore";
 import { RelationshipSelect } from "@components/select/RelationshipSelect";
 import IClient from "@interfaces/table/IClient";
+import { useMutation } from "@apollo/client";
+import { mutation } from "@services/graphql";
+import useTableStore from "@store/useTableStore";
 
 interface Props {
   data?: IClient;
-  onSubmit: (newClient: IClient) => Promise<void>
 }
 
-export default function EditClient({data, onSubmit}: Props) {
+export default function EditClient({data}: Props) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const methods = useForm<IClient>({
     resolver: zodResolver(FormClientSchema),
@@ -36,11 +38,22 @@ export default function EditClient({data, onSubmit}: Props) {
 
   const { closeModal } = useModalStore()
 
+  const refetch = useTableStore(store => store.refetchTable)
+
+  const [updateClient] = useMutation(mutation.update["clients"])
+
   const handleFormSubmit = async (newData: IClient) => {
     setIsSubmitting(true);
-    await onSubmit(newData);
-    setIsSubmitting(false);
-    closeModal()
+    try {
+      await updateClient({variables: { input: newData }});
+      toast.success("Клиент обновлен успешно!")
+    } catch(e) {
+      toast.error(`${e}`)
+    } finally {
+      refetch()
+      setIsSubmitting(false);
+      closeModal()
+    }
   }
 
   return (
