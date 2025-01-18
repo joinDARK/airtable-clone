@@ -8,13 +8,15 @@ import useRelatedData from "@services/relationship/useRelatedData"
 import { RelationshipSelect } from "@components/select/RelationshipSelect"
 import IManager from "@interfaces/table/IManager"
 import {FormManagerSchema} from "@schema/form"
+import { useMutation } from "@apollo/client";
+import { mutation } from "@services/graphql";
+import useTableStore from "@store/useTableStore";
 
 interface EditManagerProps {
   data?: IManager;
-  onSubmit: (newManager: IManager) => Promise<void>
 }
 
-function EditManager({data, onSubmit}: EditManagerProps) {
+function EditManager({data}: EditManagerProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const methods = useForm<IManager>({
     resolver: zodResolver(FormManagerSchema),
@@ -29,6 +31,8 @@ function EditManager({data, onSubmit}: EditManagerProps) {
 
   const related = useRelatedData("managers", "orders")
 
+  const refetch = useTableStore(store => store.refetchTable)
+
   const onError = (errors: unknown) => {
     toast.error("Ошибки при отправке. Проверьте консоль")
     console.debug("Ошибки при отправке:", errors)
@@ -38,11 +42,20 @@ function EditManager({data, onSubmit}: EditManagerProps) {
 
   const { closeModal } = useModalStore()
 
+  const [updateManager] = useMutation(mutation.update["managers"])
+
   const handleFormSubmit = async (newData: IManager) => {
     setIsSubmitting(true);
-    await onSubmit(newData);
-    setIsSubmitting(false);
-    closeModal()
+    try {
+      await updateManager({variables: { input: newData }});
+      toast.success("Менеджер обновлен успешно!")
+    } catch(e) {
+      toast.error(`${e}`)
+    } finally {
+      refetch()
+      setIsSubmitting(false);
+      closeModal()
+    }
   }
 
   return (

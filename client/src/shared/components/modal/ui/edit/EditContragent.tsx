@@ -8,13 +8,15 @@ import useRelatedData from "@services/relationship/useRelatedData";
 import { useModalStore } from "@store/useModalStore";
 import { RelationshipSelect } from "@components/select/RelationshipSelect";
 import IContragent from "@interfaces/table/IContragent";
+import { useMutation } from "@apollo/client";
+import { mutation } from "@services/graphql";
+import useTableStore from "@store/useTableStore";
 
 interface Props {
   data?: IContragent;
-  onSubmit: (newContragent: IContragent) => Promise<void>
 }
 
-export default function EditContragent({data, onSubmit}: Props) {
+export default function EditContragent({data}: Props) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const methods = useForm<IContragent>({
     resolver: zodResolver(FormContragentSchema),
@@ -35,11 +37,22 @@ export default function EditContragent({data, onSubmit}: Props) {
 
   const { closeModal } = useModalStore()
 
+  const refetch = useTableStore(store => store.refetchTable)
+
+  const [updateContragent] = useMutation(mutation.update["contragents"])
+
   const handleFormSubmit = async (newData: IContragent) => {
     setIsSubmitting(true);
-    await onSubmit(newData);
-    setIsSubmitting(false);
-    closeModal()
+    try {
+      await updateContragent({variables: { input: newData }});
+      toast.success("Контрагент обновлен успешно!")
+    } catch(e) {
+      toast.error(`${e}`)
+    } finally {
+      refetch()
+      setIsSubmitting(false);
+      closeModal()
+    }
   }
 
   return (

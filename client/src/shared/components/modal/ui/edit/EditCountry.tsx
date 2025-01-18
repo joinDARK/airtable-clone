@@ -8,13 +8,15 @@ import useRelatedData from "@services/relationship/useRelatedData"
 import { RelationshipSelect } from "@components/select/RelationshipSelect"
 import {FormCountrySchema} from "@schema/form"
 import ICountry from "@interfaces/table/ICountry";
+import { useMutation } from "@apollo/client";
+import { mutation } from "@services/graphql";
+import useTableStore from "@store/useTableStore";
 
 interface EditCountryProps {
   data?: ICountry;
-  onSubmit: (newCountry: ICountry) => Promise<void>
 }
 
-export default function EditCountry({data, onSubmit}: EditCountryProps) {
+export default function EditCountry({data}: EditCountryProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const methods = useForm<ICountry>({
     resolver: zodResolver(FormCountrySchema),
@@ -37,11 +39,22 @@ export default function EditCountry({data, onSubmit}: EditCountryProps) {
 
   const { closeModal } = useModalStore()
 
+  const refetch = useTableStore(store => store.refetchTable)
+
+  const [updateCountry] = useMutation(mutation.update["countries"])
+
   const handleFormSubmit = async (newData: ICountry) => {
     setIsSubmitting(true);
-    await onSubmit(newData);
-    setIsSubmitting(false);
-    closeModal()
+    try {
+      await updateCountry({variables: { input: newData }});
+      toast.success("Страна обновлена успешно!")
+    } catch(e) {
+      toast.error(`${e}`)
+    } finally {
+      refetch()
+      setIsSubmitting(false);
+      closeModal()
+    }
   }
 
   return (

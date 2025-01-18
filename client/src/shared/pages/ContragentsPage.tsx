@@ -126,7 +126,7 @@ function ContragentsPage() {
   return (
     <>
       <TableLayout type={type} delete={handleDelete} create={handleCreate} forceRefetch={handleRefetch}/>
-      <Modal submit={handleCreate} handlerValue={handleUpdateValue}/>
+      <Modal handlerValue={handleUpdateValue}/>
     </>
   )
 }

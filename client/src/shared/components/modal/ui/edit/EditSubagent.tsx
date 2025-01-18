@@ -8,13 +8,15 @@ import useRelatedData from "@services/relationship/useRelatedData";
 import { useModalStore } from "@store/useModalStore";
 import { RelationshipSelect } from "@components/select/RelationshipSelect";
 import ISubagent from "@interfaces/table/ISubagent";
+import { useMutation } from "@apollo/client";
+import { mutation } from "@services/graphql";
+import useTableStore from "@store/useTableStore";
 
 interface Props {
   data?: ISubagent;
-  onSubmit: (newSubagent: ISubagent) => Promise<void>
 }
 
-function EditSubagent({data, onSubmit}: Props) {
+function EditSubagent({data}: Props) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const methods = useForm<ISubagent>({
     resolver: zodResolver(FormSubagentSchema),
@@ -37,11 +39,22 @@ function EditSubagent({data, onSubmit}: Props) {
 
   const { closeModal } = useModalStore()
 
+  const refetch = useTableStore(store => store.refetchTable)
+
+  const [updateSubagent] = useMutation(mutation.update["subagents"])
+
   const handleFormSubmit = async (newData: ISubagent) => {
     setIsSubmitting(true);
-    await onSubmit(newData);
-    setIsSubmitting(false);
-    closeModal()
+    try {
+      await updateSubagent({variables: { input: newData }});
+      toast.success("Субагент обновлен успешно!")
+    } catch(e) {
+      toast.error(`${e}`)
+    } finally {
+      refetch()
+      setIsSubmitting(false);
+      closeModal()
+    }
   }
 
   return (
