@@ -3,11 +3,11 @@ const auditLogsController = require('../controllers/auditLogsController');
 
 const router = express.Router();
 
-router.get("/history", auditLogsController.getAll);
-router.get("/history/user/:userName", auditLogsController.getAllByUserName);
+router.get("/", auditLogsController.getAll);
+router.get("/user/:userName", auditLogsController.getAllByUserName);
 
-router.delete("/history/all", auditLogsController.deleteAll);
-router.delete("/history/:id", auditLogsController.deleteById);
-router.delete("/history/user/:userName", auditLogsController.deleteByUserName);
+router.delete("/all", auditLogsController.deleteAll);
+router.delete("/:id", auditLogsController.deleteById);
+router.delete("/user/:userName", auditLogsController.deleteByUserName);
 
 module.exports = router;

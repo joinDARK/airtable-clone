@@ -7,7 +7,6 @@ async function authMiddleware(req, res, next) {
   if (!authHeader) {
     req.user = null;
     return next();
-    // return res.status(403).json({ message: "authHeader is missing" });
   }
 
   const token = authHeader.split(" ")[1];
@@ -21,7 +20,13 @@ async function authMiddleware(req, res, next) {
       return res.status(403).json({ message: "Invalid token: user not found" });
     }
 
-    req.user = { id: user.id, login: user.login };
+    // Кладём все нужные данные о пользователе в req.user
+    req.user = {
+      id: user.id,
+      login: user.login,
+      role: user.role, // добавляем роль
+    };
+
     next();
   } catch (error) {
     console.error("Error in authMiddleware:", error);
