@@ -54,7 +54,7 @@ const UploadFiles: React.FC<Props> = ({ typeCell, orderId }) => {
     formData.append("type", typeCell);
 
     try {
-      const res = await api.files.uploadMultiple(formData);
+      const res = await api.uploadMultiple(formData);
       if (res.status === 200) {
         toast.success("Файлы загружены!");
         refetchTable();

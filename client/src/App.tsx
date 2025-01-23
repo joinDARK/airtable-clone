@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClientProvider } from "react-query";
 import { ToastContainer } from "react-toastify";
 import { queryClient } from "@api/queryClient";
-import { Sidebar } from "./shared/components/Sidebar";
+import { Sidebar } from "./shared/components/sidebar/Sidebar";
 import AuthPage from "./shared/pages/AuthPage";
 import OrdersPage from "./shared/pages/OrdersPage";
 import ManagersPage from "./shared/pages/ManagersPage";
@@ -55,8 +55,8 @@ function App() {
                       path="/subagent-payers"
                       element={<SubagentPayersPage />}
                     />
-                  </Route>
                     <Route path="/history" element={<HistoryPage />} />
+                  </Route>
                 </Routes>
               </div>
 

@@ -11,11 +11,13 @@ const authLink = setContext((_, { headers }) => {
   // Получаем токен из локального хранилища или другого источника
   const token = localStorage.getItem('jwt');
 
+  console.log(token);
+
   // Возвращаем заголовки с токеном
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : '',
+      Authorization: token ? `Bearer ${token}` : '',
     },
   };
 });
